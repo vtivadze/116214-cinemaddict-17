@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Vakhtang Tivadze](https://up.htmlacademy.ru/ecmascript/17/user/116214).
-* Наставник: `Артём Рудов`.
+* Наставник: `Антон Попов`.
 
 ---
 
