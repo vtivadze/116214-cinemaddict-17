@@ -1,3 +1,4 @@
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -8,4 +9,9 @@ module.exports = {
     clean: true,
   },
   devtoo: 'source-map',
+  plugins: [
+    new CopyPlugin({
+      patterns: [{ from: 'public' }],
+    }),
+  ],
 };
