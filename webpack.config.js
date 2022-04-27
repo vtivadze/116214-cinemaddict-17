@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js',
     clean: true,
   },
-  devtoo: 'source-map',
+  devtool: 'source-map',
   plugins: [
     new CopyPlugin({
       patterns: [{ from: 'public' }],
