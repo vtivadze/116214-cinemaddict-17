@@ -1,10 +1,10 @@
 import { createElement } from '../render';
 
-const createBoardTemplate = () => '<section class="films"></section>';
+const createContentContainerTemplate = () => '<section class="films"></section>';
 
-export default class BoardView {
+export default class ContentContainerView {
   getTemplate() {
-    return createBoardTemplate();
+    return createContentContainerTemplate();
   }
 
   getElement() {
