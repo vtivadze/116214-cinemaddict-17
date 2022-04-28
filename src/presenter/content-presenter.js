@@ -3,6 +3,7 @@ import ContentContainerView from '../view/content-container-view.js';
 import MainContentView from '../view/main-content-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import CardView from '../view/card-view.js';
+import ShowMoreButtonView from '../view/show-more-button-view.js';
 
 export default class ContentPresenter {
   contentContainerComponent = new ContentContainerView();
@@ -19,5 +20,7 @@ export default class ContentPresenter {
     for (let i = 0; i < 5; i++) {
       render(new CardView(), this.listContainerComponent.getElement());
     }
+
+    render(new ShowMoreButtonView(), this.mainContentComponent.getElement());
   }
 }
