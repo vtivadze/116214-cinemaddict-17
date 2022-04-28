@@ -4,14 +4,14 @@ import MainContentView from '../view/main-content-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import CardView from '../view/card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import ExtraContentView from '../view/extra-content-view.js';
+import TopRatedView from '../view/top-rated-view.js';
 
 export default class ContentPresenter {
   contentContainerComponent = new ContentContainerView();
   mainContentComponent = new MainContentView();
   mainContentListComponent = new ListContainerView();
 
-  extraContentComponent = new ExtraContentView();
+  extraContentComponent = new TopRatedView();
   extraContentListComponent = new ListContainerView();
 
   init(board) {
