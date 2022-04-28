@@ -28,5 +28,8 @@ export default class ContentPresenter {
 
     render(this.extraContentComponent, this.contentContainerComponent.getElement());
     render(this.extraContentListComponent, this.extraContentComponent.getElement());
+    for (let i = 0; i < 2; i++) {
+      render(new CardView(), this.extraContentListComponent.getElement());
+    }
   }
 }
