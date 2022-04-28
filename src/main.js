@@ -1,7 +1,7 @@
 import {render} from './render.js';
-import UserProfileView from './view/user-profile-view.js';
+import UserTitleView from './view/user-title-view.js';
 
 const siteHeaderElement = document.querySelector('.header');
 
-render(new UserProfileView(), siteHeaderElement);
+render(new UserTitleView(), siteHeaderElement);
 
