@@ -8,6 +8,9 @@ import TopRatedView from '../view/top-rated-view.js';
 import MostCommented from '../view/most-commented-view.js';
 
 export default class ContentPresenter {
+  CARDS_COUNT = 5;
+  CARDS_COUNT_EXTRA = 2;
+
   contentContainerComponent = new ContentContainerView();
   mainContentComponent = new MainContentView();
   mainContentListComponent = new ListContainerView();
@@ -25,20 +28,20 @@ export default class ContentPresenter {
 
     render(this.mainContentComponent, this.contentContainerComponent.getElement());
     render(this.mainContentListComponent, this.mainContentComponent.getElement());
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < this.CARDS_COUNT; i++) {
       render(new CardView(), this.mainContentListComponent.getElement());
     }
     render(new ShowMoreButtonView(), this.mainContentComponent.getElement());
 
     render(this.extraContentComponent, this.contentContainerComponent.getElement());
     render(this.extraContentListComponent, this.extraContentComponent.getElement());
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
       render(new CardView(), this.extraContentListComponent.getElement());
     }
 
     render(this.mostCommentedComponent, this.contentContainerComponent.getElement());
     render(this.mostCommentedListcomponent, this.mostCommentedComponent.getElement());
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
       render(new CardView(), this.mostCommentedListcomponent.getElement());
     }
   }
