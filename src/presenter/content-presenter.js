@@ -9,8 +9,10 @@ import ExtraContentView from '../view/extra-content-view.js';
 export default class ContentPresenter {
   contentContainerComponent = new ContentContainerView();
   mainContentComponent = new MainContentView();
+  mainContentListComponent = new ListContainerView();
+
   extraContentComponent = new ExtraContentView();
-  listContainerComponent = new ListContainerView();
+  extraContentListComponent = new ListContainerView();
 
   init(board) {
     this.board = board;
@@ -18,12 +20,13 @@ export default class ContentPresenter {
     render(this.contentContainerComponent, this.board);
 
     render(this.mainContentComponent, this.contentContainerComponent.getElement());
-    render(this.listContainerComponent, this.mainContentComponent.getElement());
+    render(this.mainContentListComponent, this.mainContentComponent.getElement());
     for (let i = 0; i < 5; i++) {
-      render(new CardView(), this.listContainerComponent.getElement());
+      render(new CardView(), this.mainContentListComponent.getElement());
     }
     render(new ShowMoreButtonView(), this.mainContentComponent.getElement());
 
     render(this.extraContentComponent, this.contentContainerComponent.getElement());
+    render(this.extraContentListComponent, this.extraContentComponent.getElement());
   }
 }
