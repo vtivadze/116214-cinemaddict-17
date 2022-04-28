@@ -5,6 +5,7 @@ import ListContainerView from '../view/list-container-view.js';
 import CardView from '../view/card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import TopRatedView from '../view/top-rated-view.js';
+import MostCommented from '../view/most-commented-view.js';
 
 export default class ContentPresenter {
   contentContainerComponent = new ContentContainerView();
@@ -13,6 +14,9 @@ export default class ContentPresenter {
 
   extraContentComponent = new TopRatedView();
   extraContentListComponent = new ListContainerView();
+
+  mostCommentedComponent = new MostCommented();
+  mostCommentedListcomponent = new ListContainerView();
 
   init(board) {
     this.board = board;
@@ -30,6 +34,12 @@ export default class ContentPresenter {
     render(this.extraContentListComponent, this.extraContentComponent.getElement());
     for (let i = 0; i < 2; i++) {
       render(new CardView(), this.extraContentListComponent.getElement());
+    }
+
+    render(this.mostCommentedComponent, this.contentContainerComponent.getElement());
+    render(this.mostCommentedListcomponent, this.mostCommentedComponent.getElement());
+    for (let i = 0; i < 2; i++) {
+      render(new CardView(), this.mostCommentedListcomponent.getElement());
     }
   }
 }
