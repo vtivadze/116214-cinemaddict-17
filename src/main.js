@@ -1,8 +1,9 @@
-import {render} from './render.js';
+import {render, RenderPosition} from './render.js';
 import UserTitleView from './view/user-title-view.js';
 import MenuView from './view/menu-view.js';
 import SortView from './view/sort-view.js';
 import FilmsCountView from './view/films-count-view.js';
+import PopupView from './view/popup-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 
 const siteHeaderElement = document.querySelector('.header');
@@ -19,3 +20,5 @@ render(new SortView(), siteMainElement);
 contentPresenter.init(siteMainElement);
 
 render(new FilmsCountView(), footerStatisticsElement);
+
+render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
