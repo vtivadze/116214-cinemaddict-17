@@ -2,7 +2,7 @@ import {render, RenderPosition} from './render.js';
 import UserTitleView from './view/user-title-view.js';
 import MenuView from './view/menu-view.js';
 import SortView from './view/sort-view.js';
-import FilmsCountView from './view/films-count-view.js';
+import StatisticsView from './view/statistics-view.js';
 import PopupView from './view/popup-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 
@@ -11,14 +11,12 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 const footerStatisticsElement = siteFooterElement.querySelector('.footer__statistics');
 
-const contentPresenter = new ContentPresenter();
-
 render(new UserTitleView(), siteHeaderElement);
 render(new MenuView(), siteMainElement);
 render(new SortView(), siteMainElement);
 
+const contentPresenter = new ContentPresenter();
 contentPresenter.init(siteMainElement);
 
-render(new FilmsCountView(), footerStatisticsElement);
-
+render(new StatisticsView(), footerStatisticsElement);
 render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);

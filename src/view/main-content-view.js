@@ -1,8 +1,10 @@
 import { createElement } from '../render.js';
 
-const createMainContentTemplate = () => `<section class="films-list">
-<h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-</section>`;
+const createMainContentTemplate = () => (
+  `<section class="films-list">
+    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+  </section>`
+);
 
 export default class MainContentView {
   getTemplate() {

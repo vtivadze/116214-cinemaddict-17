@@ -12,6 +12,7 @@ export default class ContentPresenter {
   CARDS_COUNT_EXTRA = 2;
 
   contentContainerComponent = new ContentContainerView();
+
   mainContentComponent = new MainContentView();
   mainContentListComponent = new ListContainerView();
 
