@@ -92,6 +92,22 @@ const generateReleaseCountry = () => {
   return countries[getRandomInteger(0, countries.length - 1)];
 };
 
+const generateGenre = () => {
+  const genres = [
+    'Action',
+    'Comedy',
+    'Drama',
+    'Fantasy',
+    'Horror',
+    'Mystery',
+    'Romance',
+    'Thriller',
+    'Western',
+  ];
+
+  return genres[getRandomInteger(0, genres.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
@@ -115,7 +131,9 @@ export const generateMovie = () => ({
     },
     runtime: 77,
     genre: [
-      'Comedy'
+      generateGenre(),
+      generateGenre(),
+      generateGenre()
     ],
     description: 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
   },
