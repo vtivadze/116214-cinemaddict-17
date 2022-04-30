@@ -1,8 +1,17 @@
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+const getRandomInteger = (min = 0, max = 1) => {
+  min = Math.ceil(Math.min(min, max));
+  max = Math.floor(Math.max(min, max));
 
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
+  return Math.floor(min + Math.random() * (max - min + 1));
 };
 
-export {getRandomInteger};
+const getRandomFloat = (min = 0, max = 1, decimalCount = 1) => {
+  const decimalFactor = Math.pow(10, decimalCount);
+
+  min = Math.round(min * decimalFactor);
+  max = Math.round(max * decimalFactor);
+
+  return getRandomInteger(min, max) / decimalFactor;
+};
+
+export {getRandomInteger, getRandomFloat};
