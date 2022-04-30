@@ -1,4 +1,5 @@
 import { generateMovie } from '../mock/movie';
+
 const MOVIES_COUNT = 9;
 
 export default class MoviesModel {
