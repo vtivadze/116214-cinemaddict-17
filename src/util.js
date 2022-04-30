@@ -14,4 +14,6 @@ const getRandomFloat = (min = 0, max = 1, decimalCount = 1) => {
   return getRandomInteger(min, max) / decimalFactor;
 };
 
-export {getRandomInteger, getRandomFloat};
+const getArrayRandomElement = (array) => array[getRandomInteger(0, array.length - 1)];
+
+export {getRandomInteger, getRandomFloat, getArrayRandomElement};

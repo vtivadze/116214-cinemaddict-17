@@ -1,113 +1,94 @@
-import {getRandomInteger, getRandomFloat} from '../util.js';
+import {getRandomInteger, getRandomFloat, getArrayRandomElement} from '../util.js';
 
 const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
 const MAX_COMMENT_ID = 100;
 
+const TITLES = [
+  'Made for Each Other',
+  'Popeye the Sailor Meets Sindbad the Sailor',
+  'Sagebrush Trails',
+  'Santa Claus Conquers the Martians',
+  'The Dance of Life',
+  'The Great Flamarion',
+  'The Man with Golden Arm'
+];
+
+const POSTERS = [
+  'made-for-each-other.png',
+  'popeye-meets-sindbad.png',
+  'santa-claus-conquers-the-maritians.jpg',
+  'the-danc-of-life.jpg',
+  'the-great-flamarion.jpg',
+  'the-man-with-the-golden-arm.jpg'
+];
+
+const DIRECTORS = [
+  'John Cromwell',
+  'Dave Fleischer',
+  'Armand Schaefer',
+  'Nicholas Webster',
+  'Willard Bowsky',
+  'Anthony Mann',
+  'Otto Preminger'
+];
+
+const WRITERS = [
+  'Billy Wilder',
+  'Ethan Coen and Joel Coen',
+  'Robert Towne',
+  'Quentin Tarantino',
+  'Francis Ford Coppola',
+  'William Goldman',
+  'Charlie Kaufman'
+];
+
+const ACTORS = [
+  'Tom Hanks',
+  'Gene Hackman',
+  'Tommy Lee Jones',
+  'Harrison Ford',
+  'Dustin Hoffman',
+  'Samuel L. Jackson',
+  'Bruce Willis'
+];
+
+const COUNTRIES = [
+  'United States',
+  'Great Britan',
+  'Finland',
+  'France',
+  'Italy',
+  'Hungary',
+  'Austria'
+];
+const GENRES = [
+  'Action',
+  'Comedy',
+  'Drama',
+  'Fantasy',
+  'Horror',
+  'Mystery',
+  'Romance',
+  'Thriller',
+  'Western',
+];
+
+const DESCRIPTIONS = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
+
 const generateId = () => getRandomInteger(0, MOVIES_COUNT).toString();
-
-const generateTitle = () => {
-  const titles = [
-    'Made for Each Other',
-    'Popeye the Sailor Meets Sindbad the Sailor',
-    'Sagebrush Trails',
-    'Santa Claus Conquers the Martians',
-    'The Dance of Life',
-    'The Great Flamarion',
-    'The Man with Golden Arm'
-  ];
-  return titles[getRandomInteger(0, titles.length - 1)];
-};
-
+const generateTitle = () => getArrayRandomElement(TITLES);
 const generateTotalRaiging = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const generateAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
 const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
-
-const generatePoster = () => {
-  const posters = [
-    'made-for-each-other.png',
-    'popeye-meets-sindbad.png',
-    'santa-claus-conquers-the-maritians.jpg',
-    'the-danc-of-life.jpg',
-    'the-great-flamarion.jpg',
-    'the-man-with-the-golden-arm.jpg'
-  ];
-  return posters[getRandomInteger(0, posters.length - 1)];
-};
-
-const generateDirector = () => {
-  const directors = [
-    'John Cromwell',
-    'Dave Fleischer',
-    'Armand Schaefer',
-    'Nicholas Webster',
-    'Willard Bowsky',
-    'Anthony Mann',
-    'Otto Preminger'
-  ];
-  return directors[getRandomInteger(0, directors.length - 1)];
-};
-
-const generateWriter = () => {
-  const writers = [
-    'Billy Wilder',
-    'Ethan Coen and Joel Coen',
-    'Robert Towne',
-    'Quentin Tarantino',
-    'Francis Ford Coppola',
-    'William Goldman',
-    'Charlie Kaufman'
-  ];
-  return writers[getRandomInteger(0, writers.length - 1)];
-};
-
-const generateActor = () => {
-  const actors = [
-    'Tom Hanks',
-    'Gene Hackman',
-    'Tommy Lee Jones',
-    'Harrison Ford',
-    'Dustin Hoffman',
-    'Samuel L. Jackson',
-    'Bruce Willis'
-  ];
-  return actors[getRandomInteger(0, actors.length - 1)];
-};
-
-const generateReleaseCountry = () => {
-  const countries = [
-    'United States',
-    'Great Britan',
-    'Finland',
-    'France',
-    'Italy',
-    'Hungary',
-    'Austria'
-  ];
-  return countries[getRandomInteger(0, countries.length - 1)];
-};
-
-const generateGenre = () => {
-  const genres = [
-    'Action',
-    'Comedy',
-    'Drama',
-    'Fantasy',
-    'Horror',
-    'Mystery',
-    'Romance',
-    'Thriller',
-    'Western',
-  ];
-  return genres[getRandomInteger(0, genres.length - 1)];
-};
-
-const generateDescription = () => {
-  const descriptions = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
-  const descriptionsArray = descriptions.split('. ');
-  return descriptionsArray[getRandomInteger(0, descriptionsArray.length - 1)];
-};
+const generatePoster = () => getArrayRandomElement(POSTERS);
+const generateDirector = () => getArrayRandomElement(DIRECTORS);
+const generateWriter = () => getArrayRandomElement(WRITERS);
+const generateActor = () => getArrayRandomElement(ACTORS);
+const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
+const generateGenre = () => getArrayRandomElement(GENRES);
+const generateDescription = () => getArrayRandomElement(DESCRIPTIONS.split('. '));
 
 
 export const generateMovie = () => ({
