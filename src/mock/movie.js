@@ -1,5 +1,9 @@
 import generateRandomInteger from '../util.js';
 
+const MOVIES_COUNT = 7;
+
+const generateId = () => generateRandomInteger(0, MOVIES_COUNT).toString();
+
 const generateTitle = () => {
   const titles = [
     'Made for Each Other',
@@ -15,7 +19,7 @@ const generateTitle = () => {
 };
 
 export const generateMovie = () => ({
-  id: '0',
+  id: generateId(),
   comments: [5, 6],
   firlmInfo: {
     title: generateTitle(),
