@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const getRandomInteger = (min = 0, max = 1) => {
   min = Math.ceil(Math.min(min, max));
@@ -21,10 +23,18 @@ const getArrayRandomElement = (array) => array[getRandomInteger(0, array.length 
 const humanizeDate = (date) => dayjs(date).format('DD MMMM YYYY');
 const humanizeYear = (date) => dayjs(date).format('YYYY');
 
+const humanizeDuration = (timeDuration) => {
+  dayjs.extend(duration);
+  dayjs.extend(relativeTime);
+  const durationData = dayjs.duration(timeDuration, 'minutes').$d;
+  return `${durationData.hours}h ${durationData.minutes}m`;
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
   getArrayRandomElement,
   humanizeDate,
-  humanizeYear
+  humanizeYear,
+  humanizeDuration
 };
