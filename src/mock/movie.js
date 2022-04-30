@@ -17,9 +17,9 @@ const TITLES = [
 
 const POSTERS = [
   'made-for-each-other.png',
-  'popeye-meets-sindbad.png',
-  'santa-claus-conquers-the-maritians.jpg',
-  'the-danc-of-life.jpg',
+  'popeye-meets-sinbad.png',
+  'santa-claus-conquers-the-martians.jpg',
+  'the-dance-of-life.jpg',
   'the-great-flamarion.jpg',
   'the-man-with-the-golden-arm.jpg'
 ];
@@ -88,8 +88,18 @@ const generateWriter = () => getArrayRandomElement(WRITERS);
 const generateActor = () => getArrayRandomElement(ACTORS);
 const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
 const generateGenre = () => getArrayRandomElement(GENRES);
-const generateDescription = () => getArrayRandomElement(DESCRIPTIONS.split('. '));
 const generateRuntime = () => getRandomInteger(60, 150);
+
+const generateDescription = () => {
+  const descriptionsArray = DESCRIPTIONS.split('. ');
+  const sentenceCount = getRandomInteger(1, 5);
+  let description = '';
+  for (let i = 0; i < sentenceCount; i++) {
+    description += ' ';
+    description += getArrayRandomElement(descriptionsArray);
+  }
+  return description;
+};
 
 export const generateMovie = () => ({
   id: generateId(),
@@ -101,7 +111,7 @@ export const generateMovie = () => ({
     title: generateTitle(),
     alternativeTitle: generateTitle(),
     totalRating: generateTotalRating(),
-    poster: `images/posters/${generatePoster()}`,
+    poster: generatePoster(),
     ageRating: generateAgeRating(),
     director: generateDirector(),
     writers: [
