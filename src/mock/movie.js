@@ -3,6 +3,7 @@ import {getRandomInteger, getRandomFloat} from '../util.js';
 const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
+const MAX_COMMENT_ID = 100;
 
 const generateId = () => getRandomInteger(0, MOVIES_COUNT).toString();
 
@@ -16,12 +17,12 @@ const generateTitle = () => {
     'The Great Flamarion',
     'The Man with Golden Arm'
   ];
-
   return titles[getRandomInteger(0, titles.length - 1)];
 };
 
 const generateTotalRaiging = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const generateAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
+const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
 
 const generatePoster = () => {
   const posters = [
@@ -32,7 +33,6 @@ const generatePoster = () => {
     'the-great-flamarion.jpg',
     'the-man-with-the-golden-arm.jpg'
   ];
-
   return posters[getRandomInteger(0, posters.length - 1)];
 };
 
@@ -46,7 +46,6 @@ const generateDirector = () => {
     'Anthony Mann',
     'Otto Preminger'
   ];
-
   return directors[getRandomInteger(0, directors.length - 1)];
 };
 
@@ -60,7 +59,6 @@ const generateWriter = () => {
     'William Goldman',
     'Charlie Kaufman'
   ];
-
   return writers[getRandomInteger(0, writers.length - 1)];
 };
 
@@ -74,7 +72,6 @@ const generateActor = () => {
     'Samuel L. Jackson',
     'Bruce Willis'
   ];
-
   return actors[getRandomInteger(0, actors.length - 1)];
 };
 
@@ -88,7 +85,6 @@ const generateReleaseCountry = () => {
     'Hungary',
     'Austria'
   ];
-
   return countries[getRandomInteger(0, countries.length - 1)];
 };
 
@@ -104,20 +100,22 @@ const generateGenre = () => {
     'Thriller',
     'Western',
   ];
-
   return genres[getRandomInteger(0, genres.length - 1)];
 };
 
 const generateDescription = () => {
   const descriptions = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
   const descriptionsArray = descriptions.split('. ');
-
   return descriptionsArray[getRandomInteger(0, descriptionsArray.length - 1)];
 };
 
+
 export const generateMovie = () => ({
   id: generateId(),
-  comments: [5, 6],
+  comments: [
+    generateCommentId(),
+    generateCommentId()
+  ],
   firlmInfo: {
     title: generateTitle(),
     alternativeTitle: generateTitle(),
