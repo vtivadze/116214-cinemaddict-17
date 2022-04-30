@@ -79,8 +79,8 @@ const DESCRIPTIONS = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. C
 
 const generateId = () => getRandomInteger(0, MOVIES_COUNT).toString();
 const generateTitle = () => getArrayRandomElement(TITLES);
-const generateTotalRaiging = () => getRandomFloat(0, MAX_TOTAL_RAITING);
-const generateAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
+const generateTotalRating = () => getRandomFloat(0, MAX_TOTAL_RAITING);
+const generateAgeRating = () => getRandomInteger(0, MAX_AGE_RAITING);
 const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
 const generatePoster = () => getArrayRandomElement(POSTERS);
 const generateDirector = () => getArrayRandomElement(DIRECTORS);
@@ -89,7 +89,7 @@ const generateActor = () => getArrayRandomElement(ACTORS);
 const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
 const generateGenre = () => getArrayRandomElement(GENRES);
 const generateDescription = () => getArrayRandomElement(DESCRIPTIONS.split('. '));
-
+const generateRuntime = () => getRandomInteger(60, 150);
 
 export const generateMovie = () => ({
   id: generateId(),
@@ -97,12 +97,12 @@ export const generateMovie = () => ({
     generateCommentId(),
     generateCommentId()
   ],
-  firlmInfo: {
+  filmInfo: {
     title: generateTitle(),
     alternativeTitle: generateTitle(),
-    totalRating: generateTotalRaiging(),
+    totalRating: generateTotalRating(),
     poster: `images/posters/${generatePoster()}`,
-    ageRating: generateAgeRaiting(),
+    ageRating: generateAgeRating(),
     director: generateDirector(),
     writers: [
       generateWriter()
@@ -115,7 +115,7 @@ export const generateMovie = () => ({
       date: '2019-05-11T00:00:00.000Z',
       releaseCountry: generateReleaseCountry()
     },
-    runtime: 77,
+    runtime: generateRuntime(),
     genre: [
       generateGenre(),
       generateGenre(),
