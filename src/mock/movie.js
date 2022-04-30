@@ -23,6 +23,19 @@ const generateTitle = () => {
 const getTotalRaiting = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const getAgeRaiting = () => getRandomInteger(0, MAX_TOTAL_RAITING);
 
+const generatePoster = () => {
+  const posters = [
+    'made-for-each-other.png',
+    'popeye-meets-sindbad.png',
+    'santa-claus-conquers-the-maritians.jpg',
+    'the-danc-of-life.jpg',
+    'the-great-flamarion.jpg',
+    'the-man-with-the-golden-arm.jpg'
+  ];
+
+  return posters[getRandomInteger(0, posters.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
@@ -30,7 +43,7 @@ export const generateMovie = () => ({
     title: generateTitle(),
     alternativeTitle: generateTitle(),
     totalRating: getTotalRaiting(),
-    poster: 'images/posters/blue-blazes.jpg',
+    poster: `images/posters/${generatePoster()}`,
     ageRating: getAgeRaiting(),
     director: 'Tom Ford',
     writers: [
