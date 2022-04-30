@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-import { humanizeDate } from '../util.js';
+import { humanizeYear } from '../util.js';
 
 const createCardTemplate = (movie) => {
   const {
@@ -17,7 +17,7 @@ const createCardTemplate = (movie) => {
     comments
   } = movie;
 
-  const releaseDate = humanizeDate(date);
+  const releaseDate = humanizeYear(date);
   const genres = genre.join(', ');
   const commentsCount = comments.length;
 
