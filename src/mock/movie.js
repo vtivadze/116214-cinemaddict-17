@@ -78,6 +78,20 @@ const generateActor = () => {
   return actors[getRandomInteger(0, actors.length - 1)];
 };
 
+const generateReleaseCountry = () => {
+  const countries = [
+    'United States',
+    'Great Britan',
+    'Finland',
+    'France',
+    'Italy',
+    'Hungary',
+    'Austria'
+  ];
+
+  return countries[getRandomInteger(0, countries.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
@@ -97,7 +111,7 @@ export const generateMovie = () => ({
     ],
     release: {
       date: '2019-05-11T00:00:00.000Z',
-      releaseCountry: 'Finland'
+      releaseCountry: generateReleaseCountry()
     },
     runtime: 77,
     genre: [
