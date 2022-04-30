@@ -1,10 +1,10 @@
-import {generateRandomInteger, getRandomFloat, getRandomInteger} from '../util.js';
+import {getRandomInteger, getRandomFloat} from '../util.js';
 
 const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
 
-const generateId = () => generateRandomInteger(0, MOVIES_COUNT).toString();
+const generateId = () => getRandomInteger(0, MOVIES_COUNT).toString();
 
 const generateTitle = () => {
   const titles = [
@@ -17,11 +17,11 @@ const generateTitle = () => {
     'The Man with Golden Arm'
   ];
 
-  return titles[generateRandomInteger(0, titles.length - 1)];
+  return titles[getRandomInteger(0, titles.length - 1)];
 };
 
-const getTotalRaiting = () => getRandomFloat(0, MAX_TOTAL_RAITING);
-const getAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
+const generateTotalRaiging = () => getRandomFloat(0, MAX_TOTAL_RAITING);
+const generateAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
 
 const generatePoster = () => {
   const posters = [
@@ -50,21 +50,50 @@ const generateDirector = () => {
   return directors[getRandomInteger(0, directors.length - 1)];
 };
 
+const generateWriter = () => {
+  const writers = [
+    'Billy Wilder',
+    'Ethan Coen and Joel Coen',
+    'Robert Towne',
+    'Quentin Tarantino',
+    'Francis Ford Coppola',
+    'William Goldman',
+    'Charlie Kaufman'
+  ];
+
+  return writers[getRandomInteger(0, writers.length - 1)];
+};
+
+const generateActor = () => {
+  const actors = [
+    'Tom Hanks',
+    'Gene Hackman',
+    'Tommy Lee Jones',
+    'Harrison Ford',
+    'Dustin Hoffman',
+    'Samuel L. Jackson',
+    'Bruce Willis'
+  ];
+
+  return actors[getRandomInteger(0, actors.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
   firlmInfo: {
     title: generateTitle(),
     alternativeTitle: generateTitle(),
-    totalRating: getTotalRaiting(),
+    totalRating: generateTotalRaiging(),
     poster: `images/posters/${generatePoster()}`,
-    ageRating: getAgeRaiting(),
+    ageRating: generateAgeRaiting(),
     director: generateDirector(),
     writers: [
-      'Takeshi Kitano'
+      generateWriter()
     ],
     actors: [
-      'Morgan Freeman'
+      generateActor(),
+      generateActor()
     ],
     release: {
       date: '2019-05-11T00:00:00.000Z',
