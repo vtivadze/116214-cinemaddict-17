@@ -11,9 +11,9 @@ const generateTitle = () => {
     'Made for Each Other',
     'Popeye the Sailor Meets Sindbad the Sailor',
     'Sagebrush Trails',
-    'Santa Claus Conquers the martians',
+    'Santa Claus Conquers the Martians',
     'The Dance of Life',
-    'The Grate Flamarion',
+    'The Great Flamarion',
     'The Man with Golden Arm'
   ];
 
@@ -21,7 +21,7 @@ const generateTitle = () => {
 };
 
 const getTotalRaiting = () => getRandomFloat(0, MAX_TOTAL_RAITING);
-const getAgeRaiting = () => getRandomInteger(0, MAX_TOTAL_RAITING);
+const getAgeRaiting = () => getRandomInteger(0, MAX_AGE_RAITING);
 
 const generatePoster = () => {
   const posters = [
@@ -36,6 +36,20 @@ const generatePoster = () => {
   return posters[getRandomInteger(0, posters.length - 1)];
 };
 
+const generateDirector = () => {
+  const directors = [
+    'John Cromwell',
+    'Dave Fleischer',
+    'Armand Schaefer',
+    'Nicholas Webster',
+    'Willard Bowsky',
+    'Anthony Mann',
+    'Otto Preminger'
+  ];
+
+  return directors[getRandomInteger(0, directors.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
@@ -45,7 +59,7 @@ export const generateMovie = () => ({
     totalRating: getTotalRaiting(),
     poster: `images/posters/${generatePoster()}`,
     ageRating: getAgeRaiting(),
-    director: 'Tom Ford',
+    director: generateDirector(),
     writers: [
       'Takeshi Kitano'
     ],
