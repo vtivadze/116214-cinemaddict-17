@@ -39,13 +39,13 @@ export default class ContentPresenter {
     render(this.extraContentComponent, this.contentContainerComponent.getElement());
     render(this.extraContentListComponent, this.extraContentComponent.getElement());
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      render(new CardView(), this.extraContentListComponent.getElement());
+      render(new CardView(this.movies[i]), this.extraContentListComponent.getElement());
     }
 
     render(this.mostCommentedComponent, this.contentContainerComponent.getElement());
     render(this.mostCommentedListcomponent, this.mostCommentedComponent.getElement());
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      render(new CardView(), this.mostCommentedListcomponent.getElement());
+      render(new CardView(this.movies[i]), this.mostCommentedListcomponent.getElement());
     }
   }
 }
