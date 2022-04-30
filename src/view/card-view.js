@@ -28,7 +28,7 @@ export default class CardView {
   }
 
   getTemplate() {
-    return createCardTemplate();
+    return createCardTemplate(this.movie);
   }
 
   getElement() {
