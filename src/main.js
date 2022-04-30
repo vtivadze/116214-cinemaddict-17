@@ -5,6 +5,7 @@ import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
 import PopupView from './view/popup-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
+import MoviesModel from './model/movies-model.js';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -16,7 +17,8 @@ render(new MenuView(), siteMainElement);
 render(new SortView(), siteMainElement);
 
 const contentPresenter = new ContentPresenter();
-contentPresenter.init(siteMainElement);
+const moviesModel = new MoviesModel();
+contentPresenter.init(siteMainElement, moviesModel);
 
 render(new StatisticsView(), footerStatisticsElement);
-render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
+// render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
