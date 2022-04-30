@@ -31,7 +31,7 @@ const createCardTemplate = (movie) => {
           <span class="film-card__duration">${runtime}m</span>
           <span class="film-card__genre">${genres}</span>
         </p>
-        <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+        <img src="./images/posters/${poster}" alt="${title}" class="film-card__poster">
         <p class="film-card__description">${description}</p>
         <span class="film-card__comments">${commentsCount} comments</span>
       </a>
@@ -42,8 +42,7 @@ const createCardTemplate = (movie) => {
       </div>
     </article>`
   );
-}
-;
+};
 
 export default class CardView {
   constructor(movie) {
