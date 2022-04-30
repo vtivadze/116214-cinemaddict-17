@@ -1,4 +1,8 @@
-import {getRandomInteger, getRandomFloat, getArrayRandomElement} from '../util.js';
+import {
+  getRandomInteger,
+  getRandomFloat,
+  getArrayRandomElement
+} from '../util.js';
 
 const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
