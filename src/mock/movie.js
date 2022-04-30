@@ -4,6 +4,9 @@ const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
 const MAX_COMMENT_ID = 100;
+const MAX_WITERS_COUNT = 3;
+const MAX_ACTORS_COUNT = 5;
+const MAX_GENRES_COUNT = 3;
 
 const TITLES = [
   'Made for Each Other',
@@ -63,6 +66,7 @@ const COUNTRIES = [
   'Hungary',
   'Austria'
 ];
+
 const GENRES = [
   'Action',
   'Comedy',
@@ -81,32 +85,49 @@ const generateId = () => getRandomInteger(0, MOVIES_COUNT).toString();
 const generateTitle = () => getArrayRandomElement(TITLES);
 const generateTotalRating = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const generateAgeRating = () => getRandomInteger(0, MAX_AGE_RAITING);
-const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
 const generatePoster = () => getArrayRandomElement(POSTERS);
 const generateDirector = () => getArrayRandomElement(DIRECTORS);
-const generateWriter = () => getArrayRandomElement(WRITERS);
-const generateActor = () => getArrayRandomElement(ACTORS);
 const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
-const generateGenre = () => getArrayRandomElement(GENRES);
 const generateRuntime = () => getRandomInteger(60, 150);
+
+const generateCommentIdsArray = () => {
+  const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
+  const COMMENT_COUNT = getRandomInteger(0, MAX_COMMENT_ID);
+  return Array.from({length: COMMENT_COUNT}, generateCommentId);
+};
+
+const generateWritersArray = () => {
+  const generateWriter = () => getArrayRandomElement(WRITERS);
+  const WRITERS_COUNT = getRandomInteger(1, MAX_WITERS_COUNT);
+  return Array.from({length: WRITERS_COUNT}, generateWriter);
+};
+
+const generateActorsArray = () => {
+  const generateActor = () => getArrayRandomElement(ACTORS);
+  const ACTORS_COUNT = getRandomInteger(1, MAX_ACTORS_COUNT);
+  return Array.from({length: ACTORS_COUNT}, generateActor);
+};
+
+const generateGenresArray = () => {
+  const generateGenre = () => getArrayRandomElement(GENRES);
+  const GENRES_COUNT = getRandomInteger(1, MAX_GENRES_COUNT);
+  return Array.from({length: GENRES_COUNT}, generateGenre);
+};
 
 const generateDescription = () => {
   const descriptionsArray = DESCRIPTIONS.split('. ');
   const sentenceCount = getRandomInteger(1, 5);
   let description = '';
   for (let i = 0; i < sentenceCount; i++) {
-    description += ' ';
     description += getArrayRandomElement(descriptionsArray);
+    description += '. ';
   }
   return description;
 };
 
 export const generateMovie = () => ({
   id: generateId(),
-  comments: [
-    generateCommentId(),
-    generateCommentId()
-  ],
+  comments: generateCommentIdsArray(),
   filmInfo: {
     title: generateTitle(),
     alternativeTitle: generateTitle(),
@@ -114,23 +135,14 @@ export const generateMovie = () => ({
     poster: generatePoster(),
     ageRating: generateAgeRating(),
     director: generateDirector(),
-    writers: [
-      generateWriter()
-    ],
-    actors: [
-      generateActor(),
-      generateActor()
-    ],
+    writers: generateWritersArray(),
+    actors: generateActorsArray(),
     release: {
       date: '2019-05-11T00:00:00.000Z',
       releaseCountry: generateReleaseCountry()
     },
     runtime: generateRuntime(),
-    genre: [
-      generateGenre(),
-      generateGenre(),
-      generateGenre()
-    ],
+    genre: generateGenresArray(),
     description: generateDescription()
   },
   userDetails: {
