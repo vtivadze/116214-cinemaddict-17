@@ -23,6 +23,10 @@ const createCardTemplate = () => (
 );
 
 export default class CardView {
+  constructor(movie) {
+    this.movie = movie;
+  }
+
   getTemplate() {
     return createCardTemplate();
   }
