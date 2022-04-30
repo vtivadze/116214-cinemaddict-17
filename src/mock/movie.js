@@ -1,6 +1,7 @@
-import generateRandomInteger from '../util.js';
+import {generateRandomInteger, getRandomFloat} from '../util.js';
 
 const MOVIES_COUNT = 7;
+const MAX_TOTAL_RAITING = 10;
 
 const generateId = () => generateRandomInteger(0, MOVIES_COUNT).toString();
 
@@ -18,13 +19,15 @@ const generateTitle = () => {
   return titles[generateRandomInteger(0, titles.length - 1)];
 };
 
+const getTotalRaiting = () => getRandomFloat(0, MAX_TOTAL_RAITING);
+
 export const generateMovie = () => ({
   id: generateId(),
   comments: [5, 6],
   firlmInfo: {
     title: generateTitle(),
     alternativeTitle: generateTitle(),
-    totalRating: 5.3,
+    totalRating: getTotalRaiting(),
     poster: 'images/posters/blue-blazes.jpg',
     ageRating: 0,
     director: 'Tom Ford',
