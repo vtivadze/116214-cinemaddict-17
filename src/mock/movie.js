@@ -1,9 +1,25 @@
+import generateRandomInteger from '../util.js';
+
+const generateTitle = () => {
+  const titles = [
+    'Made for Each Other',
+    'Popeye the Sailor Meets Sindbad the Sailor',
+    'Sagebrush Trails',
+    'Santa Claus Conquers the martians',
+    'The Dance of Life',
+    'The Grate Flamarion',
+    'The Man with Golden Arm'
+  ];
+
+  return titles[generateRandomInteger(0, titles.length - 1)];
+};
+
 export const generateMovie = () => ({
   id: '0',
   comments: [5, 6],
   firlmInfo: {
-    title: 'A Little Pony Without The Carpet',
-    alternativeTitle: 'Laziness Who Sold Themselves',
+    title: generateTitle(),
+    alternativeTitle: generateTitle(),
     totalRating: 5.3,
     poster: 'images/posters/blue-blazes.jpg',
     ageRating: 0,
