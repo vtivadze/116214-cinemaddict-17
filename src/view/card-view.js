@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-import { humanizeYear, humanizeDuration } from '../util.js';
+import { humanizeYear, humanizeRuntime } from '../util.js';
 
 const createCardTemplate = (movie) => {
   const {
@@ -20,7 +20,7 @@ const createCardTemplate = (movie) => {
   const releaseDate = humanizeYear(date);
   const genres = genre.join(', ');
   const commentsCount = comments.length;
-  const duration = humanizeDuration(runtime);
+  const duration = humanizeRuntime(runtime);
 
   return  (
     `<article class="film-card">
