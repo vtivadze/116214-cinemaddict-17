@@ -12,6 +12,7 @@ export default class ContentPresenter {
   CARDS_COUNT_EXTRA = 2;
 
   contentContainerComponent = new ContentContainerView();
+
   mainContentComponent = new MainContentView();
   mainContentListComponent = new ListContainerView();
 
@@ -21,28 +22,30 @@ export default class ContentPresenter {
   mostCommentedComponent = new MostCommented();
   mostCommentedListcomponent = new ListContainerView();
 
-  init(board) {
+  init(board, moviesModel) {
     this.board = board;
+    this.moviesModel = moviesModel;
+    this.movies = [...this.moviesModel.getMovies()];
 
     render(this.contentContainerComponent, this.board);
 
     render(this.mainContentComponent, this.contentContainerComponent.getElement());
     render(this.mainContentListComponent, this.mainContentComponent.getElement());
     for (let i = 0; i < this.CARDS_COUNT; i++) {
-      render(new CardView(), this.mainContentListComponent.getElement());
+      render(new CardView(this.movies[i]), this.mainContentListComponent.getElement());
     }
     render(new ShowMoreButtonView(), this.mainContentComponent.getElement());
 
     render(this.extraContentComponent, this.contentContainerComponent.getElement());
     render(this.extraContentListComponent, this.extraContentComponent.getElement());
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      render(new CardView(), this.extraContentListComponent.getElement());
+      render(new CardView(this.movies[i]), this.extraContentListComponent.getElement());
     }
 
     render(this.mostCommentedComponent, this.contentContainerComponent.getElement());
     render(this.mostCommentedListcomponent, this.mostCommentedComponent.getElement());
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      render(new CardView(), this.mostCommentedListcomponent.getElement());
+      render(new CardView(this.movies[i]), this.mostCommentedListcomponent.getElement());
     }
   }
 }
