@@ -31,7 +31,7 @@ const humanizeDuration = (timeDuration) => {
 };
 
 const getId = () => {
-  let id = 1;
+  let id = 0;
   return () => (id++).toString();
 };
 
