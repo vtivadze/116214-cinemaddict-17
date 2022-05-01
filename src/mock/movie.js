@@ -2,7 +2,8 @@ import {
   getRandomInteger,
   getRandomFloat,
   getArrayRandomElement,
-  getId
+  getId,
+  getMockText
 } from '../util.js';
 
 const MAX_TOTAL_RAITING = 10;
@@ -11,6 +12,7 @@ const MAX_COMMENT_ID = 100;
 const MAX_WRITERS_COUNT = 3;
 const MAX_ACTORS_COUNT = 5;
 const MAX_GENRES_COUNT = 3;
+const MAX_DESCRIPTIONS_SENTENCE_COUNT = 5;
 
 const TITLES = [
   'Made for Each Other',
@@ -83,8 +85,6 @@ const GENRES = [
   'Western',
 ];
 
-const DESCRIPTIONS = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
-
 const generateId = getId();
 const generateTitle = () => getArrayRandomElement(TITLES);
 const generateTotalRating = () => getRandomFloat(0, MAX_TOTAL_RAITING);
@@ -93,6 +93,7 @@ const generatePoster = () => getArrayRandomElement(POSTERS);
 const generateDirector = () => getArrayRandomElement(DIRECTORS);
 const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
 const generateRuntime = () => getRandomInteger(60, 150);
+const generateDescription = () => getMockText(MAX_DESCRIPTIONS_SENTENCE_COUNT);
 
 const generateCommentIdsArray = () => {
   const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
@@ -116,17 +117,6 @@ const generateGenresArray = () => {
   const generateGenre = () => getArrayRandomElement(GENRES);
   const genresCount = getRandomInteger(1, MAX_GENRES_COUNT);
   return Array.from({length: genresCount}, generateGenre);
-};
-
-const generateDescription = () => {
-  const descriptionsArray = DESCRIPTIONS.split('. ');
-  const sentenceCount = getRandomInteger(1, 5);
-  let description = '';
-  for (let i = 0; i < sentenceCount; i++) {
-    description += getArrayRandomElement(descriptionsArray);
-    description += '. ';
-  }
-  return description;
 };
 
 export const generateMovie = () => ({
