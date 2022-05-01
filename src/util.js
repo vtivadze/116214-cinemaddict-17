@@ -22,7 +22,8 @@ const getRandomFloat = (min = 0, max = 1, decimalCount = 1) => {
 
 const getArrayRandomElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-const humanizeDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+const humanizeCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+const humanizeReleaseDate = (date) => dayjs(date).format('D MMMM YYYY');
 const humanizeYear = (date) => dayjs(date).format('YYYY');
 
 const humanizeDuration = (timeDuration) => {
@@ -51,7 +52,8 @@ export {
   getRandomInteger,
   getRandomFloat,
   getArrayRandomElement,
-  humanizeDate,
+  humanizeCommentDate,
+  humanizeReleaseDate,
   humanizeYear,
   humanizeDuration,
   getId,
