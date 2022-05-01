@@ -26,10 +26,10 @@ const humanizeCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 const humanizeReleaseDate = (date) => dayjs(date).format('D MMMM YYYY');
 const humanizeYear = (date) => dayjs(date).format('YYYY');
 
-const humanizeDuration = (timeDuration) => {
+const humanizeRuntime = (movieRuntime) => {
   dayjs.extend(duration);
   dayjs.extend(relativeTime);
-  const durationData = dayjs.duration(timeDuration, 'minutes').$d;
+  const durationData = dayjs.duration(movieRuntime, 'minutes').$d;
   return `${durationData.hours}h ${durationData.minutes}m`;
 };
 
@@ -55,7 +55,7 @@ export {
   humanizeCommentDate,
   humanizeReleaseDate,
   humanizeYear,
-  humanizeDuration,
+  humanizeRuntime,
   getId,
   getMockText
 };
