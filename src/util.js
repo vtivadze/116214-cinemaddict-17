@@ -30,11 +30,17 @@ const humanizeDuration = (timeDuration) => {
   return `${durationData.hours}h ${durationData.minutes}m`;
 };
 
+const getId = () => {
+  let id = 1;
+  return () => (id++).toString();
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
   getArrayRandomElement,
   humanizeDate,
   humanizeYear,
-  humanizeDuration
+  humanizeDuration,
+  getId
 };
