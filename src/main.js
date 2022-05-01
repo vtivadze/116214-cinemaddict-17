@@ -26,7 +26,7 @@ contentPresenter.init(siteMainElement, moviesModel);
 render(new StatisticsView(), footerStatisticsElement);
 
 const movies = moviesModel.getMovies();
-const movie = movies[getRandomInteger(0, movies.length)];
+const movie = movies[getRandomInteger(0, movies.length - 1)];
 render(new PopupView(movie), siteFooterElement, RenderPosition.AFTEREND);
 
 const commentsListElement = document.querySelector('.film-details__comments-list');
