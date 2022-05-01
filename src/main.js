@@ -8,6 +8,7 @@ import CommentView from './view/comment-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
+import { getRandomInteger } from './util.js';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -23,7 +24,10 @@ const moviesModel = new MoviesModel();
 contentPresenter.init(siteMainElement, moviesModel);
 
 render(new StatisticsView(), footerStatisticsElement);
-render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
+
+const movies = moviesModel.getMovies();
+const movie = movies[getRandomInteger(0, movies.length)];
+render(new PopupView(movie), siteFooterElement, RenderPosition.AFTEREND);
 
 const commentsListElement = document.querySelector('.film-details__comments-list');
 const commentsModel = new CommentsModel();
