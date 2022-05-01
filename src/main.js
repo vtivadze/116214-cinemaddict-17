@@ -7,8 +7,7 @@ import PopupView from './view/popup-view.js';
 import CommentView from './view/comment-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 import MoviesModel from './model/movies-model.js';
-
-const COMMENTS_COUNT = 4;
+import CommentsModel from './model/comments-model.js';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -27,6 +26,8 @@ render(new StatisticsView(), footerStatisticsElement);
 render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
 
 const commentsListElement = document.querySelector('.film-details__comments-list');
-for (let i = 0; i < COMMENTS_COUNT; i++) {
-  render(new CommentView(), commentsListElement);
+const commentsModel = new CommentsModel();
+const comments = commentsModel.getComments();
+for (let i = 0; i < comments.length; i++) {
+  render(new CommentView(comments[i]), commentsListElement);
 }
