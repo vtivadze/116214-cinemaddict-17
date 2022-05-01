@@ -42,10 +42,9 @@ const getMockText = (MAX_SENTENCE_COUNT) => {
   const sentenceCount = getRandomInteger(1, MAX_SENTENCE_COUNT);
   let mockText = '';
   for (let i = 0; i < sentenceCount; i++) {
-    mockText += getArrayRandomElement(textArray);
-    mockText += '. ';
+    mockText += `${getArrayRandomElement(textArray)}. `;
   }
-  return mockText;
+  return mockText.trim();
 };
 
 export {
