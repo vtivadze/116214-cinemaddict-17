@@ -4,8 +4,11 @@ import MenuView from './view/menu-view.js';
 import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
 import PopupView from './view/popup-view.js';
+import CommentView from './view/comment-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 import MoviesModel from './model/movies-model.js';
+
+const COMMENTS_COUNT = 4;
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -21,4 +24,9 @@ const moviesModel = new MoviesModel();
 contentPresenter.init(siteMainElement, moviesModel);
 
 render(new StatisticsView(), footerStatisticsElement);
-// render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
+render(new PopupView(), siteFooterElement, RenderPosition.AFTEREND);
+
+const commentsListElement = document.querySelector('.film-details__comments-list');
+for (let i = 0; i < COMMENTS_COUNT; i++) {
+  render(new CommentView(), commentsListElement);
+}
