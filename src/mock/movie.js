@@ -87,7 +87,7 @@ const GENRES = [
   'Western',
 ];
 
-const generateId = getId();
+const generateMoveId = getId();
 const generateTitle = () => getArrayRandomElement(TITLES);
 const generateTotalRating = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const generateAgeRating = () => getRandomInteger(0, MAX_AGE_RAITING);
@@ -98,7 +98,7 @@ const generateRuntime = () => getRandomInteger(MIN_RUNTIME_MINUTES, MAX_RUNTIME_
 const generateDescription = () => getMockText(MAX_DESCRIPTIONS_SENTENCE_COUNT);
 
 const generateCommentIdsArray = () => {
-  const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
+  const generateCommentId = getId();
   const commentsCount = getRandomInteger(0, MAX_COMMENT_ID);
   return Array.from({length: commentsCount}, generateCommentId);
 };
@@ -122,7 +122,7 @@ const generateGenresArray = () => {
 };
 
 export const generateMovie = () => ({
-  id: generateId(),
+  id: generateMoveId(),
   comments: generateCommentIdsArray(),
   filmInfo: {
     title: generateTitle(),
