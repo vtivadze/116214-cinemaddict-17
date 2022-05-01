@@ -13,6 +13,8 @@ const MAX_WRITERS_COUNT = 3;
 const MAX_ACTORS_COUNT = 5;
 const MAX_GENRES_COUNT = 3;
 const MAX_DESCRIPTIONS_SENTENCE_COUNT = 5;
+const MIN_RUNTIME_MINUTES = 60;
+const MAX_RUNTIME_MINUTES = 150;
 
 const TITLES = [
   'Made for Each Other',
@@ -92,7 +94,7 @@ const generateAgeRating = () => getRandomInteger(0, MAX_AGE_RAITING);
 const generatePoster = () => getArrayRandomElement(POSTERS);
 const generateDirector = () => getArrayRandomElement(DIRECTORS);
 const generateReleaseCountry = () => getArrayRandomElement(COUNTRIES);
-const generateRuntime = () => getRandomInteger(60, 150);
+const generateRuntime = () => getRandomInteger(MIN_RUNTIME_MINUTES, MAX_RUNTIME_MINUTES);
 const generateDescription = () => getMockText(MAX_DESCRIPTIONS_SENTENCE_COUNT);
 
 const generateCommentIdsArray = () => {
