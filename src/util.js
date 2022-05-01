@@ -22,7 +22,7 @@ const getRandomFloat = (min = 0, max = 1, decimalCount = 1) => {
 
 const getArrayRandomElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-const humanizeDate = (date) => dayjs(date).format('DD MMMM YYYY');
+const humanizeDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 const humanizeYear = (date) => dayjs(date).format('YYYY');
 
 const humanizeDuration = (timeDuration) => {
