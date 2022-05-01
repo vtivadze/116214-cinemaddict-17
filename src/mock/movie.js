@@ -8,7 +8,7 @@ const MOVIES_COUNT = 7;
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
 const MAX_COMMENT_ID = 100;
-const MAX_WITERS_COUNT = 3;
+const MAX_WRITERS_COUNT = 3;
 const MAX_ACTORS_COUNT = 5;
 const MAX_GENRES_COUNT = 3;
 
@@ -96,26 +96,26 @@ const generateRuntime = () => getRandomInteger(60, 150);
 
 const generateCommentIdsArray = () => {
   const generateCommentId = () => getRandomInteger(0, MAX_COMMENT_ID);
-  const COMMENT_COUNT = getRandomInteger(0, MAX_COMMENT_ID);
-  return Array.from({length: COMMENT_COUNT}, generateCommentId);
+  const commentsCount = getRandomInteger(0, MAX_COMMENT_ID);
+  return Array.from({length: commentsCount}, generateCommentId);
 };
 
 const generateWritersArray = () => {
   const generateWriter = () => getArrayRandomElement(WRITERS);
-  const WRITERS_COUNT = getRandomInteger(1, MAX_WITERS_COUNT);
-  return Array.from({length: WRITERS_COUNT}, generateWriter);
+  const writersCount = getRandomInteger(1, MAX_WRITERS_COUNT);
+  return Array.from({length: writersCount}, generateWriter);
 };
 
 const generateActorsArray = () => {
   const generateActor = () => getArrayRandomElement(ACTORS);
-  const ACTORS_COUNT = getRandomInteger(1, MAX_ACTORS_COUNT);
-  return Array.from({length: ACTORS_COUNT}, generateActor);
+  const actorsCount = getRandomInteger(1, MAX_ACTORS_COUNT);
+  return Array.from({length: actorsCount}, generateActor);
 };
 
 const generateGenresArray = () => {
   const generateGenre = () => getArrayRandomElement(GENRES);
-  const GENRES_COUNT = getRandomInteger(1, MAX_GENRES_COUNT);
-  return Array.from({length: GENRES_COUNT}, generateGenre);
+  const genresCount = getRandomInteger(1, MAX_GENRES_COUNT);
+  return Array.from({length: genresCount}, generateGenre);
 };
 
 const generateDescription = () => {
