@@ -48,10 +48,7 @@ const getMockText = (MAX_SENTENCE_COUNT) => {
   return mockText.trim();
 };
 
-const getRandomBoolean = () => {
-  const booleans = [true, false];
-  return booleans[getRandomInteger(0, 1)];
-};
+const getRandomBoolean = () => Boolean(getRandomInteger(0, 1));
 
 const getRandomeDate = (maxPassedDays) => {
   const daysGap = getRandomInteger(0, maxPassedDays);
