@@ -25,7 +25,7 @@ render(new SortView(), siteMainElement);
 const contentPresenter = new ContentPresenter();
 contentPresenter.init(siteMainElement, moviesModel);
 
-render(new StatisticsView(), footerStatisticsElement);
+render(new StatisticsView(movies), footerStatisticsElement);
 
 const movie = movies[getRandomInteger(0, movies.length - 1)];
 render(new PopupView(movie), siteFooterElement, RenderPosition.AFTEREND);
