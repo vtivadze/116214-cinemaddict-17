@@ -1,6 +1,6 @@
 import {render, RenderPosition} from './render.js';
 import UserTitleView from './view/user-title-view.js';
-import MenuView from './view/menu-view.js';
+import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
 import PopupView from './view/popup-view.js';
@@ -19,7 +19,7 @@ const moviesModel = new MoviesModel();
 const movies = moviesModel.getMovies();
 
 render(new UserTitleView(), siteHeaderElement);
-render(new MenuView(), siteMainElement);
+render(new FilterView(), siteMainElement);
 render(new SortView(), siteMainElement);
 
 const contentPresenter = new ContentPresenter();
