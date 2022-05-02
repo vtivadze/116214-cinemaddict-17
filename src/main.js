@@ -1,6 +1,6 @@
 import {render, RenderPosition} from './render.js';
 import UserTitleView from './view/user-title-view.js';
-import MenuView from './view/menu-view.js';
+import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
 import PopupView from './view/popup-view.js';
@@ -15,17 +15,18 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 const footerStatisticsElement = siteFooterElement.querySelector('.footer__statistics');
 
+const moviesModel = new MoviesModel();
+const movies = moviesModel.getMovies();
+
 render(new UserTitleView(), siteHeaderElement);
-render(new MenuView(), siteMainElement);
+render(new FilterView(moviesModel), siteMainElement);
 render(new SortView(), siteMainElement);
 
 const contentPresenter = new ContentPresenter();
-const moviesModel = new MoviesModel();
 contentPresenter.init(siteMainElement, moviesModel);
 
-render(new StatisticsView(), footerStatisticsElement);
+render(new StatisticsView(movies), footerStatisticsElement);
 
-const movies = moviesModel.getMovies();
 const movie = movies[getRandomInteger(0, movies.length - 1)];
 render(new PopupView(movie), siteFooterElement, RenderPosition.AFTEREND);
 

@@ -1,11 +1,26 @@
 import {createElement} from '../render.js';
 import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
 
+const createMovieGenresListTemplate = (genres) => genres.reduce((result, item) => `${result}<span class="film-details__genre">${item}</span>`, '');
+
 const createPopupTemplate = (movie) => {
   const {
     comments,
-    filmInfo: {poster, title, alternativeTitle, totalRating, director, writers, actors, runtime, description, genre,
-      release: {date, releaseCountry}
+    filmInfo: {
+      poster,
+      title,
+      alternativeTitle,
+      totalRating,
+      director,
+      writers,
+      actors,
+      runtime,
+      description,
+      genre,
+      release: {
+        date,
+        releaseCountry
+      }
     }
   } = movie;
 
@@ -14,7 +29,8 @@ const createPopupTemplate = (movie) => {
   const releaseDate = humanizeReleaseDate(date);
   const movieRuntime = humanizeRuntime(runtime);
   const commentsCount = comments.length;
-  const movieGenre = genre.reduce((result, item) => `${result}<span class="film-details__genre">${item}</span>`, '');
+
+  const movieGenresListTemplate = createMovieGenresListTemplate(genre);
 
   return (
     `<section class="film-details">
@@ -33,8 +49,8 @@ const createPopupTemplate = (movie) => {
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${title}</h3>
-                  <p class="film-details__title-original">Original: ${alternativeTitle}</p>
+                  <h3 class="film-details__title">${alternativeTitle}</h3>
+                  <p class="film-details__title-original">Original: ${title}</p>
                 </div>
 
                 <div class="film-details__rating">
@@ -69,7 +85,7 @@ const createPopupTemplate = (movie) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
-                  <td class="film-details__cell">${movieGenre}</td>
+                  <td class="film-details__cell">${movieGenresListTemplate}</td>
                 </tr>
               </table>
 

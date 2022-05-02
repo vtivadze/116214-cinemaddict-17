@@ -48,6 +48,14 @@ const getMockText = (MAX_SENTENCE_COUNT) => {
   return mockText.trim();
 };
 
+const getRandomBoolean = () => Boolean(getRandomInteger(0, 1));
+
+const getRandomeDate = (maxPassedDays) => {
+  const daysGap = getRandomInteger(0, maxPassedDays);
+  const hoursGap = getRandomInteger(-24, 24);
+  return dayjs().add(-daysGap, 'day').add(hoursGap, 'hour').toDate();
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -57,5 +65,7 @@ export {
   humanizeYear,
   humanizeRuntime,
   getId,
-  getMockText
+  getMockText,
+  getRandomBoolean,
+  getRandomeDate
 };
