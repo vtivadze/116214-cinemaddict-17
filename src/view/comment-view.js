@@ -1,7 +1,9 @@
 import {createElement} from '../render.js';
 import {humanizeCommentDate} from '../util.js';
 
-const createCommentTemplate = ({author, comment, date, emotion}) => {
+const createCommentTemplate = (movieComment) => {
+  const {author, comment, date, emotion} = movieComment;
+
   const commentDate = humanizeCommentDate(date);
 
   return (
