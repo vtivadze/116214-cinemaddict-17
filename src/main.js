@@ -15,17 +15,18 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 const footerStatisticsElement = siteFooterElement.querySelector('.footer__statistics');
 
+const moviesModel = new MoviesModel();
+const movies = moviesModel.getMovies();
+
 render(new UserTitleView(), siteHeaderElement);
 render(new MenuView(), siteMainElement);
 render(new SortView(), siteMainElement);
 
 const contentPresenter = new ContentPresenter();
-const moviesModel = new MoviesModel();
 contentPresenter.init(siteMainElement, moviesModel);
 
 render(new StatisticsView(), footerStatisticsElement);
 
-const movies = moviesModel.getMovies();
 const movie = movies[getRandomInteger(0, movies.length - 1)];
 render(new PopupView(movie), siteFooterElement, RenderPosition.AFTEREND);
 
