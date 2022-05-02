@@ -19,7 +19,7 @@ const moviesModel = new MoviesModel();
 const movies = moviesModel.getMovies();
 
 render(new UserTitleView(), siteHeaderElement);
-render(new FilterView(), siteMainElement);
+render(new FilterView(moviesModel), siteMainElement);
 render(new SortView(), siteMainElement);
 
 const contentPresenter = new ContentPresenter();
