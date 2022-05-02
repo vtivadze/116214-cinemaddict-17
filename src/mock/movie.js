@@ -4,7 +4,8 @@ import {
   getArrayRandomElement,
   getId,
   getMockText,
-  getRandomBoolean
+  getRandomBoolean,
+  getRandomeDate
 } from '../util.js';
 
 const MAX_TOTAL_RAITING = 10;
@@ -16,6 +17,7 @@ const MAX_GENRES_COUNT = 3;
 const MAX_DESCRIPTIONS_SENTENCE_COUNT = 5;
 const MIN_RUNTIME_MINUTES = 60;
 const MAX_RUNTIME_MINUTES = 150;
+const DAYS_IN_YEAR = 365;
 
 const TITLES = [
   'Made for Each Other',
@@ -100,6 +102,8 @@ const generateDescription = () => getMockText(MAX_DESCRIPTIONS_SENTENCE_COUNT);
 const generateWatchList = () => getRandomBoolean();
 const generateAlreadyWatched = () => getRandomBoolean();
 const generateFavorite = () => getRandomBoolean();
+const generateReleaseDate = () => getRandomeDate(DAYS_IN_YEAR * 100);
+const generateWatchingDate = () => getRandomeDate(DAYS_IN_YEAR * 10);
 
 const generateCommentIdsArray = () => {
   const generateCommentId = getId();
@@ -138,7 +142,7 @@ export const generateMovie = () => ({
     writers: generateWritersArray(),
     actors: generateActorsArray(),
     release: {
-      date: '2019-05-11T00:00:00.000Z',
+      date: generateReleaseDate(),
       releaseCountry: generateReleaseCountry()
     },
     runtime: generateRuntime(),
@@ -148,7 +152,7 @@ export const generateMovie = () => ({
   userDetails: {
     watchlist: generateWatchList(),
     alreadyWatched: generateAlreadyWatched(),
-    watchingDate: '2019-04-12T16:12:32.554Z',
+    watchingDate: generateWatchingDate(),
     favorite: generateFavorite()
   }
 });
