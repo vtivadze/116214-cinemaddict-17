@@ -4,8 +4,21 @@ import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
 const createPopupTemplate = (movie) => {
   const {
     comments,
-    filmInfo: {poster, title, alternativeTitle, totalRating, director, writers, actors, runtime, description, genre,
-      release: {date, releaseCountry}
+    filmInfo: {
+      poster,
+      title,
+      alternativeTitle,
+      totalRating,
+      director,
+      writers,
+      actors,
+      runtime,
+      description,
+      genre,
+      release: {
+        date,
+        releaseCountry
+      }
     }
   } = movie;
 
