@@ -48,6 +48,11 @@ const getMockText = (MAX_SENTENCE_COUNT) => {
   return mockText.trim();
 };
 
+const getRandomBoolean = () => {
+  const booleans = [true, false];
+  return booleans[getRandomInteger(0, 1)];
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -57,5 +62,6 @@ export {
   humanizeYear,
   humanizeRuntime,
   getId,
-  getMockText
+  getMockText,
+  getRandomBoolean
 };
