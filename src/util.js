@@ -53,6 +53,12 @@ const getRandomBoolean = () => {
   return booleans[getRandomInteger(0, 1)];
 };
 
+const getRandomeDate = (maxPassedDays) => {
+  const daysGap = getRandomInteger(0, maxPassedDays);
+  const hoursGap = getRandomInteger(-24, 24);
+  return dayjs().add(-daysGap, 'day').add(hoursGap, 'hour').toDate();
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -63,5 +69,6 @@ export {
   humanizeRuntime,
   getId,
   getMockText,
-  getRandomBoolean
+  getRandomBoolean,
+  getRandomeDate
 };
