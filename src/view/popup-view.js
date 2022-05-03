@@ -2,12 +2,12 @@ import {createElement} from '../render.js';
 import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
-  .map((genre) => `<span class="film-details__genre">${genre}</span>`)
-  .join('');
+  .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
 
 const createCommentsListTemplate = (comments) => comments
-  .map(({emotion, comment, author, commentDate}) => (
-    `<li class="film-details__comment">
+  .reduce((previousValue, {emotion, comment, author, commentDate}) => (
+    `${previousValue}
+    <li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
         </span>
@@ -19,8 +19,9 @@ const createCommentsListTemplate = (comments) => comments
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
-      </li>`)
-  ).join('');
+      </li>`
+  ), ''
+);
 
 const createPopupTemplate = (movie, comments) => {
   const {
