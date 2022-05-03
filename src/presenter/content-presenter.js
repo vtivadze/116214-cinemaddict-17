@@ -58,6 +58,14 @@ export default class ContentPresenter {
     const popupComponent = new PopupView(movie);
     const container = containerComponent.element;
 
+    cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+
+    });
+
+    popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+
+    });
+
     render(cardComponent, container);
   }
 }
