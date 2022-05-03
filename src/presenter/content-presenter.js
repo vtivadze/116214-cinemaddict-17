@@ -25,7 +25,7 @@ export default class ContentPresenter {
   init(board, moviesModel) {
     this.board = board;
     this.moviesModel = moviesModel;
-    this.movies = [...this.moviesModel.getMovies()];
+    this.movies = [...this.moviesModel.movies];
 
     render(this.contentContainerComponent, this.board);
 

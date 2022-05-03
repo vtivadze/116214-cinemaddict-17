@@ -16,7 +16,7 @@ const siteFooterElement = document.querySelector('.footer');
 const footerStatisticsElement = siteFooterElement.querySelector('.footer__statistics');
 
 const moviesModel = new MoviesModel();
-const movies = moviesModel.getMovies();
+const movies = moviesModel.movies;
 
 render(new UserTitleView(), siteHeaderElement);
 render(new FilterView(moviesModel), siteMainElement);
