@@ -66,7 +66,7 @@ export default class ContentPresenter {
 
     const hidePopup = () => {
       document.body.removeChild(popupComponent.element);
-      document.body.classList.remove('hide-owerflow');
+      document.body.classList.remove('hide-overflow');
       document.removeEventListener('keydown', handleEscapeDocument);
     };
 
@@ -77,7 +77,7 @@ export default class ContentPresenter {
     }
 
     const showPopup = () => {
-      document.body.classList.add('hide-owerflow');
+      document.body.classList.add('hide-overflow');
       document.body.appendChild(popupComponent.element);
       document.addEventListener('keydown', handleEscapeDocument);
     };
