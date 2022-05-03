@@ -1,3 +1,4 @@
+import { isEscape } from '../util.js';
 import { render } from '../render.js';
 import ContentContainerView from '../view/content-container-view.js';
 import MainContentView from '../view/main-content-view.js';
@@ -63,14 +64,22 @@ export default class ContentPresenter {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(comment.id));
     const popupComponent = new PopupView(movie, comments);
 
-    const showPopup = () => {
-      document.body.classList.add('hide-owerflow');
-      document.body.appendChild(popupComponent.element);
-    };
-
     const hidePopup = () => {
       document.body.removeChild(popupComponent.element);
       document.body.classList.remove('hide-owerflow');
+      document.removeEventListener('keydown', handleEscapeDocument);
+    };
+
+    function handleEscapeDocument (evt) {
+      if (isEscape(evt.code)) {
+        hidePopup();
+      }
+    }
+
+    const showPopup = () => {
+      document.body.classList.add('hide-owerflow');
+      document.body.appendChild(popupComponent.element);
+      document.addEventListener('keydown', handleEscapeDocument);
     };
 
     cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
