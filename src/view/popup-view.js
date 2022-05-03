@@ -22,17 +22,26 @@ const createCommentsListTemplate = (comments) => comments
       </li>`
   ), '');
 
-const createWatchlistButtonTemplate = (watchlist) => watchlist
-  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>'
-  : '<button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>';
+const createWatchlistButtonTemplate = (watchlist) => (
+  `<button
+    type="button"
+    class="${watchlist ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watchlist"
+    id="watchlist" name="watchlist">Add to watchlist</button>`
+);
 
-const createAlreadyWatchedButtonTemplate = (alreadyWatched) => alreadyWatched
-  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>'
-  : '<button type="button" class="film-details__control-button film-details__control-button--watched" id="watched" name="watched">Already watched</button>';
+const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+  `<button
+    type="button"
+    class="${alreadyWatched ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watched"
+    id="watched" name="watched">Already watched</button>`
+);
 
-const createFavoriteButtonTemplate = (favorite) => favorite
-  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>'
-  : '<button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>';
+const createFavoriteButtonTemplate = (favorite) => (
+  `<button
+    type="button"
+    class="${favorite ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--favorite"
+    id="favorite" name="favorite">Add to favorites</button>`
+);
 
 const createPopupTemplate = (movie, comments) => {
   const {
