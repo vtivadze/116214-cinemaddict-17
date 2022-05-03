@@ -1,7 +1,15 @@
 import {createElement} from '../render.js';
 import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
 
-const createMovieGenresListTemplate = (genres) => genres.reduce((result, item) => `${result}<span class="film-details__genre">${item}</span>`, '');
+const createMovieGenresListTemplate = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
+// const createCommentsListTemplate = (commentIds) => {
+//   const commentsListElement = document.querySelector('.film-details__comments-list');
+//   const commentsModel = new CommentsModel();
+//   const comments = commentsModel.getComments();
+//   for (let i = 0; i < comments.length; i++) {
+//     render(new CommentView(comments[i]), commentsListElement);
+//   }
+// };
 
 const createPopupTemplate = (movie) => {
   const {
@@ -31,6 +39,7 @@ const createPopupTemplate = (movie) => {
   const commentsCount = comments.length;
 
   const movieGenresListTemplate = createMovieGenresListTemplate(genre);
+  // const commentsListTemplate = createCommentsListTemplate(comments);
 
   return (
     `<section class="film-details">
