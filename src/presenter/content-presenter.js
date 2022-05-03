@@ -58,12 +58,29 @@ export default class ContentPresenter {
     const popupComponent = new PopupView(movie);
     const container = containerComponent.element;
 
-    cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+    const showPopup = () => {
+      document.body.classList.add('hide-owerflow');
+      document.body.appendChild(popupComponent.element);
+    };
 
+    const hidePopup = () => {
+      document.body.removeChild(popupComponent.element);
+      document.body.classList.remove('hide-owerflow');
+    };
+
+    cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+      showPopup();
+
+      // const commentsListElement = document.querySelector('.film-details__comments-list');
+      // const commentsModel = new CommentsModel();
+      // const comments = commentsModel.getComments();
+      // for (let i = 0; i < comments.length; i++) {
+      //   render(new CommentView(comments[i]), commentsListElement);
+      // }
     });
 
     popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
-
+      hidePopup();
     });
 
     render(cardComponent, container);
