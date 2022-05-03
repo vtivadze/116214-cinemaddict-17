@@ -47,6 +47,7 @@ const createPopupTemplate = (movie, comments) => {
       runtime,
       description,
       genre,
+      ageRating,
       release: {
         date,
         releaseCountry
@@ -86,7 +87,7 @@ const createPopupTemplate = (movie, comments) => {
             <div class="film-details__poster">
               <img class="film-details__poster-img" src="./images/posters/${poster}" alt="${title}">
 
-              <p class="film-details__age">18+</p>
+              <p class="film-details__age">${ageRating}+</p>
             </div>
 
             <div class="film-details__info">
