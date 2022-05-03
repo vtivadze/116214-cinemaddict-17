@@ -1,11 +1,11 @@
 import {createElement} from '../render.js';
-import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
 
 const createCommentsListTemplate = (comments) => comments
-  .reduce((previousValue, {emotion, comment, author, commentDate}) => (
+  .reduce((previousValue, {emotion, comment, author, date}) => (
     `${previousValue}
     <li class="film-details__comment">
         <span class="film-details__comment-emoji">
@@ -15,7 +15,7 @@ const createCommentsListTemplate = (comments) => comments
           <p class="film-details__comment-text">${comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
-            <span class="film-details__comment-day">${commentDate}</span>
+            <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
