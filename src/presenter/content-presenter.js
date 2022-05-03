@@ -70,13 +70,6 @@ export default class ContentPresenter {
 
     cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
       showPopup();
-
-      // const commentsListElement = document.querySelector('.film-details__comments-list');
-      // const commentsModel = new CommentsModel();
-      // const comments = commentsModel.getComments();
-      // for (let i = 0; i < comments.length; i++) {
-      //   render(new CommentView(comments[i]), commentsListElement);
-      // }
     });
 
     popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
