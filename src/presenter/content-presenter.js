@@ -40,26 +40,25 @@ export default class ContentPresenter {
     render(this.#mainContentComponent, this.#contentContainerComponent.element);
     render(this.#mainContentListComponent, this.#mainContentComponent.element);
     for (let i = 0; i < this.#movies.length; i++) {
-      this.#renderCard(this.#movies[i], this.#mainContentListComponent);
+      this.#renderCard(this.#movies[i], this.#mainContentListComponent.element);
     }
     render(new ShowMoreButtonView(), this.#mainContentComponent.element);
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
     render(this.#extraContentListComponent, this.#extraContentComponent.element);
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      this.#renderCard(this.#movies[i], this.#extraContentListComponent);
+      this.#renderCard(this.#movies[i], this.#extraContentListComponent.element);
     }
 
     render(this.#mostCommentedComponent, this.#contentContainerComponent.element);
     render(this.#mostCommentedListcomponent, this.#mostCommentedComponent.element);
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent);
+      this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent.element);
     }
   }
 
-  #renderCard(movie, containerComponent) {
+  #renderCard(movie, container) {
     const cardComponent = new CardView(movie);
-    const container = containerComponent.element;
 
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(comment.id));
     const popupComponent = new PopupView(movie, comments);
