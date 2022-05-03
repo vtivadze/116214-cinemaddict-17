@@ -10,7 +10,7 @@ import {
 
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
-const MAX_COMMENT_ID = 100;
+const MAX_COMMENT_ID = 10;
 const MAX_WRITERS_COUNT = 3;
 const MAX_ACTORS_COUNT = 5;
 const MAX_GENRES_COUNT = 3;
