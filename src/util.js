@@ -56,6 +56,8 @@ const getRandomeDate = (maxPassedDays) => {
   return dayjs().add(-daysGap, 'day').add(hoursGap, 'hour').toDate();
 };
 
+const isEscape = (code) => code === 'Escape';
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -67,5 +69,6 @@ export {
   getId,
   getMockText,
   getRandomBoolean,
-  getRandomeDate
+  getRandomeDate,
+  isEscape
 };
