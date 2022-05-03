@@ -1,8 +1,27 @@
 import { createElement } from '../render.js';
 import { humanizeYear, humanizeRuntime } from '../util.js';
 
+const createWatchlistButtonTemplate = (watchlist) => (
+  `<button
+    class="${watchlist ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--add-to-watchlist"
+    type="button">Add to watchlist</button>`
+);
+
+const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+  `<button
+    class="${alreadyWatched ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--mark-as-watched"
+    type="button">Mark as watched</button>`
+);
+
+const createFavoriteButtonTemplate = (favorite) => (
+  `<button
+    class="${favorite ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--favorite"
+    type="button">Mark as favorite</button>`
+);
+
 const createCardTemplate = (movie) => {
   const {
+    comments,
     filmInfo: {
       title,
       totalRating,
@@ -14,13 +33,21 @@ const createCardTemplate = (movie) => {
         date
       }
     },
-    comments
+    userDetails: {
+      watchlist,
+      alreadyWatched,
+      favorite
+    }
   } = movie;
 
   const releaseDate = humanizeYear(date);
   const genres = genre.join(', ');
   const commentsCount = comments.length;
   const duration = humanizeRuntime(runtime);
+
+  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
+  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
+  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
   return  (
     `<article class="film-card">
@@ -37,32 +64,34 @@ const createCardTemplate = (movie) => {
         <span class="film-card__comments">${commentsCount} comments</span>
       </a>
       <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist film-card__controls-item--active" type="button">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched film-card__controls-item--active" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button">Mark as favorite</button>
+        ${watchlistButtonTemplate}
+        ${alreadyWatchedButtonTemplate}
+        ${favoriteButtonTemplate}
       </div>
     </article>`
   );
 };
 
 export default class CardView {
+  #element = null;
+  #movie = null;
+
   constructor(movie) {
-    this.movie = movie;
+    this.#movie = movie;
   }
 
-  getTemplate() {
-    return createCardTemplate(this.movie);
+  get template() {
+    return createCardTemplate(this.#movie);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

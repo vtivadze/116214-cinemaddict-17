@@ -1,11 +1,50 @@
 import {createElement} from '../render.js';
-import {humanizeReleaseDate, humanizeRuntime} from '../util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../util.js';
 
-const createMovieGenresListTemplate = (genres) => genres.reduce((result, item) => `${result}<span class="film-details__genre">${item}</span>`, '');
+const createMovieGenresListTemplate = (genres) => genres
+  .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
 
-const createPopupTemplate = (movie) => {
+const createCommentsListTemplate = (comments) => comments
+  .reduce((previousValue, {emotion, comment, author, date}) => (
+    `${previousValue}
+    <li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${comment}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">${author}</span>
+            <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
+            <button class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`
+  ), '');
+
+const createWatchlistButtonTemplate = (watchlist) => (
+  `<button
+    type="button"
+    class="${watchlist ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watchlist"
+    id="watchlist" name="watchlist">Add to watchlist</button>`
+);
+
+const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+  `<button
+    type="button"
+    class="${alreadyWatched ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watched"
+    id="watched" name="watched">Already watched</button>`
+);
+
+const createFavoriteButtonTemplate = (favorite) => (
+  `<button
+    type="button"
+    class="${favorite ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--favorite"
+    id="favorite" name="favorite">Add to favorites</button>`
+);
+
+const createPopupTemplate = (movie, comments) => {
   const {
-    comments,
     filmInfo: {
       poster,
       title,
@@ -17,10 +56,16 @@ const createPopupTemplate = (movie) => {
       runtime,
       description,
       genre,
+      ageRating,
       release: {
         date,
         releaseCountry
-      }
+      },
+    },
+    userDetails: {
+      watchlist,
+      alreadyWatched,
+      favorite
     }
   } = movie;
 
@@ -31,6 +76,14 @@ const createPopupTemplate = (movie) => {
   const commentsCount = comments.length;
 
   const movieGenresListTemplate = createMovieGenresListTemplate(genre);
+
+  const commentsListTemplate = commentsCount
+    ? createCommentsListTemplate(comments)
+    : '';
+
+  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
+  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
+  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
   return (
     `<section class="film-details">
@@ -43,14 +96,14 @@ const createPopupTemplate = (movie) => {
             <div class="film-details__poster">
               <img class="film-details__poster-img" src="./images/posters/${poster}" alt="${title}">
 
-              <p class="film-details__age">18+</p>
+              <p class="film-details__age">${ageRating}+</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${alternativeTitle}</h3>
-                  <p class="film-details__title-original">Original: ${title}</p>
+                  <h3 class="film-details__title">${title}</h3>
+                  <p class="film-details__title-original">Original: ${alternativeTitle}</p>
                 </div>
 
                 <div class="film-details__rating">
@@ -94,9 +147,9 @@ const createPopupTemplate = (movie) => {
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+            ${watchlistButtonTemplate}
+            ${alreadyWatchedButtonTemplate}
+            ${favoriteButtonTemplate}
           </section>
         </div>
 
@@ -104,7 +157,7 @@ const createPopupTemplate = (movie) => {
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
-            <ul class="film-details__comments-list"></ul>
+            <ul class="film-details__comments-list">${commentsListTemplate}</ul>
 
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label"></div>
@@ -143,23 +196,27 @@ const createPopupTemplate = (movie) => {
 };
 
 export default class PopupView {
-  constructor(movie) {
-    this.movie = movie;
+  #element = null;
+  #movie = null;
+  #comments = null;
+
+  constructor(movie, comments) {
+    this.#movie = movie;
+    this.#comments = comments;
   }
 
-  getTemplate() {
-    return createPopupTemplate(this.movie);
+  get template() {
+    return createPopupTemplate(this.#movie, this.#comments);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

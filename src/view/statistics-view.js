@@ -3,23 +3,25 @@ import {createElement} from '../render.js';
 const createStatisticsTemplate = (moviesCount) => `<p>${moviesCount} movies inside</p>`;
 
 export default class StatisticsView {
+  #element = null;
+  #movies = null;
+
   constructor(movies) {
-    this.movies = movies;
+    this.#movies = movies;
   }
 
-  getTemplate() {
-    return createStatisticsTemplate(this.movies.length);
+  get template() {
+    return createStatisticsTemplate(this.#movies.length);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

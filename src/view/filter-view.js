@@ -27,23 +27,25 @@ const createFilterTemplate = (moviesModel) => {
 };
 
 export default class FilterView {
+  #element = null;
+  #moviesModel = null;
+
   constructor(moviesModel) {
-    this.moviesModel = moviesModel;
+    this.#moviesModel = moviesModel;
   }
 
-  getTemplate() {
-    return createFilterTemplate(this.moviesModel);
+  get template() {
+    return createFilterTemplate(this.#moviesModel);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
