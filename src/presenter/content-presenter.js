@@ -6,6 +6,7 @@ import CardView from '../view/card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MostCommented from '../view/most-commented-view.js';
+import PopupView from '../view/popup-view.js';
 
 export default class ContentPresenter {
   CARDS_COUNT_EXTRA = 2;
@@ -54,7 +55,9 @@ export default class ContentPresenter {
 
   #renderCard(movie, containerComponent) {
     const cardComponent = new CardView(movie);
+    const popupComponent = new PopupView(movie);
     const container = containerComponent.element;
+
     render(cardComponent, container);
   }
 }
