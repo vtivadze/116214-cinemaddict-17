@@ -22,6 +22,18 @@ const createCommentsListTemplate = (comments) => comments
       </li>`
   ), '');
 
+const createWatchlistButtonTemplate = (watchlist) => watchlist
+  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>'
+  : '<button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>';
+
+const createAlreadyWatchedButtonTemplate = (alreadyWatched) => alreadyWatched
+  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>'
+  : '<button type="button" class="film-details__control-button film-details__control-button--watched" id="watched" name="watched">Already watched</button>';
+
+const createFavoriteButtonTemplate = (favorite) => favorite
+  ? '<button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>'
+  : '<button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>';
+
 const createPopupTemplate = (movie, comments) => {
   const {
     filmInfo: {
@@ -38,7 +50,12 @@ const createPopupTemplate = (movie, comments) => {
       release: {
         date,
         releaseCountry
-      }
+      },
+    },
+    userDetails: {
+      watchlist,
+      alreadyWatched,
+      favorite
     }
   } = movie;
 
@@ -53,6 +70,10 @@ const createPopupTemplate = (movie, comments) => {
   const commentsListTemplate = commentsCount
     ? createCommentsListTemplate(comments)
     : '';
+
+  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
+  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
+  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
   return (
     `<section class="film-details">
@@ -116,9 +137,9 @@ const createPopupTemplate = (movie, comments) => {
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+            ${watchlistButtonTemplate}
+            ${alreadyWatchedButtonTemplate}
+            ${favoriteButtonTemplate}
           </section>
         </div>
 
