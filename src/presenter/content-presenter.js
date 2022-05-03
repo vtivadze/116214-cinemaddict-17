@@ -35,24 +35,24 @@ export default class ContentPresenter {
     render(this.#mainContentComponent, this.#contentContainerComponent.element);
     render(this.#mainContentListComponent, this.#mainContentComponent.element);
     for (let i = 0; i < this.#movies.length; i++) {
-      this.#renderMovie(this.#movies[i], this.#mainContentListComponent);
+      this.#renderCard(this.#movies[i], this.#mainContentListComponent);
     }
     render(new ShowMoreButtonView(), this.#mainContentComponent.element);
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
     render(this.#extraContentListComponent, this.#extraContentComponent.element);
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      this.#renderMovie(this.#movies[i], this.#extraContentListComponent);
+      this.#renderCard(this.#movies[i], this.#extraContentListComponent);
     }
 
     render(this.#mostCommentedComponent, this.#contentContainerComponent.element);
     render(this.#mostCommentedListcomponent, this.#mostCommentedComponent.element);
     for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
-      this.#renderMovie(this.#movies[i], this.#mostCommentedListcomponent);
+      this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent);
     }
   }
 
-  #renderMovie(movie, containerComponent) {
+  #renderCard(movie, containerComponent) {
     const cardComponent = new CardView(movie);
     const container = containerComponent.element;
     render(cardComponent, container);
