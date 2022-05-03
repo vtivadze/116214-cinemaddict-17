@@ -1,17 +1,23 @@
 import { createElement } from '../render.js';
 import { humanizeYear, humanizeRuntime } from '../util.js';
 
-const createWatchlistButtonTemplate = (watchlist) => watchlist
-  ? '<button class="film-card__controls-item film-card__controls-item--add-to-watchlist film-card__controls-item--active" type="button">Add to watchlist</button>'
-  : '<button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>';
+const createWatchlistButtonTemplate = (watchlist) => (
+  `<button
+    class="${watchlist ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--add-to-watchlist"
+    type="button">Add to watchlist</button>`
+);
 
-const createAlreadyWatchedButtonTemplate = (alreadyWatched) => alreadyWatched
-  ? '<button class="film-card__controls-item film-card__controls-item--mark-as-watched film-card__controls-item--active" type="button">Mark as watched</button>'
-  : '<button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>';
+const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+  `<button
+    class="${alreadyWatched ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--mark-as-watched"
+    type="button">Mark as watched</button>`
+);
 
-const createFavoriteButtonTemplate = (favorite) => favorite
-  ? '<button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button">Mark as favorite</button>'
-  : '<button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>';
+const createFavoriteButtonTemplate = (favorite) => (
+  `<button
+    class="${favorite ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--favorite"
+    type="button">Mark as favorite</button>`
+);
 
 const createCardTemplate = (movie) => {
   const {
