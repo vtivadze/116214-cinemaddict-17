@@ -40,7 +40,7 @@ export default class ContentPresenter {
 
     render(this.#mainContentComponent, this.#contentContainerComponent.element);
     render(this.#mainContentListComponent, this.#mainContentComponent.element);
-    for (let i = 0; i < this.#movies.length; i++) {
+    for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
       this.#renderCard(this.#movies[i], this.#mainContentListComponent.element);
     }
     render(new ShowMoreButtonView(), this.#mainContentComponent.element);
