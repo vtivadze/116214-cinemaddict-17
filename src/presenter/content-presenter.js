@@ -8,6 +8,7 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MostCommented from '../view/most-commented-view.js';
 import PopupView from '../view/popup-view.js';
+import NomovieView from '../view/nomovie-view.js';
 import CommentsModel from '../model/comments-model.js';
 
 const CARDS_COUNT_EXTRA = 2;
@@ -42,6 +43,11 @@ export default class ContentPresenter {
     render(this.#contentContainerComponent, this.#board);
 
     render(this.#mainContentComponent, this.#contentContainerComponent.element);
+    if (this.#movies.length === 0) {
+      render(new NomovieView(), this.#mainContentComponent.element);
+      return;
+    }
+
     render(this.#mainContentListComponent, this.#mainContentComponent.element);
     for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
       this.#renderCard(this.#movies[i], this.#mainContentListComponent.element);
@@ -64,6 +70,7 @@ export default class ContentPresenter {
     for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
       this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent.element);
     }
+
   }
 
   #handleLoadMoreButtonClick = () => {
