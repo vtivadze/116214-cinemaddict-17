@@ -26,6 +26,7 @@ export default class ContentPresenter {
   #mainContentListComponent = new ListContainerView();
 
   #loadMoreButtonComponent = new LoadMoreButtonView();
+  #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
   #extraContentComponent = new TopRatedView();
   #extraContentListComponent = new ListContainerView();
@@ -48,6 +49,8 @@ export default class ContentPresenter {
 
     if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
       render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
+
+      this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
     }
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
@@ -62,6 +65,19 @@ export default class ContentPresenter {
       this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent.element);
     }
   }
+
+  #handleLoadMoreButtonClick = () => {
+    this.#movies
+      .slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP)
+      .forEach((movie) => this.#renderCard(movie, this.#mainContentListComponent.element));
+
+    this.#renderedMoviesCount += MOVIE_COUNT_PER_STEP;
+
+    if (this.#renderedMoviesCount >= this.#movies.length) {
+      this.#loadMoreButtonComponent.element.remove();
+      this.#loadMoreButtonComponent.removeElement();
+    }
+  };
 
   #renderCard(movie, container) {
     const cardComponent = new CardView(movie);
