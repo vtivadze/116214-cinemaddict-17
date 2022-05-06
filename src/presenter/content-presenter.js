@@ -4,15 +4,17 @@ import ContentContainerView from '../view/content-container-view.js';
 import MainContentView from '../view/main-content-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import CardView from '../view/card-view.js';
-import ShowMoreButtonView from '../view/show-more-button-view.js';
+import LoadMoreButtonView from '../view/load-more-button-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MostCommented from '../view/most-commented-view.js';
 import PopupView from '../view/popup-view.js';
+import NomovieView from '../view/nomovie-view.js';
 import CommentsModel from '../model/comments-model.js';
 
-export default class ContentPresenter {
-  CARDS_COUNT_EXTRA = 2;
+const CARDS_COUNT_EXTRA = 2;
+const MOVIE_COUNT_PER_STEP = 5;
 
+export default class ContentPresenter {
   #board = null;
   #moviesModel = null;
   #movies = [];
@@ -23,6 +25,9 @@ export default class ContentPresenter {
 
   #mainContentComponent = new MainContentView();
   #mainContentListComponent = new ListContainerView();
+
+  #loadMoreButtonComponent = new LoadMoreButtonView();
+  #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
   #extraContentComponent = new TopRatedView();
   #extraContentListComponent = new ListContainerView();
@@ -38,24 +43,48 @@ export default class ContentPresenter {
     render(this.#contentContainerComponent, this.#board);
 
     render(this.#mainContentComponent, this.#contentContainerComponent.element);
+    if (this.#movies.length === 0) {
+      render(new NomovieView(), this.#mainContentComponent.element);
+      return;
+    }
+
     render(this.#mainContentListComponent, this.#mainContentComponent.element);
-    for (let i = 0; i < this.#movies.length; i++) {
+    for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
       this.#renderCard(this.#movies[i], this.#mainContentListComponent.element);
     }
-    render(new ShowMoreButtonView(), this.#mainContentComponent.element);
+
+    if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
+      render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
+
+      this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+    }
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
     render(this.#extraContentListComponent, this.#extraContentComponent.element);
-    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
+    for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
       this.#renderCard(this.#movies[i], this.#extraContentListComponent.element);
     }
 
     render(this.#mostCommentedComponent, this.#contentContainerComponent.element);
     render(this.#mostCommentedListcomponent, this.#mostCommentedComponent.element);
-    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
+    for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
       this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent.element);
     }
+
   }
+
+  #handleLoadMoreButtonClick = () => {
+    this.#movies
+      .slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP)
+      .forEach((movie) => this.#renderCard(movie, this.#mainContentListComponent.element));
+
+    this.#renderedMoviesCount += MOVIE_COUNT_PER_STEP;
+
+    if (this.#renderedMoviesCount >= this.#movies.length) {
+      this.#loadMoreButtonComponent.element.remove();
+      this.#loadMoreButtonComponent.removeElement();
+    }
+  };
 
   #renderCard(movie, container) {
     const cardComponent = new CardView(movie);
@@ -71,6 +100,7 @@ export default class ContentPresenter {
 
     function handleEscapeDocument (evt) {
       if (isEscape(evt.code)) {
+        evt.preventDefault();
         hidePopup();
       }
     }
