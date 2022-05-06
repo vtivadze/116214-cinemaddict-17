@@ -71,6 +71,7 @@ export default class ContentPresenter {
 
     function handleEscapeDocument (evt) {
       if (isEscape(evt.code)) {
+        evt.preventDefault();
         hidePopup();
       }
     }
