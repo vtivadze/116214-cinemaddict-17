@@ -10,9 +10,10 @@ import MostCommented from '../view/most-commented-view.js';
 import PopupView from '../view/popup-view.js';
 import CommentsModel from '../model/comments-model.js';
 
-export default class ContentPresenter {
-  CARDS_COUNT_EXTRA = 2;
+const CARDS_COUNT_EXTRA = 2;
+const MOVIE_COUNT_PER_STEP = 5;
 
+export default class ContentPresenter {
   #board = null;
   #moviesModel = null;
   #movies = [];
@@ -46,13 +47,13 @@ export default class ContentPresenter {
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
     render(this.#extraContentListComponent, this.#extraContentComponent.element);
-    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
+    for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
       this.#renderCard(this.#movies[i], this.#extraContentListComponent.element);
     }
 
     render(this.#mostCommentedComponent, this.#contentContainerComponent.element);
     render(this.#mostCommentedListcomponent, this.#mostCommentedComponent.element);
-    for (let i = 0; i < this.CARDS_COUNT_EXTRA; i++) {
+    for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
       this.#renderCard(this.#movies[i], this.#mostCommentedListcomponent.element);
     }
   }
