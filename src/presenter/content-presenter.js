@@ -4,7 +4,7 @@ import ContentContainerView from '../view/content-container-view.js';
 import MainContentView from '../view/main-content-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import CardView from '../view/card-view.js';
-import ShowMoreButtonView from '../view/show-more-button-view.js';
+import LoadMoreButtonView from '../view/load-more-button-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MostCommented from '../view/most-commented-view.js';
 import PopupView from '../view/popup-view.js';
@@ -25,6 +25,8 @@ export default class ContentPresenter {
   #mainContentComponent = new MainContentView();
   #mainContentListComponent = new ListContainerView();
 
+  #loadMoreButtonComponent = new LoadMoreButtonView();
+
   #extraContentComponent = new TopRatedView();
   #extraContentListComponent = new ListContainerView();
 
@@ -43,7 +45,10 @@ export default class ContentPresenter {
     for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
       this.#renderCard(this.#movies[i], this.#mainContentListComponent.element);
     }
-    render(new ShowMoreButtonView(), this.#mainContentComponent.element);
+
+    if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
+      render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
+    }
 
     render(this.#extraContentComponent, this.#contentContainerComponent.element);
     render(this.#extraContentListComponent, this.#extraContentComponent.element);
