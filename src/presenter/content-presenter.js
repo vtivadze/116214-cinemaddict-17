@@ -29,8 +29,8 @@ export default class ContentPresenter {
   #loadMoreButtonComponent = new LoadMoreButtonView();
   #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
-  #extraContentComponent = new TopRatedView();
-  #extraContentListComponent = new ListContainerView();
+  #topRatedComponent = new TopRatedView();
+  #topRatedListComponent = new ListContainerView();
 
   #mostCommentedComponent = new MostCommented();
   #mostCommentedListcomponent = new ListContainerView();
@@ -59,10 +59,10 @@ export default class ContentPresenter {
       this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
     }
 
-    render(this.#extraContentComponent, this.#contentContainerComponent.element);
-    render(this.#extraContentListComponent, this.#extraContentComponent.element);
+    render(this.#topRatedComponent, this.#contentContainerComponent.element);
+    render(this.#topRatedListComponent, this.#topRatedComponent.element);
     for (let i = 0; i < CARDS_COUNT_EXTRA; i++) {
-      this.#renderCard(this.#movies[i], this.#extraContentListComponent.element);
+      this.#renderCard(this.#movies[i], this.#topRatedListComponent.element);
     }
 
     render(this.#mostCommentedComponent, this.#contentContainerComponent.element);
