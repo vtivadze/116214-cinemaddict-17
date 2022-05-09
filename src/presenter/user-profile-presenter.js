@@ -30,6 +30,7 @@ export default class UserProfilePresenter {
   #getUserTitle() {
     const count = this.#getAlreadyWatchedCount();
     let userTitle = null;
+
     if (count === NO_TITLE_COUNT) {
       userTitle = '';
     } else if (count >= NOVICE_MIN_COUNT && count <= NOVICE_MAX_COUNT) {
@@ -39,6 +40,7 @@ export default class UserProfilePresenter {
     } else if (count >= MOVIE_BUF_MIN_COUNT) {
       userTitle = 'movie buff';
     }
+
     return userTitle;
   }
 }
