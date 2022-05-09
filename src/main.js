@@ -1,5 +1,5 @@
 import {render} from './render.js';
-import UserProfileView from './view/user-profile-view.js';
+import UserProfilePresenter from './presenter/user-profile-presenter.js';
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
@@ -14,7 +14,9 @@ const footerStatisticsElement = siteFooterElement.querySelector('.footer__statis
 const moviesModel = new MoviesModel();
 const movies = moviesModel.movies;
 
-render(new UserProfileView(), siteHeaderElement);
+const userProfilePresenter = new UserProfilePresenter(siteHeaderElement, moviesModel);
+userProfilePresenter.render();
+
 render(new FilterView(moviesModel), siteMainElement);
 render(new SortView(), siteMainElement);
 
