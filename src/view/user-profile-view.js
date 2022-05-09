@@ -7,7 +7,7 @@ const createUserTitleTemplate = () => (
   </section>`
 );
 
-export default class UserTitleView {
+export default class UserProfileView {
   #element = null;
 
   get template () {
