@@ -1,9 +1,9 @@
 import { createElement } from '../render.js';
 
 const createFilterTemplate = (moviesModel) => {
-  const watchListCount = moviesModel.getWatchListCount();
-  const alreadyWatchedCount = moviesModel.getAlreadyWatchedCount();
-  const favoriteCount = moviesModel.getFavoreiteCount();
+  const watchListCount = moviesModel.watchListCount;
+  const alreadyWatchedCount = moviesModel.alreadyWatchedCount;
+  const favoriteCount = moviesModel.favoreiteCount;
 
   return (
     `<nav class="main-navigation">

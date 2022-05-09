@@ -9,7 +9,15 @@ export default class MoviesModel {
     return this.#movies;
   }
 
-  getWatchListCount = () => this.#movies.filter((movie) => movie.userDetails.watchlist).length;
-  getAlreadyWatchedCount = () => this.#movies.filter((movie) => movie.userDetails.alreadyWatched).length;
-  getFavoreiteCount = () => this.#movies.filter((movie) => movie.userDetails.favorite).length;
+  get watchListCount() {
+    return this.#movies.filter((movie) => movie.userDetails.watchlist).length;
+  }
+
+  get alreadyWatchedCount() {
+    return this.#movies.filter((movie) => movie.userDetails.alreadyWatched).length;
+  }
+
+  get favoreiteCount() {
+    return this.#movies.filter((movie) => movie.userDetails.favorite).length;
+  }
 }
