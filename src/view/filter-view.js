@@ -1,9 +1,7 @@
 import { createElement } from '../render.js';
 
-const createFilterTemplate = (moviesModel) => {
-  const watchListCount = moviesModel.watchListCount;
-  const alreadyWatchedCount = moviesModel.alreadyWatchedCount;
-  const favoriteCount = moviesModel.favoreiteCount;
+const createFilterTemplate = (filter) => {
+  const {watchListCount, alreadyWatchedCount, favoriteCount} = filter;
 
   return (
     `<nav class="main-navigation">
@@ -28,14 +26,14 @@ const createFilterTemplate = (moviesModel) => {
 
 export default class FilterView {
   #element = null;
-  #moviesModel = null;
+  #filter = null;
 
-  constructor(moviesModel) {
-    this.#moviesModel = moviesModel;
+  constructor(filter) {
+    this.#filter = filter;
   }
 
   get template() {
-    return createFilterTemplate(this.#moviesModel);
+    return createFilterTemplate(this.#filter);
   }
 
   get element() {

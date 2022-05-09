@@ -17,7 +17,7 @@ export default class MoviesModel {
     return this.#movies.filter((movie) => movie.userDetails.alreadyWatched).length;
   }
 
-  get favoreiteCount() {
+  get favoriteCount() {
     return this.#movies.filter((movie) => movie.userDetails.favorite).length;
   }
 }
