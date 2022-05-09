@@ -3,7 +3,7 @@ import UserTitleView from './view/user-title-view.js';
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import StatisticsView from './view/statistics-view.js';
-import MainPresenter from './presenter/main-presenter.js';
+import PagePresenter from './presenter/page-presenter.js';
 import MoviesModel from './model/movies-model.js';
 
 const siteHeaderElement = document.querySelector('.header');
@@ -18,7 +18,7 @@ render(new UserTitleView(), siteHeaderElement);
 render(new FilterView(moviesModel), siteMainElement);
 render(new SortView(), siteMainElement);
 
-const contentPresenter = new MainPresenter();
+const contentPresenter = new PagePresenter();
 contentPresenter.init(siteMainElement, moviesModel);
 
 render(new StatisticsView(movies), footerStatisticsElement);

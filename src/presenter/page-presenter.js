@@ -14,7 +14,7 @@ import CommentsModel from '../model/comments-model.js';
 const CARDS_COUNT_EXTRA = 2;
 const MOVIE_COUNT_PER_STEP = 5;
 
-export default class MainPresenter {
+export default class PagePresenter {
   #board = null;
   #moviesModel = null;
   #movies = [];
