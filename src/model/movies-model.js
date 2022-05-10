@@ -20,4 +20,9 @@ export default class MoviesModel {
   get favoriteCount() {
     return this.#movies.filter((movie) => movie.userDetails.favorite).length;
   }
+
+  get mostCommented() {
+    const movies = [...this.#movies];
+    return movies.sort((a, b) => a.comments.length > b.comments.length);
+  }
 }
