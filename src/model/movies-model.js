@@ -1,6 +1,6 @@
 import { generateMovie } from '../mock/movie.js';
 
-const MOVIES_COUNT = 150;
+const MOVIES_COUNT = 5;
 
 export default class MoviesModel {
   #movies = Array.from({length: MOVIES_COUNT}, generateMovie);
@@ -23,11 +23,11 @@ export default class MoviesModel {
 
   get mostCommented() {
     const movies = [...this.#movies];
-    return movies.sort((a, b) => a.comments.length > b.comments.length);
+    return movies.sort((a, b) => b.comments.length - a.comments.length);
   }
 
   get topRated() {
     const movies = [...this.#movies];
-    return movies.sort((a, b) => a.filmInfo.totalRating > b.filmInfo.totalRating);
+    return movies.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
   }
 }
