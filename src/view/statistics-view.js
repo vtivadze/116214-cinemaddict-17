@@ -4,14 +4,14 @@ const createStatisticsTemplate = (moviesCount) => `<p>${moviesCount} movies insi
 
 export default class StatisticsView {
   #element = null;
-  #movies = null;
+  #moviesCount = 0;
 
-  constructor(movies) {
-    this.#movies = movies;
+  constructor(moviesCount) {
+    this.#moviesCount = moviesCount;
   }
 
   get template() {
-    return createStatisticsTemplate(this.#movies.length);
+    return createStatisticsTemplate(this.#moviesCount);
   }
 
   get element() {
