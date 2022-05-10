@@ -25,4 +25,9 @@ export default class MoviesModel {
     const movies = [...this.#movies];
     return movies.sort((a, b) => a.comments.length > b.comments.length);
   }
+
+  get topRated() {
+    const movies = [...this.#movies];
+    return movies.sort((a, b) => a.filmInfo.totalRating > b.filmInfo.totalRating);
+  }
 }
