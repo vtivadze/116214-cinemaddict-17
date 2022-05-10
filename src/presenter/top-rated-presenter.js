@@ -14,8 +14,6 @@ export default class TopRatedPresenter {
   #commentsModel = null;
   #movies = [];
 
-  #topRatedCount = TOP_RATED_COUNT;
-
   constructor(contentContainer, moviesModel, commentsModel) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
@@ -28,16 +26,18 @@ export default class TopRatedPresenter {
   }
 
   #getTopRatedMovies() {
-    return this.#moviesModel.topRated.slice(0, this.#topRatedCount);
+    return this.#moviesModel.topRated.slice(0, TOP_RATED_COUNT);
   }
 
   #renderCardsContainer() {
     render(this.#topRatedComponenet, this.#contentContainer);
     render(this.#listContainerComponent, this.#topRatedComponenet.element);
-    for (let i = 0; i < this.#topRatedCount; i++) {
-      const comments = this.#commentsModel.comments.filter((comment) => this.#movies[i].comments.includes(String(comment.id)));
-      const cardPresenter = new CardPresenter(this.#movies[i], comments);
-      cardPresenter.init().renderCard(this.#listContainerComponent.element);
-    }
+    this.#movies.forEach((movie) => this.#renderCard(movie));
+  }
+
+  #renderCard(movie) {
+    const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
+    const cardPresenter = new CardPresenter(movie, comments);
+    cardPresenter.init().renderCard(this.#listContainerComponent.element);
   }
 }

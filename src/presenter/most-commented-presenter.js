@@ -14,8 +14,6 @@ export default class MostCommentedPresenter {
   #commentsModel = null;
   #movies = [];
 
-  #mostCommentedCount = MOST_COMMETNTED_COUNT;
-
   constructor(contentContainer, moviesModel, commentsModel) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
@@ -34,10 +32,12 @@ export default class MostCommentedPresenter {
   #renderCardsContainer() {
     render(this.#mostCommentedComponent, this.#contentContainer);
     render(this.#listContainerComponent, this.#mostCommentedComponent.element);
-    for (let i = 0; i < this.#mostCommentedCount; i++) {
-      const comments = this.#commentsModel.comments.filter((comment) => this.#movies[i].comments.includes(String(comment.id)));
-      const cardPresenter = new CardPresenter(this.#movies[i], comments);
-      cardPresenter.init().renderCard(this.#listContainerComponent.element);
-    }
+    this.#movies.forEach((movie) => this.#renderCard(movie));
+  }
+
+  #renderCard(movie) {
+    const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
+    const cardPresenter = new CardPresenter(movie, comments);
+    cardPresenter.init().renderCard(this.#listContainerComponent.element);
   }
 }
