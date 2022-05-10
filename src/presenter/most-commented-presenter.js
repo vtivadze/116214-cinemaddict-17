@@ -20,14 +20,14 @@ export default class MostCommentedPresenter {
 
   init() {
     this.#mostCommentedMovies = this.#getMostCommentedMovies();
-    this.#renderboard();
+    this.#renderCardsContainer();
   }
 
   #getMostCommentedMovies() {
     return this.#moviesModel.mostCommented.slice(0, MOST_COMMETNTED_COUNT);
   }
 
-  #renderboard() {
+  #renderCardsContainer() {
     render(this.#mostCommentedComponent, this.#contentContainer);
     render(this.#listContainerComponent, this.#mostCommentedComponent.element);
     this.#mostCommentedMovies.forEach((movie) => this.#renderCard(movie));

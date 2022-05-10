@@ -20,14 +20,14 @@ export default class TopRatedPresenter {
 
   init() {
     this.#topRatedMovies = this.#getTopRatedMovies();
-    this.#renderboard();
+    this.#renderCardsContainer();
   }
 
   #getTopRatedMovies() {
     return this.#moviesModel.topRated.slice(0, TOP_RATED_COUNT);
   }
 
-  #renderboard() {
+  #renderCardsContainer() {
     render(this.#topRatedComponenet, this.#contentContainer);
     render(this.#listContainerComponent, this.#topRatedComponenet.element);
     this.#topRatedMovies.forEach((movie) => this.#renderCard(movie));
