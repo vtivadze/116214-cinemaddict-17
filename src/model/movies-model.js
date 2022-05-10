@@ -22,12 +22,10 @@ export default class MoviesModel {
   }
 
   get mostCommented() {
-    const movies = [...this.#movies];
-    return movies.sort((a, b) => b.comments.length - a.comments.length);
+    return [...this.#movies].sort((a, b) => b.comments.length - a.comments.length);
   }
 
   get topRated() {
-    const movies = [...this.#movies];
-    return movies.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+    return [...this.#movies].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
   }
 }
