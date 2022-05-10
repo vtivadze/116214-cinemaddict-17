@@ -2,7 +2,7 @@ import { createElement } from '../render.js';
 
 const createNomovieTemplate = () => '<h2 class="films-list__title">There are no movies in our database</h2>';
 
-export default class NomovieView {
+export default class NoMovieView {
   #element = null;
 
   get template() {
