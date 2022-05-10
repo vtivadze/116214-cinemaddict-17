@@ -1,25 +1,29 @@
 import {render} from '../render.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import ListContainerView from '../view/list-container-view.js';
-import CardView from '../view/card-view.js';
+import CardPresenter from './card-presenter.js';
 
 const MOST_COMMETNTED_COUNT = 2;
 
 export default class MostCommentedPresenter {
   #mostCommentedComponent = new MostCommentedView();
   #listContainerComponent = new ListContainerView();
-  #mostCommentedMovies = null;
 
   #contentContainer = null;
   #moviesModel = null;
+  #commentsModel = null;
+  #movies = [];
 
-  constructor(contentContainer, moviesModel) {
+  #mostCommentedCount = MOST_COMMETNTED_COUNT;
+
+  constructor(contentContainer, moviesModel, commentsModel) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
+    this.#commentsModel = commentsModel;
   }
 
   init() {
-    this.#mostCommentedMovies = this.#getMostCommentedMovies();
+    this.#movies = this.#getMostCommentedMovies();
     this.#renderCardsContainer();
   }
 
@@ -30,42 +34,10 @@ export default class MostCommentedPresenter {
   #renderCardsContainer() {
     render(this.#mostCommentedComponent, this.#contentContainer);
     render(this.#listContainerComponent, this.#mostCommentedComponent.element);
-    this.#mostCommentedMovies.forEach((movie) => this.#renderCard(movie));
-  }
-
-  #renderCard(movie) {
-    const cardComponent = new CardView(movie);
-
-    // const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(comment.id));
-    // const popupComponent = new PopupView(movie, comments);
-
-    // const hidePopup = () => {
-    //   document.body.removeChild(popupComponent.element);
-    //   document.body.classList.remove('hide-overflow');
-    //   document.removeEventListener('keydown', handleEscapeDocument);
-    // };
-
-    // function handleEscapeDocument (evt) {
-    //   if (isEscape(evt.code)) {
-    //     evt.preventDefault();
-    //     hidePopup();
-    //   }
-    // }
-
-    // const showPopup = () => {
-    //   document.body.classList.add('hide-overflow');
-    //   document.body.appendChild(popupComponent.element);
-    //   document.addEventListener('keydown', handleEscapeDocument);
-    // };
-
-    // cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-    //   showPopup();
-    // });
-
-    // popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
-    //   hidePopup();
-    // });
-
-    render(cardComponent, this.#listContainerComponent.element);
+    for (let i = 0; i < this.#mostCommentedCount; i++) {
+      const comments = this.#commentsModel.comments.filter((comment) => this.#movies[i].comments.includes(String(comment.id)));
+      const cardPresenter = new CardPresenter(this.#movies[i], comments);
+      cardPresenter.init().renderCard(this.#listContainerComponent.element);
+    }
   }
 }
