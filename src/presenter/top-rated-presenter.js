@@ -10,11 +10,11 @@ export default class TopRatedPresenter {
   #listContainerComponent = new ListContainerView();
   #topRatedMovies = null;
 
-  #boardContainer = null;
+  #contentContainer = null;
   #moviesModel = null;
 
-  constructor(boardContainer, moviesModel) {
-    this.#boardContainer = boardContainer;
+  constructor(contentContainer, moviesModel) {
+    this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
   }
 
@@ -28,7 +28,7 @@ export default class TopRatedPresenter {
   }
 
   #renderboard() {
-    render(this.#topRatedComponenet, this.#boardContainer);
+    render(this.#topRatedComponenet, this.#contentContainer);
     render(this.#listContainerComponent, this.#topRatedComponenet.element);
     this.#topRatedMovies.forEach((movie) => this.#renderCard(movie));
   }

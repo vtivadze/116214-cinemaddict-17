@@ -10,11 +10,11 @@ export default class MostCommentedPresenter {
   #listContainerComponent = new ListContainerView();
   #mostCommentedMovies = null;
 
-  #boardContainer = null;
+  #contentContainer = null;
   #moviesModel = null;
 
-  constructor(boardContainer, moviesModel) {
-    this.#boardContainer = boardContainer;
+  constructor(contentContainer, moviesModel) {
+    this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
   }
 
@@ -28,7 +28,7 @@ export default class MostCommentedPresenter {
   }
 
   #renderboard() {
-    render(this.#mostCommentedComponent, this.#boardContainer);
+    render(this.#mostCommentedComponent, this.#contentContainer);
     render(this.#listContainerComponent, this.#mostCommentedComponent.element);
     this.#mostCommentedMovies.forEach((movie) => this.#renderCard(movie));
   }
