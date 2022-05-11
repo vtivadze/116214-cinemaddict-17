@@ -19,7 +19,7 @@ export default class LoadMoreButtonPresenter {
   }
 
   init() {
-    this.#loadMoreButtonComponent.setClickHandler(this.#handleLoadMoreButtonClick);
+    this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick);
     return this;
   }
 
@@ -27,7 +27,7 @@ export default class LoadMoreButtonPresenter {
     render(this.#loadMoreButtonComponent, this.#container);
   }
 
-  #handleLoadMoreButtonClick = () => {
+  #onLoadMoreButtonClick = () => {
     this.#moviesModel.movies
       .slice(this.#renderedMoviesCount, this.#renderedMoviesCount + this.#movieCountPerStep)
       .forEach((movie) => this.#renderCard(movie));
