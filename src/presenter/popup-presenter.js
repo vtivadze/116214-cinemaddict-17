@@ -14,7 +14,7 @@ export default class PopupPresenter {
 
   init() {
     this.#popupComponent = new PopupView(this.#movie, this.#comments);
-    this.#addHandlers();
+    this.#setListeners();
     return this;
   }
 
@@ -23,22 +23,21 @@ export default class PopupPresenter {
     render(this.#popupComponent, document.body);
   }
 
-  #addHandlers() {
-    document.addEventListener('keydown', handleEscapeDocument);
-
-    const hidePopup = () => {
-      document.body.removeChild(this.#popupComponent.element);
-      document.body.classList.remove('hide-overflow');
-      document.removeEventListener('keydown', handleEscapeDocument);
-    };
-
-    function handleEscapeDocument (evt) {
-      if (isEscape(evt.code)) {
-        evt.preventDefault();
-        hidePopup();
-      }
-    }
-
-    this.#popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', hidePopup);
+  #setListeners() {
+    document.addEventListener('keydown', this.#handleEscapeDocument);
+    this.#popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', this.#hidePopup);
   }
+
+  #handleEscapeDocument = (evt) => {
+    if (isEscape(evt.code)) {
+      evt.preventDefault();
+      this.#hidePopup();
+    }
+  };
+
+  #hidePopup = () => {
+    document.body.removeChild(this.#popupComponent.element);
+    document.body.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this.#handleEscapeDocument);
+  };
 }
