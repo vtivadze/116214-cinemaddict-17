@@ -14,7 +14,7 @@ export default class PopupPresenter {
 
   init() {
     this.#popupComponent = new PopupView(this.#movie, this.#comments);
-    document.addEventListener('keydown', this.#onDocumentEscape);
+    document.addEventListener('keydown', this.#onDocumentKeydown);
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup);
     return this;
   }
@@ -24,7 +24,7 @@ export default class PopupPresenter {
     render(this.#popupComponent, document.body);
   }
 
-  #onDocumentEscape = (evt) => {
+  #onDocumentKeydown = (evt) => {
     if (isEscape(evt.code)) {
       evt.preventDefault();
       this.#hidePopup();
@@ -34,6 +34,6 @@ export default class PopupPresenter {
   #hidePopup = () => {
     this.#popupComponent.element.remove();
     document.body.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', this.#onDocumentEscape);
+    document.removeEventListener('keydown', this.#onDocumentKeydown);
   };
 }
