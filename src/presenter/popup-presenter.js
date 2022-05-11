@@ -14,18 +14,14 @@ export default class PopupPresenter {
 
   init() {
     this.#popupComponent = new PopupView(this.#movie, this.#comments);
-    this.#setListeners();
+    document.addEventListener('keydown', this.#handleEscapeDocument);
+    this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup);
     return this;
   }
 
   renderPresenter() {
     document.body.classList.add('hide-overflow');
     render(this.#popupComponent, document.body);
-  }
-
-  #setListeners() {
-    document.addEventListener('keydown', this.#handleEscapeDocument);
-    this.#popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', this.#hidePopup);
   }
 
   #handleEscapeDocument = (evt) => {
