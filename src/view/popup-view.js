@@ -211,10 +211,10 @@ export default class PopupView extends AbstractView {
 
   setCloseButtonClickHandler = (callback) => {
     this._callback.closeButtonClick = callback;
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonClickHandler);
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick);
   };
 
-  #closeButtonClickHandler = (evt) => {
+  #onCloseButtonClick = (evt) => {
     evt.preventDefault();
     this._callback.closeButtonClick();
   };
