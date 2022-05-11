@@ -1,9 +1,7 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterTemplate = (moviesModel) => {
-  const watchListCount = moviesModel.getWatchListCount();
-  const alreadyWatchedCount = moviesModel.getAlreadyWatchedCount();
-  const favoriteCount = moviesModel.getFavoreiteCount();
+const createFilterTemplate = (filter) => {
+  const {watchListCount, alreadyWatchedCount, favoriteCount} = filter;
 
   return (
     `<nav class="main-navigation">
@@ -26,26 +24,15 @@ const createFilterTemplate = (moviesModel) => {
   );
 };
 
-export default class FilterView {
-  #element = null;
-  #moviesModel = null;
+export default class FilterView extends AbstractView {
+  #filter = null;
 
-  constructor(moviesModel) {
-    this.#moviesModel = moviesModel;
+  constructor(filter) {
+    super();
+    this.#filter = filter;
   }
 
   get template() {
-    return createFilterTemplate(this.#moviesModel);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
+    return createFilterTemplate(this.#filter);
   }
 }

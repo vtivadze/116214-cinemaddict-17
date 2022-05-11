@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, humanizeRuntime } from '../util.js';
 
 const createWatchlistButtonTemplate = (watchlist) => (
@@ -72,26 +72,15 @@ const createCardTemplate = (movie) => {
   );
 };
 
-export default class CardView {
-  #element = null;
+export default class CardView extends AbstractView {
   #movie = null;
 
   constructor(movie) {
+    super();
     this.#movie = movie;
   }
 
   get template() {
     return createCardTemplate(this.#movie);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

@@ -9,7 +9,23 @@ export default class MoviesModel {
     return this.#movies;
   }
 
-  getWatchListCount = () => this.#movies.filter((movie) => movie.userDetails.watchlist).length;
-  getAlreadyWatchedCount = () => this.#movies.filter((movie) => movie.userDetails.alreadyWatched).length;
-  getFavoreiteCount = () => this.#movies.filter((movie) => movie.userDetails.favorite).length;
+  get watchListCount() {
+    return this.#movies.filter((movie) => movie.userDetails.watchlist).length;
+  }
+
+  get alreadyWatchedCount() {
+    return this.#movies.filter((movie) => movie.userDetails.alreadyWatched).length;
+  }
+
+  get favoriteCount() {
+    return this.#movies.filter((movie) => movie.userDetails.favorite).length;
+  }
+
+  get mostCommented() {
+    return [...this.#movies].sort((a, b) => b.comments.length - a.comments.length);
+  }
+
+  get topRated() {
+    return [...this.#movies].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+  }
 }
