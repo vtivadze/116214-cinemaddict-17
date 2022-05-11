@@ -19,7 +19,7 @@ export default class LoadMoreButtonPresenter {
   }
 
   init() {
-    this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+    this.#loadMoreButtonComponent.setClickHandler(this.#handleLoadMoreButtonClick);
     return this;
   }
 
