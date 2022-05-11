@@ -32,7 +32,7 @@ export default class PopupPresenter {
   };
 
   #hidePopup = () => {
-    document.body.removeChild(this.#popupComponent.element);
+    this.#popupComponent.element.remove();
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#handleEscapeDocument);
   };
