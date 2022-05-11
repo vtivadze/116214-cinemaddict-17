@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
@@ -195,28 +195,17 @@ const createPopupTemplate = (movie, comments) => {
   );
 };
 
-export default class PopupView {
-  #element = null;
+export default class PopupView extends AbstractView {
   #movie = null;
   #comments = null;
 
   constructor(movie, comments) {
+    super();
     this.#movie = movie;
     this.#comments = comments;
   }
 
   get template() {
     return createPopupTemplate(this.#movie, this.#comments);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
