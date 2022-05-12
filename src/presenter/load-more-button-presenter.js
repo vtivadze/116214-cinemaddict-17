@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 
 export default class LoadMoreButtonPresenter {

@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import UserProfileView from '../view/user-profile-view.js';
 
 const NO_TITLE_COUNT = 0;

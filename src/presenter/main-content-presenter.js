@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import {render} from '../framework/render.js';
 import MainContentView from '../view/main-content-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import LoadMoreButtonPresenter from './load-more-button-presenter.js';
