@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import ListContainerView from '../view/list-container-view.js';
 import CardPresenter from './card-presenter.js';

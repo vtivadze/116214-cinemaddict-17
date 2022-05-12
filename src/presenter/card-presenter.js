@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
