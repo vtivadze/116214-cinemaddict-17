@@ -39,4 +39,4 @@ const topRatedPresenter = new TopRatedPresenter(contentContainerComponent.elemen
 topRatedPresenter.init();
 
 const statisticsPresenter = new StatisticsPresenter(footerStatisticsElement, moviesModel);
-statisticsPresenter.init().renderStatistics();
+statisticsPresenter.init();

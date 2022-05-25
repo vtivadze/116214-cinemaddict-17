@@ -13,10 +13,10 @@ export default class StatisticsPresenter {
 
   init() {
     this.#moviecCount = this.#moviesModel.movies.length;
-    return this;
+    this.#renderStatistics();
   }
 
-  renderStatistics() {
+  #renderStatistics() {
     render(new StatisticsView(this.#moviecCount), this.#container);
   }
 }
