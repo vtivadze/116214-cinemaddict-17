@@ -1,13 +1,16 @@
 import {render} from './framework/render.js';
+
 import MoviesModel from './model/movies-model.js';
+import CommentsModel from './model/comments-model.js';
+
 import ContentContainerView from './view/content-container-view.js';
 import SortView from './view/sort-view.js';
+
 import UserProfilePresenter from './presenter/user-profile-presenter.js';
 import MainContentPresenter from './presenter/main-content-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import MostCommentedPresenter from './presenter/most-commented-presenter.js';
 import TopRatedPresenter from './presenter/top-rated-presenter.js';
-import CommentsModel from './model/comments-model.js';
 import StatisticsPresenter from './presenter/statistics-presenter.js';
 
 const siteHeaderElement = document.querySelector('.header');
