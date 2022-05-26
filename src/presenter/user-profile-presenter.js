@@ -1,16 +1,23 @@
 import {render} from '../framework/render.js';
 import UserProfileView from '../view/user-profile-view.js';
 
-const NO_TITLE_COUNT = 0;
-const NOVICE_MIN_COUNT = 1;
-const NOVICE_MAX_COUNT = 10;
-const FAN_MIN_COUNT = 11;
-const FAN_MAX_COUNT = 20;
-const MOVIE_BUF_MIN_COUNT = 21;
-
 export default class UserProfilePresenter {
   #container = null;
   #moviesModel = null;
+
+  #userTitle = {
+    titles: [
+      {min: 0, max: 0, title: ''},
+      {min: 1, max: 10, title: 'novice'},
+      {min: 11, max: 20, title: 'fan'},
+      {min: 21, max: Number.POSITIVE_INFINITY, title: 'movie buf'},
+    ],
+    getTitle: function(count) {
+      return this.titles
+        .find((item) => count >= item.min && count <= item.max)
+        .title;
+    }
+  };
 
   constructor(container, moviesModel) {
     this.#container = container;
@@ -29,18 +36,6 @@ export default class UserProfilePresenter {
 
   #getUserTitle() {
     const count = this.#getAlreadyWatchedCount();
-    let userTitle = null;
-
-    if (count === NO_TITLE_COUNT) {
-      userTitle = '';
-    } else if (count >= NOVICE_MIN_COUNT && count <= NOVICE_MAX_COUNT) {
-      userTitle = 'novice';
-    } else if (count >= FAN_MIN_COUNT && count <= FAN_MAX_COUNT) {
-      userTitle = 'fan';
-    } else if (count >= MOVIE_BUF_MIN_COUNT) {
-      userTitle = 'movie buff';
-    }
-
-    return userTitle;
+    return this.#userTitle.getTitle(count);
   }
 }
