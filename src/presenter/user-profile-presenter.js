@@ -26,11 +26,11 @@ export default class UserProfilePresenter {
 
   init() {
     if (this.#getUserTitle()) {
-      this.#render();
+      this.#renderUserProfile();
     }
   }
 
-  #render() {
+  #renderUserProfile() {
     render(new UserProfileView(this.#getUserTitle()), this.#container);
   }
 
