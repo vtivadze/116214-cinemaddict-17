@@ -32,9 +32,9 @@ export default class MainContentPresenter {
   #renderCardsContainer() {
     render(this.#mainContentComponent, this.#contentContainer);
     if (this.#movies.length === 0) {
-      render(new NoMovieView(), this.#mainContentComponent.element);
+      this.#renderNoMovie();
     } else {
-      render(this.#listContainerComponent, this.#mainContentComponent.element);
+      this.#renderListContainer();
       for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
         this.#renderCard(this.#movies[i]);
       }
@@ -43,6 +43,10 @@ export default class MainContentPresenter {
         this.#renderLoadMoreButton();
       }
     }
+  }
+
+  #renderListContainer() {
+    render(this.#listContainerComponent, this.#mainContentComponent.element);
   }
 
   #renderCard(movie) {
@@ -60,5 +64,9 @@ export default class MainContentPresenter {
       this.#renderCard.bind(this)
     );
     loadMoreButtonPresenter.init().renderLoadMoreButton();
+  }
+
+  #renderNoMovie() {
+    render(new NoMovieView(), this.#mainContentComponent.element);
   }
 }
