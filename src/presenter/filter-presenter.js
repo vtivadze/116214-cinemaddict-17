@@ -19,6 +19,10 @@ export default class FilterPresenter {
       favoriteCount
     };
 
+    this.#renderFilter();
+  }
+
+  #renderFilter() {
     render(new FilterView(this.#filter), this.#container);
   }
 
