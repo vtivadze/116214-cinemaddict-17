@@ -27,22 +27,16 @@ export default class MainContentPresenter {
   init() {
     this.#movies = [...this.#moviesModel.movies];
     this.#renderCardsContainer();
+
+    if (this.#movies.length === 0) {
+      this.#renderNoMovie();
+    } else {
+      this.#renderMovies();
+    }
   }
 
   #renderCardsContainer() {
     render(this.#mainContentComponent, this.#contentContainer);
-    if (this.#movies.length === 0) {
-      this.#renderNoMovie();
-    } else {
-      this.#renderListContainer();
-      for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
-        this.#renderCard(this.#movies[i]);
-      }
-
-      if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
-        this.#renderLoadMoreButton();
-      }
-    }
   }
 
   #renderListContainer() {
@@ -68,5 +62,16 @@ export default class MainContentPresenter {
 
   #renderNoMovie() {
     render(new NoMovieView(), this.#mainContentComponent.element);
+  }
+
+  #renderMovies() {
+    this.#renderListContainer();
+    for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
+      this.#renderCard(this.#movies[i]);
+    }
+
+    if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
+      this.#renderLoadMoreButton();
+    }
   }
 }
