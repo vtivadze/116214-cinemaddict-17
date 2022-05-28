@@ -16,6 +16,7 @@ export default class CardPresenter {
 
   init() {
     this.#cardComponent = new CardView(this.#movie);
+    this.#cardComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
     this.#addClickHandler();
     this.#renderCard();
   }
@@ -30,4 +31,9 @@ export default class CardPresenter {
       popupPresenter.init();
     });
   }
+
+  #onAddToWatchlistClick = () => {
+    // eslint-disable-next-line no-console
+    console.log('Add to watchlist');
+  };
 }
