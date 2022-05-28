@@ -22,7 +22,7 @@ const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 
 const userProfilePresenter = new UserProfilePresenter(siteHeaderElement, moviesModel);
-userProfilePresenter.render();
+userProfilePresenter.init();
 
 const filterPresenter = new FilterPresenter(siteMainElement, moviesModel);
 filterPresenter.init();

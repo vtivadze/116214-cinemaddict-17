@@ -24,10 +24,14 @@ export default class UserProfilePresenter {
     this.#moviesModel = moviesModel;
   }
 
-  render() {
+  init() {
     if (this.#getUserTitle()) {
-      render(new UserProfileView(this.#getUserTitle()), this.#container);
+      this.#render();
     }
+  }
+
+  #render() {
+    render(new UserProfileView(this.#getUserTitle()), this.#container);
   }
 
   #getAlreadyWatchedCount() {
