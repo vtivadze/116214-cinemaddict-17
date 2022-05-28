@@ -57,7 +57,7 @@ export default class MainContentPresenter {
       MOVIE_COUNT_PER_STEP,
       this.#renderCard.bind(this)
     );
-    loadMoreButtonPresenter.init().renderLoadMoreButton();
+    loadMoreButtonPresenter.init();
   }
 
   #renderNoMovie() {
