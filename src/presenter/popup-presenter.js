@@ -16,10 +16,10 @@ export default class PopupPresenter {
     this.#popupComponent = new PopupView(this.#movie, this.#comments);
     document.addEventListener('keydown', this.#onDocumentKeydown);
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup);
-    return this;
+    this.#renderPopup();
   }
 
-  renderPresenter() {
+  #renderPopup() {
     document.body.classList.add('hide-overflow');
     render(this.#popupComponent, document.body);
   }
