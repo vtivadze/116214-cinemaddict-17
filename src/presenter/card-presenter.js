@@ -3,11 +3,13 @@ import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
 export default class CardPresenter {
+  #cardContainer = null;
   #movie = null;
-  #cardComponent = null;
   #comments = [];
+  #cardComponent = null;
 
-  constructor(movie, comments) {
+  constructor(cardContainer, movie, comments) {
+    this.#cardContainer = cardContainer;
     this.#movie = movie;
     this.#comments = comments;
   }
@@ -15,11 +17,11 @@ export default class CardPresenter {
   init() {
     this.#cardComponent = new CardView(this.#movie);
     this.#addClickHandler();
-    return this;
+    this.#renderCard();
   }
 
-  renderCard(cardContainer) {
-    render(this.#cardComponent, cardContainer);
+  #renderCard() {
+    render(this.#cardComponent, this.#cardContainer);
   }
 
   #addClickHandler() {
