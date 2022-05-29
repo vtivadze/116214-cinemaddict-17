@@ -246,4 +246,17 @@ export default class PopupView extends AbstractView {
     this.#cardComponent._callback.alreadyWatchedClick();
     this._callback.alreadyWatchedClickPopup();
   };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClickPopup = callback;
+    this.element
+      .querySelector('.film-details__control-button--favorite')
+      .addEventListener('click', this.#onFavoriteClick);
+  };
+
+  #onFavoriteClick = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.favoriteClick();
+    this._callback.favoriteClickPopup();
+  };
 }

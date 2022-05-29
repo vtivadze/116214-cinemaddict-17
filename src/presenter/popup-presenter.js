@@ -22,6 +22,7 @@ export default class PopupPresenter {
 
     this.#popupComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
+    this.#popupComponent.setFavoriteClickHandler(this.#onFavoriteClick);
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup);
     document.addEventListener('keydown', this.#onDocumentKeydown);
@@ -61,6 +62,10 @@ export default class PopupPresenter {
   };
 
   #onAlreadyWatchedClick = () => {
+    this.init(this.#movie);
+  };
+
+  #onFavoriteClick = () => {
     this.init(this.#movie);
   };
 }
