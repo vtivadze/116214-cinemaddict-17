@@ -1,18 +1,22 @@
 import {render, replace, remove} from '../framework/render.js';
+import { updateItem } from '../utils/common.js';
 import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
 export default class CardPresenter {
   #cardContainer = null;
-  #movie = null;
   #comments = [];
   #moviesModel = null;
+  #filterPresenter = null;
+
+  #movie = null;
   #cardComponent = null;
 
-  constructor(cardContainer, comments, moviesModel) {
+  constructor(cardContainer, comments, moviesModel, filterPresenter) {
     this.#cardContainer = cardContainer;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
+    this.#filterPresenter = filterPresenter;
   }
 
   init(movie) {
@@ -48,12 +52,9 @@ export default class CardPresenter {
   }
 
   #onAddToWatchlistClick = () => {
-    // eslint-disable-next-line no-console
-    console.log(this.#movie);
-    console.log(this.#moviesModel);
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
+    updateItem(this.#moviesModel.movies, this.#movie);
+    this.init(this.#movie);
+    this.#filterPresenter.init(this.#moviesModel);
   };
-
-  #toggleWatchList() {
-    // const movie
-  }
 }

@@ -14,14 +14,17 @@ export default class MainContentPresenter {
   #contentContainer = null;
   #moviesModel = null;
   #commentsModel = null;
+  #filterPresenter = null;
+
   #movies = [];
 
   #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(contentContainer, moviesModel, commentsModel) {
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#filterPresenter = filterPresenter;
   }
 
   init() {
@@ -45,7 +48,11 @@ export default class MainContentPresenter {
 
   #renderCard(movie) {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
-    const cardPresenter = new CardPresenter(this.#listContainerComponent.element, comments, this.#moviesModel);
+    const cardPresenter = new CardPresenter(
+      this.#listContainerComponent.element,
+      comments,
+      this.#moviesModel,
+      this.#filterPresenter);
     cardPresenter.init(movie);
   }
 

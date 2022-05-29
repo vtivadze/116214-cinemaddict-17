@@ -24,21 +24,33 @@ const commentsModel = new CommentsModel();
 const userProfilePresenter = new UserProfilePresenter(siteHeaderElement, moviesModel);
 userProfilePresenter.init();
 
-const filterPresenter = new FilterPresenter(siteMainElement, moviesModel);
-filterPresenter.init();
+const filterPresenter = new FilterPresenter(siteMainElement);
+filterPresenter.init(moviesModel);
 
 render(new SortView(), siteMainElement);
 
 const contentContainerComponent = new ContentContainerView();
 render(contentContainerComponent, siteMainElement);
 
-const mainContentPresenter = new MainContentPresenter(contentContainerComponent.element, moviesModel, commentsModel);
+const mainContentPresenter = new MainContentPresenter(
+  contentContainerComponent.element,
+  moviesModel,
+  commentsModel,
+  filterPresenter);
 mainContentPresenter.init();
 
-const mostCommentedPresenter = new MostCommentedPresenter(contentContainerComponent.element, moviesModel, commentsModel);
+const mostCommentedPresenter = new MostCommentedPresenter(
+  contentContainerComponent.element,
+  moviesModel,
+  commentsModel,
+  filterPresenter);
 mostCommentedPresenter.init();
 
-const topRatedPresenter = new TopRatedPresenter(contentContainerComponent.element, moviesModel, commentsModel);
+const topRatedPresenter = new TopRatedPresenter(
+  contentContainerComponent.element,
+  moviesModel,
+  commentsModel,
+  filterPresenter);
 topRatedPresenter.init();
 
 const statisticsPresenter = new StatisticsPresenter(footerStatisticsElement, moviesModel);

@@ -12,12 +12,15 @@ export default class TopRatedPresenter {
   #contentContainer = null;
   #moviesModel = null;
   #commentsModel = null;
+  #filterPresenter = null;
+
   #movies = [];
 
-  constructor(contentContainer, moviesModel, commentsModel) {
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#filterPresenter = filterPresenter;
   }
 
   init() {
@@ -37,7 +40,11 @@ export default class TopRatedPresenter {
 
   #renderCard(movie) {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
-    const cardPresenter = new CardPresenter(this.#listContainerComponent.element, comments);
+    const cardPresenter = new CardPresenter(
+      this.#listContainerComponent.element,
+      comments,
+      this.#moviesModel,
+      this.#filterPresenter);
     cardPresenter.init(movie);
   }
 }
