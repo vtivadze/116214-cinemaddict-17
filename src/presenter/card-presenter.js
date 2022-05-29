@@ -54,23 +54,43 @@ export default class CardPresenter {
   }
 
   #onAddToWatchlistClick = () => {
-    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
+    this.#toggleWatchlist();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.init(this.#movie);
-    this.#filterPresenter.init(this.#moviesModel);
+    this.#updateCardView();
+    this.#updateFilterView();
   };
 
   #onAlreadyWatchedClick = () => {
-    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
+    this.#toggleAlreadyWatched();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.init(this.#movie);
-    this.#filterPresenter.init(this.#moviesModel);
+    this.#updateCardView();
+    this.#updateFilterView();
   };
 
   #onFavoriteClick = () => {
-    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
+    this.#toggleFavorite();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.init(this.#movie);
-    this.#filterPresenter.init(this.#moviesModel);
+    this.#updateCardView();
+    this.#updateFilterView();
   };
+
+  #updateCardView() {
+    this.init(this.#movie);
+  }
+
+  #updateFilterView() {
+    this.#filterPresenter.init(this.#moviesModel);
+  }
+
+  #toggleWatchlist() {
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
+  }
+
+  #toggleAlreadyWatched() {
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
+  }
+
+  #toggleFavorite() {
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
+  }
 }
