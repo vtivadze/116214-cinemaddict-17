@@ -91,8 +91,20 @@ export default class CardView extends AbstractView {
       .addEventListener('click', this.#addToWatchlistClickHandler);
   };
 
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClick = callback;
+    this.element
+      .querySelector('.film-card__controls-item--mark-as-watched')
+      .addEventListener('click', this.#alreadyWatchedClickHandler);
+  };
+
   #addToWatchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.addToWatchlistClick();
+  };
+
+  #alreadyWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
   };
 }
