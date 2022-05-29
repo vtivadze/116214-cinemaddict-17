@@ -233,4 +233,17 @@ export default class PopupView extends AbstractView {
     this.#cardComponent._callback.addToWatchlistClick();
     this._callback.addToWatchlistClickPopup();
   };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClickPopup = callback;
+    this.element
+      .querySelector('.film-details__control-button--watched')
+      .addEventListener('click', this.#onAlreadyWatchedClick);
+  };
+
+  #onAlreadyWatchedClick = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.alreadyWatchedClick();
+    this._callback.alreadyWatchedClickPopup();
+  };
 }
