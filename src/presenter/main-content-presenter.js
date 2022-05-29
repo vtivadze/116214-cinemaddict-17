@@ -17,6 +17,7 @@ export default class MainContentPresenter {
   #filterPresenter = null;
 
   #movies = [];
+  #cardPresenter = new Map();
 
   #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
@@ -54,6 +55,7 @@ export default class MainContentPresenter {
       this.#moviesModel,
       this.#filterPresenter);
     cardPresenter.init(movie);
+    this.#cardPresenter.set(movie.id, cardPresenter);
   }
 
   #renderLoadMoreButton() {
