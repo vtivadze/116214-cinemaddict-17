@@ -222,7 +222,7 @@ export default class PopupView extends AbstractView {
   };
 
   setAddToWatchlistClickHandler = (callback) => {
-    this._callback.addToWatchlistClickPopup = callback;
+    this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
       .addEventListener('click', this.#onAddToWatchlistClick);
@@ -231,11 +231,11 @@ export default class PopupView extends AbstractView {
   #onAddToWatchlistClick = (evt) => {
     evt.preventDefault();
     this.#cardComponent._callback.addToWatchlistClick();
-    this._callback.addToWatchlistClickPopup();
+    this._callback.addToWatchlistClick();
   };
 
   setAlreadyWatchedClickHandler = (callback) => {
-    this._callback.alreadyWatchedClickPopup = callback;
+    this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-details__control-button--watched')
       .addEventListener('click', this.#onAlreadyWatchedClick);
@@ -244,11 +244,11 @@ export default class PopupView extends AbstractView {
   #onAlreadyWatchedClick = (evt) => {
     evt.preventDefault();
     this.#cardComponent._callback.alreadyWatchedClick();
-    this._callback.alreadyWatchedClickPopup();
+    this._callback.alreadyWatchedClick();
   };
 
   setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClickPopup = callback;
+    this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-details__control-button--favorite')
       .addEventListener('click', this.#onFavoriteClick);
@@ -257,6 +257,6 @@ export default class PopupView extends AbstractView {
   #onFavoriteClick = (evt) => {
     evt.preventDefault();
     this.#cardComponent._callback.favoriteClick();
-    this._callback.favoriteClickPopup();
+    this._callback.favoriteClick();
   };
 }
