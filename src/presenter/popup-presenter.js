@@ -58,18 +58,18 @@ export default class PopupPresenter {
   };
 
   #onAddToWatchlistClick = () => {
-    this.#updatePopupView();
+    this.#updatePopup();
   };
 
   #onAlreadyWatchedClick = () => {
-    this.#updatePopupView();
+    this.#updatePopup();
   };
 
   #onFavoriteClick = () => {
-    this.#updatePopupView();
+    this.#updatePopup();
   };
 
-  #updatePopupView() {
+  #updatePopup() {
     this.init(this.#movie);
   }
 }
