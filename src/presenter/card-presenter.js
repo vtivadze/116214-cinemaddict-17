@@ -60,25 +60,25 @@ export default class CardPresenter {
   #onAddToWatchlistClick = () => {
     this.#toggleWatchlist();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateCardView();
+    this.#updateCard();
     this.#updateFilter();
   };
 
   #onAlreadyWatchedClick = () => {
     this.#toggleAlreadyWatched();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateCardView();
+    this.#updateCard();
     this.#updateFilter();
   };
 
   #onFavoriteClick = () => {
     this.#toggleFavorite();
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateCardView();
+    this.#updateCard();
     this.#updateFilter();
   };
 
-  #updateCardView() {
+  #updateCard() {
     this.init(this.#movie);
   }
 
