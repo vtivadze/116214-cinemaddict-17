@@ -33,7 +33,7 @@ export default class PopupPresenter {
     }
 
     if (document.body.contains(prevPopupComponent.element)) {
-      replace(this.#popupComponent, prevPopupComponent);
+      this.#replacePopup(prevPopupComponent);
     }
 
     remove(prevPopupComponent);
@@ -42,6 +42,10 @@ export default class PopupPresenter {
   #renderPopup() {
     document.body.classList.add('hide-overflow');
     render(this.#popupComponent, document.body);
+  }
+
+  #replacePopup(prevPopupComponent) {
+    replace(this.#popupComponent, prevPopupComponent);
   }
 
   #onDocumentKeydown = (evt) => {
