@@ -13,14 +13,17 @@ export default class TopRatedPresenter {
   #moviesModel = null;
   #commentsModel = null;
   #filterPresenter = null;
+  #updateContent = null;
 
   #movies = [];
+  cardPresenters = new Map();
 
-  constructor(contentContainer, moviesModel, commentsModel, filterPresenter) {
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter, updateContent) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filterPresenter = filterPresenter;
+    this.#updateContent = updateContent;
   }
 
   init() {
@@ -44,7 +47,9 @@ export default class TopRatedPresenter {
       this.#listContainerComponent.element,
       comments,
       this.#moviesModel,
-      this.#filterPresenter);
+      this.#filterPresenter,
+      this.#updateContent);
     cardPresenter.init(movie);
+    this.cardPresenters.set(movie.id, cardPresenter);
   }
 }

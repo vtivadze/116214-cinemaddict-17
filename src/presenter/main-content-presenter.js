@@ -15,17 +15,19 @@ export default class MainContentPresenter {
   #moviesModel = null;
   #commentsModel = null;
   #filterPresenter = null;
+  #updateContent = null;
 
   #movies = [];
-  #cardPresenter = new Map();
+  cardPresenters = new Map();
 
   #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(contentContainer, moviesModel, commentsModel, filterPresenter) {
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter, updateContent) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filterPresenter = filterPresenter;
+    this.#updateContent = updateContent;
   }
 
   init() {
@@ -53,9 +55,10 @@ export default class MainContentPresenter {
       this.#listContainerComponent.element,
       comments,
       this.#moviesModel,
-      this.#filterPresenter);
+      this.#filterPresenter,
+      this.#updateContent);
     cardPresenter.init(movie);
-    this.#cardPresenter.set(movie.id, cardPresenter);
+    this.cardPresenters.set(movie.id, cardPresenter);
   }
 
   #renderLoadMoreButton() {
