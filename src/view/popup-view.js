@@ -225,10 +225,10 @@ export default class PopupView extends AbstractView {
     this._callback.addToWatchlistClickPopup = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#addToWatchlistClickHandler);
+      .addEventListener('click', this.#onAddToWatchlistClick);
   };
 
-  #addToWatchlistClickHandler = (evt) => {
+  #onAddToWatchlistClick = (evt) => {
     evt.preventDefault();
     this.#cardComponent._callback.addToWatchlistClick();
     this._callback.addToWatchlistClickPopup();
