@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
@@ -9,18 +9,31 @@ export default class CardPresenter {
   #moviesModel = null;
   #cardComponent = null;
 
-  constructor(cardContainer, movie, comments, moviesModel) {
+  constructor(cardContainer, comments, moviesModel) {
     this.#cardContainer = cardContainer;
-    this.#movie = movie;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
   }
 
-  init() {
-    this.#cardComponent = new CardView(this.#movie);
+  init(movie) {
+    this.#movie = movie;
+
+    const prevCardComponent = this.#cardComponent;
+    this.#cardComponent = new CardView(movie);
+
     this.#cardComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
     this.#addClickHandler();
-    this.#renderCard();
+
+    if (prevCardComponent === null) {
+      this.#renderCard();
+      return;
+    }
+
+    if (this.#cardContainer.contains(prevCardComponent.element)) {
+      replace(this.#cardComponent, prevCardComponent);
+    }
+
+    remove(prevCardComponent);
   }
 
   #renderCard() {
