@@ -9,6 +9,8 @@ export default class PopupPresenter {
   #popupComponent = null;
   #movie = null;
 
+  static openedPresenter = null;
+
   constructor(comments, cardComponent) {
     this.#comments = comments;
     this.#cardComponent = cardComponent;
@@ -28,7 +30,12 @@ export default class PopupPresenter {
     document.addEventListener('keydown', this.#onDocumentKeydown);
 
     if (prevPopupComponent === null) {
+      if (PopupPresenter.openedPresenter !== null) {
+        PopupPresenter.openedPresenter.#hidePopup();
+      }
+
       this.#renderPopup();
+      PopupPresenter.openedPresenter = this;
       return;
     }
 
