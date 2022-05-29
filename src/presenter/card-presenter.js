@@ -36,7 +36,7 @@ export default class CardPresenter {
     }
 
     if (this.#cardContainer.contains(prevCardComponent.element)) {
-      replace(this.#cardComponent, prevCardComponent);
+      this.#replaceCard(prevCardComponent);
     }
 
     remove(prevCardComponent);
@@ -44,6 +44,10 @@ export default class CardPresenter {
 
   #renderCard() {
     render(this.#cardComponent, this.#cardContainer);
+  }
+
+  #replaceCard(prevCardComponent) {
+    replace(this.#cardComponent, prevCardComponent);
   }
 
   #addClickHandler() {
