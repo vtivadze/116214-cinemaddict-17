@@ -61,28 +61,28 @@ export default class CardPresenter {
     this.#toggleWatchlist();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateCardView();
-    this.#updateFilterView();
+    this.#updateFilter();
   };
 
   #onAlreadyWatchedClick = () => {
     this.#toggleAlreadyWatched();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateCardView();
-    this.#updateFilterView();
+    this.#updateFilter();
   };
 
   #onFavoriteClick = () => {
     this.#toggleFavorite();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateCardView();
-    this.#updateFilterView();
+    this.#updateFilter();
   };
 
   #updateCardView() {
     this.init(this.#movie);
   }
 
-  #updateFilterView() {
+  #updateFilter() {
     this.#filterPresenter.init(this.#moviesModel);
   }
 
