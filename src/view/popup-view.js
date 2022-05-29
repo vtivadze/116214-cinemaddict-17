@@ -216,16 +216,16 @@ export default class PopupView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick);
   };
 
+  #onCloseButtonClick = (evt) => {
+    evt.preventDefault();
+    this._callback.closeButtonClick();
+  };
+
   setAddToWatchlistClickHandler = (callback) => {
     this._callback.addToWatchlistClickPopup = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
       .addEventListener('click', this.#addToWatchlistClickHandler);
-  };
-
-  #onCloseButtonClick = (evt) => {
-    evt.preventDefault();
-    this._callback.closeButtonClick();
   };
 
   #addToWatchlistClickHandler = (evt) => {
