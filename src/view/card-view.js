@@ -98,6 +98,13 @@ export default class CardView extends AbstractView {
       .addEventListener('click', this.#alreadyWatchedClickHandler);
   };
 
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element
+      .querySelector('.film-card__controls-item--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
+  };
+
   #addToWatchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.addToWatchlistClick();
@@ -106,5 +113,10 @@ export default class CardView extends AbstractView {
   #alreadyWatchedClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.alreadyWatchedClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   };
 }

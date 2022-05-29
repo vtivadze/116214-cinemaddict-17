@@ -27,6 +27,7 @@ export default class CardPresenter {
 
     this.#cardComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
     this.#cardComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
+    this.#cardComponent.setFavoriteClickHandler(this.#onFavoriteClick);
     this.#addClickHandler();
 
     if (prevCardComponent === null) {
@@ -61,6 +62,13 @@ export default class CardPresenter {
 
   #onAlreadyWatchedClick = () => {
     this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
+    updateItem(this.#moviesModel.movies, this.#movie);
+    this.init(this.#movie);
+    this.#filterPresenter.init(this.#moviesModel);
+  };
+
+  #onFavoriteClick = () => {
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     updateItem(this.#moviesModel.movies, this.#movie);
     this.init(this.#movie);
     this.#filterPresenter.init(this.#moviesModel);
