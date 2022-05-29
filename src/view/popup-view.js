@@ -198,11 +198,13 @@ const createPopupTemplate = (movie, comments) => {
 export default class PopupView extends AbstractView {
   #movie = null;
   #comments = null;
+  #cardComponent = null;
 
-  constructor(movie, comments) {
+  constructor(movie, comments, cardComponent) {
     super();
     this.#movie = movie;
     this.#comments = comments;
+    this.#cardComponent = cardComponent;
   }
 
   get template() {
@@ -214,8 +216,21 @@ export default class PopupView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick);
   };
 
+  setAddToWatchlistClickHandler = (callback) => {
+    this._callback.addToWatchlistClickPopup = callback;
+    this.element
+      .querySelector('.film-details__control-button--watchlist')
+      .addEventListener('click', this.#addToWatchlistClickHandler);
+  };
+
   #onCloseButtonClick = (evt) => {
     evt.preventDefault();
     this._callback.closeButtonClick();
+  };
+
+  #addToWatchlistClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.addToWatchlistClick();
+    this._callback.addToWatchlistClickPopup();
   };
 }

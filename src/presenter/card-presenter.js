@@ -48,8 +48,8 @@ export default class CardPresenter {
 
   #addClickHandler() {
     this.#cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-      const popupPresenter = new PopupPresenter(this.#movie, this.#comments);
-      popupPresenter.init();
+      const popupPresenter = new PopupPresenter(this.#comments, this.#cardComponent);
+      popupPresenter.init(this.#movie);
     });
   }
 
