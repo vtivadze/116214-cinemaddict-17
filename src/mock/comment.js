@@ -3,7 +3,7 @@ import {
   getArrayRandomElement,
   getMockText,
   getRandomeDate
-} from '../util.js';
+} from '../utils/util.js';
 
 const MAX_COMMENTS_SENTENCE_COUNT = 3;
 const DAYS_IN_YEAR = 365;

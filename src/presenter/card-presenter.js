@@ -6,12 +6,14 @@ export default class CardPresenter {
   #cardContainer = null;
   #movie = null;
   #comments = [];
+  #moviesModel = null;
   #cardComponent = null;
 
-  constructor(cardContainer, movie, comments) {
+  constructor(cardContainer, movie, comments, moviesModel) {
     this.#cardContainer = cardContainer;
     this.#movie = movie;
     this.#comments = comments;
+    this.#moviesModel = moviesModel;
   }
 
   init() {
@@ -34,6 +36,11 @@ export default class CardPresenter {
 
   #onAddToWatchlistClick = () => {
     // eslint-disable-next-line no-console
-    console.log('Add to watchlist');
+    console.log(this.#movie);
+    console.log(this.#moviesModel);
   };
+
+  #toggleWatchList() {
+    // const movie
+  }
 }

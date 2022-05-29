@@ -45,7 +45,7 @@ export default class MainContentPresenter {
 
   #renderCard(movie) {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
-    const cardPresenter = new CardPresenter(this.#listContainerComponent.element, movie, comments);
+    const cardPresenter = new CardPresenter(this.#listContainerComponent.element, movie, comments, this.#moviesModel);
     cardPresenter.init();
   }
 

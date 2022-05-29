@@ -6,7 +6,7 @@ import {
   getMockText,
   getRandomBoolean,
   getRandomeDate
-} from '../util.js';
+} from '../utils/util.js';
 
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;

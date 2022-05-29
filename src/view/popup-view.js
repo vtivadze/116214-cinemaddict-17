@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');

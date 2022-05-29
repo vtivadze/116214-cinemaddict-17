@@ -1,4 +1,4 @@
-import { isEscape } from '../util.js';
+import { isEscape } from '../utils/util.js';
 import {render} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
 

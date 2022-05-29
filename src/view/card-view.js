@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeYear, humanizeRuntime } from '../util.js';
+import { humanizeYear, humanizeRuntime } from '../utils/util.js';
 
 const createWatchlistButtonTemplate = (watchlist) => (
   `<button
