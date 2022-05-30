@@ -1,25 +1,42 @@
-import { render } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 
 export default class FilterPresenter {
-  #container = null;
-  #moviesModel = null;
-  #filter = null;
+  #filterContainer = null;
 
-  constructor(container, moviesModel) {
-    this.#container = container;
-    this.#moviesModel = moviesModel;
+  #filter = null;
+  #filterComponent = null;
+
+  constructor(filterContainer) {
+    this.#filterContainer = filterContainer;
   }
 
-  init() {
-    const {watchListCount, alreadyWatchedCount, favoriteCount} = this.#moviesModel;
+  init(moviesModel) {
+    const {watchListCount, alreadyWatchedCount, favoriteCount} = moviesModel;
     this.#filter = {
       watchListCount,
       alreadyWatchedCount,
       favoriteCount
     };
 
-    render(new FilterView(this.#filter), this.#container);
+    const prevFilterComponent = this.#filterComponent;
+
+    this.#filterComponent = new FilterView(this.#filter);
+
+    if (prevFilterComponent === null) {
+      this.#renderFilter();
+      return;
+    }
+
+    if (this.#filterContainer.contains(prevFilterComponent.element)) {
+      replace(this.#filterComponent, prevFilterComponent);
+    }
+
+    remove(prevFilterComponent);
+  }
+
+  #renderFilter() {
+    render(this.#filterComponent, this.#filterContainer);
   }
 
 }

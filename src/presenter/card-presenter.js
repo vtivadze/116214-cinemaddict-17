@@ -1,31 +1,103 @@
-import {render} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
+import { updateItem } from '../utils/common.js';
 import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
 export default class CardPresenter {
-  #movie = null;
-  #cardComponent = null;
+  #cardContainer = null;
   #comments = [];
+  #moviesModel = null;
+  #filterPresenter = null;
+  #updateContent = null;
 
-  constructor(movie, comments) {
-    this.#movie = movie;
+  movie = null;
+  #cardComponent = null;
+
+  constructor(cardContainer, comments, moviesModel, filterPresenter, updateContent) {
+    this.#cardContainer = cardContainer;
     this.#comments = comments;
+    this.#moviesModel = moviesModel;
+    this.#filterPresenter = filterPresenter;
+    this.#updateContent = updateContent;
   }
 
-  init() {
-    this.#cardComponent = new CardView(this.#movie);
+  init(movie) {
+    this.movie = movie;
+
+    const prevCardComponent = this.#cardComponent;
+    this.#cardComponent = new CardView(movie);
+
+    this.#cardComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
+    this.#cardComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
+    this.#cardComponent.setFavoriteClickHandler(this.#onFavoriteClick);
+
     this.#addClickHandler();
-    return this;
+
+    if (prevCardComponent === null) {
+      this.#renderCard();
+      return;
+    }
+
+    if (this.#cardContainer.contains(prevCardComponent.element)) {
+      this.#replaceCard(prevCardComponent);
+    }
+
+    remove(prevCardComponent);
   }
 
-  renderCard(cardContainer) {
-    render(this.#cardComponent, cardContainer);
+  #renderCard() {
+    render(this.#cardComponent, this.#cardContainer);
+  }
+
+  #replaceCard(prevCardComponent) {
+    replace(this.#cardComponent, prevCardComponent);
   }
 
   #addClickHandler() {
     this.#cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-      const popupPresenter = new PopupPresenter(this.#movie, this.#comments);
-      popupPresenter.init().renderPresenter();
+      const popupPresenter = new PopupPresenter(this.#comments, this.#cardComponent);
+      popupPresenter.init(this.movie);
     });
+  }
+
+  #onAddToWatchlistClick = () => {
+    this.#toggleWatchlist();
+    updateItem(this.#moviesModel.movies, this.movie);
+    this.#updateContent(this.movie);
+    this.#updateFilter();
+  };
+
+  #onAlreadyWatchedClick = () => {
+    this.#toggleAlreadyWatched();
+    updateItem(this.#moviesModel.movies, this.movie);
+    this.#updateContent(this.movie);
+    this.#updateFilter();
+  };
+
+  #onFavoriteClick = () => {
+    this.#toggleFavorite();
+    updateItem(this.#moviesModel.movies, this.movie);
+    this.#updateContent(this.movie);
+    this.#updateFilter();
+  };
+
+  #updateCard() {
+    this.init(this.movie);
+  }
+
+  #updateFilter() {
+    this.#filterPresenter.init(this.#moviesModel);
+  }
+
+  #toggleWatchlist() {
+    this.movie.userDetails.watchlist = !this.movie.userDetails.watchlist;
+  }
+
+  #toggleAlreadyWatched() {
+    this.movie.userDetails.alreadyWatched = !this.movie.userDetails.alreadyWatched;
+  }
+
+  #toggleFavorite() {
+    this.movie.userDetails.favorite = !this.movie.userDetails.favorite;
   }
 }

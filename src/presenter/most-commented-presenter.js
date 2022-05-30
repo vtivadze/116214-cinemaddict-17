@@ -12,12 +12,18 @@ export default class MostCommentedPresenter {
   #contentContainer = null;
   #moviesModel = null;
   #commentsModel = null;
-  #movies = [];
+  #filterPresenter = null;
+  #updateContent = null;
 
-  constructor(contentContainer, moviesModel, commentsModel) {
+  #movies = [];
+  cardPresenters = new Map();
+
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter, updateContent) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#filterPresenter = filterPresenter;
+    this.#updateContent = updateContent;
   }
 
   init() {
@@ -37,7 +43,13 @@ export default class MostCommentedPresenter {
 
   #renderCard(movie) {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
-    const cardPresenter = new CardPresenter(movie, comments);
-    cardPresenter.init().renderCard(this.#listContainerComponent.element);
+    const cardPresenter = new CardPresenter(
+      this.#listContainerComponent.element,
+      comments,
+      this.#moviesModel,
+      this.#filterPresenter,
+      this.#updateContent);
+    cardPresenter.init(movie);
+    this.cardPresenters.set(movie.id, cardPresenter);
   }
 }

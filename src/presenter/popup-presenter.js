@@ -1,27 +1,58 @@
-import { isEscape } from '../util.js';
-import {render} from '../framework/render.js';
+import { isEscape } from '../utils/util.js';
+import {render, replace, remove} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
-  #movie = null;
   #comments = [];
+  #cardComponent = null;
+
   #popupComponent = null;
+  #movie = null;
 
-  constructor(movie, comments) {
-    this.#movie = movie;
+  static openedPresenter = null;
+
+  constructor(comments, cardComponent) {
     this.#comments = comments;
+    this.#cardComponent = cardComponent;
   }
 
-  init() {
-    this.#popupComponent = new PopupView(this.#movie, this.#comments);
-    document.addEventListener('keydown', this.#onDocumentKeydown);
+  init(movie) {
+    this.#movie = movie;
+
+    const prevPopupComponent = this.#popupComponent;
+    this.#popupComponent = new PopupView(movie, this.#comments, this.#cardComponent);
+
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
+    this.#popupComponent.setFavoriteClickHandler(this.#onFavoriteClick);
+
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup);
-    return this;
+    document.addEventListener('keydown', this.#onDocumentKeydown);
+
+    if (prevPopupComponent === null) {
+      if (PopupPresenter.openedPresenter !== null) {
+        PopupPresenter.openedPresenter.#hidePopup();
+      }
+
+      this.#renderPopup();
+      PopupPresenter.openedPresenter = this;
+      return;
+    }
+
+    if (document.body.contains(prevPopupComponent.element)) {
+      this.#replacePopup(prevPopupComponent);
+    }
+
+    remove(prevPopupComponent);
   }
 
-  renderPresenter() {
+  #renderPopup() {
     document.body.classList.add('hide-overflow');
     render(this.#popupComponent, document.body);
+  }
+
+  #replacePopup(prevPopupComponent) {
+    replace(this.#popupComponent, prevPopupComponent);
   }
 
   #onDocumentKeydown = (evt) => {
@@ -36,4 +67,20 @@ export default class PopupPresenter {
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onDocumentKeydown);
   };
+
+  #onAddToWatchlistClick = () => {
+    this.#updatePopup();
+  };
+
+  #onAlreadyWatchedClick = () => {
+    this.#updatePopup();
+  };
+
+  #onFavoriteClick = () => {
+    this.#updatePopup();
+  };
+
+  #updatePopup() {
+    this.init(this.#movie);
+  }
 }

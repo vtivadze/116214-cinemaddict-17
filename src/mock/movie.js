@@ -6,7 +6,8 @@ import {
   getMockText,
   getRandomBoolean,
   getRandomeDate
-} from '../util.js';
+} from '../utils/util.js';
+import {nanoid} from 'nanoid';
 
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
@@ -90,7 +91,6 @@ const GENRES = [
   'Western',
 ];
 
-const generateMoveId = getId();
 const generateTitle = () => getArrayRandomElement(TITLES);
 const generateTotalRating = () => getRandomFloat(0, MAX_TOTAL_RAITING);
 const generateAgeRating = () => getRandomInteger(0, MAX_AGE_RAITING);
@@ -130,7 +130,7 @@ const generateGenresArray = () => {
 };
 
 export const generateMovie = () => ({
-  id: generateMoveId(),
+  id: nanoid(),
   comments: generateCommentIdsArray(),
   filmInfo: {
     title: generateTitle(),

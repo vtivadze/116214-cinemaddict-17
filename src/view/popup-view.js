@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
@@ -198,11 +198,13 @@ const createPopupTemplate = (movie, comments) => {
 export default class PopupView extends AbstractView {
   #movie = null;
   #comments = null;
+  #cardComponent = null;
 
-  constructor(movie, comments) {
+  constructor(movie, comments, cardComponent) {
     super();
     this.#movie = movie;
     this.#comments = comments;
+    this.#cardComponent = cardComponent;
   }
 
   get template() {
@@ -217,5 +219,44 @@ export default class PopupView extends AbstractView {
   #onCloseButtonClick = (evt) => {
     evt.preventDefault();
     this._callback.closeButtonClick();
+  };
+
+  setAddToWatchlistClickHandler = (callback) => {
+    this._callback.addToWatchlistClick = callback;
+    this.element
+      .querySelector('.film-details__control-button--watchlist')
+      .addEventListener('click', this.#onAddToWatchlistClick);
+  };
+
+  #onAddToWatchlistClick = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.addToWatchlistClick();
+    this._callback.addToWatchlistClick();
+  };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClick = callback;
+    this.element
+      .querySelector('.film-details__control-button--watched')
+      .addEventListener('click', this.#onAlreadyWatchedClick);
+  };
+
+  #onAlreadyWatchedClick = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.alreadyWatchedClick();
+    this._callback.alreadyWatchedClick();
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element
+      .querySelector('.film-details__control-button--favorite')
+      .addEventListener('click', this.#onFavoriteClick);
+  };
+
+  #onFavoriteClick = (evt) => {
+    evt.preventDefault();
+    this.#cardComponent._callback.favoriteClick();
+    this._callback.favoriteClick();
   };
 }

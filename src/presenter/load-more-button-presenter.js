@@ -20,10 +20,10 @@ export default class LoadMoreButtonPresenter {
 
   init() {
     this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick);
-    return this;
+    this.#renderLoadMoreButton();
   }
 
-  renderLoadMoreButton() {
+  #renderLoadMoreButton() {
     render(this.#loadMoreButtonComponent, this.#container);
   }
 

@@ -14,41 +14,51 @@ export default class MainContentPresenter {
   #contentContainer = null;
   #moviesModel = null;
   #commentsModel = null;
+  #filterPresenter = null;
+  #updateContent = null;
+
   #movies = [];
+  cardPresenters = new Map();
 
   #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(contentContainer, moviesModel, commentsModel) {
+  constructor(contentContainer, moviesModel, commentsModel, filterPresenter, updateContent) {
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#filterPresenter = filterPresenter;
+    this.#updateContent = updateContent;
   }
 
   init() {
     this.#movies = [...this.#moviesModel.movies];
     this.#renderCardsContainer();
+
+    if (this.#movies.length === 0) {
+      this.#renderNoMovie();
+    } else {
+      this.#renderMovies();
+    }
   }
 
   #renderCardsContainer() {
     render(this.#mainContentComponent, this.#contentContainer);
-    if (this.#movies.length === 0) {
-      render(new NoMovieView(), this.#mainContentComponent.element);
-    } else {
-      render(this.#listContainerComponent, this.#mainContentComponent.element);
-      for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
-        this.#renderCard(this.#movies[i]);
-      }
+  }
 
-      if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
-        this.#renderLoadMoreButton();
-      }
-    }
+  #renderListContainer() {
+    render(this.#listContainerComponent, this.#mainContentComponent.element);
   }
 
   #renderCard(movie) {
     const comments = this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
-    const cardPresenter = new CardPresenter(movie, comments);
-    cardPresenter.init().renderCard(this.#listContainerComponent.element);
+    const cardPresenter = new CardPresenter(
+      this.#listContainerComponent.element,
+      comments,
+      this.#moviesModel,
+      this.#filterPresenter,
+      this.#updateContent);
+    cardPresenter.init(movie);
+    this.cardPresenters.set(movie.id, cardPresenter);
   }
 
   #renderLoadMoreButton() {
@@ -59,6 +69,21 @@ export default class MainContentPresenter {
       MOVIE_COUNT_PER_STEP,
       this.#renderCard.bind(this)
     );
-    loadMoreButtonPresenter.init().renderLoadMoreButton();
+    loadMoreButtonPresenter.init();
+  }
+
+  #renderNoMovie() {
+    render(new NoMovieView(), this.#mainContentComponent.element);
+  }
+
+  #renderMovies() {
+    this.#renderListContainer();
+    for (let i = 0; i < Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP); i++) {
+      this.#renderCard(this.#movies[i]);
+    }
+
+    if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
+      this.#renderLoadMoreButton();
+    }
   }
 }
