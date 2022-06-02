@@ -1,5 +1,5 @@
 import {render, replace, remove} from '../framework/render.js';
-import { updateItem } from '../utils/common.js';
+import { updateItem } from '../utils/util.js';
 import CardView from '../view/card-view.js';
 import PopupPresenter from './popup-presenter.js';
 
