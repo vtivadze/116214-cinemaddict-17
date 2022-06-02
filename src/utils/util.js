@@ -72,6 +72,28 @@ const updateItem = (items, update) => {
   ];
 };
 
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortMoviesByDate = (movieA, movieB) => {
+  const weight = getWeightForNullDate(movieA.release.date, movieB.release.date);
+
+  return weight ?? dayjs(movieB.release.date).diff(dayjs(movieA.release.date));
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -85,5 +107,7 @@ export {
   getRandomBoolean,
   getRandomeDate,
   isEscape,
-  updateItem
+  updateItem,
+  sortMovieByDate,
+  sortMovieByRating
 };
