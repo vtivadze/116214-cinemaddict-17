@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {RenderPosition, render} from '../framework/render.js';
 import {MOVIE_COUNT_PER_STEP, MOST_COMMETNTED_COUNT, TOP_RATED_COUNT} from '../const.js';
 import MoviePresenter from './movie-presenter.js';
 import BoardView from '../view/board-view.js';
@@ -8,6 +8,7 @@ import MoviesListContainerView from '../view/movies-list-container-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
+import SortView from '../view/sort-view.js';
 
 export default class BoardPresenter {
   #siteMainElement = null;
@@ -20,6 +21,7 @@ export default class BoardPresenter {
   #loadMoreButtonComponent = new LoadMoreButtonView();
   #mostCommentedComponent = new MostCommentedView();
   #topRatedComponent = new TopRatedView();
+  #sortViewComponent = new SortView();
 
   #movies = [];
 
@@ -52,9 +54,14 @@ export default class BoardPresenter {
   #renderBoard() {
     render(this.#boardComponent, this.#siteMainElement);
 
+    this.#renderSortView();
     this.#renderMainContent();
     this.#renderMostCommentedMovies();
     this.#renderTopRatedMovies();
+  }
+
+  #renderSortView() {
+    render(this.#sortViewComponent, this.#boardComponent.element, RenderPosition.BEFOREBEGIN);
   }
 
   #renderMainContent() {
