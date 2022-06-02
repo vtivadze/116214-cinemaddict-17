@@ -1,20 +1,20 @@
 import {render, replace, remove} from '../framework/render.js';
 import { updateItem } from '../utils/util.js';
-import CardView from '../view/card-view.js';
+import MovieView from '../view/movie-view.js';
 import PopupPresenter from './popup-presenter.js';
 
 export default class CardPresenter {
-  #cardContainer = null;
+  #movieContainer = null;
   #comments = [];
   #moviesModel = null;
   #filterPresenter = null;
   #updateContent = null;
 
-  movie = null;
-  #cardComponent = null;
+  #movie = null;
+  #movieComponent = null;
 
-  constructor(cardContainer, comments, moviesModel, filterPresenter, updateContent) {
-    this.#cardContainer = cardContainer;
+  constructor(movieContainer, comments, moviesModel, filterPresenter, updateContent) {
+    this.#movieContainer = movieContainer;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
     this.#filterPresenter = filterPresenter;
@@ -22,82 +22,82 @@ export default class CardPresenter {
   }
 
   init(movie) {
-    this.movie = movie;
+    this.#movie = movie;
 
-    const prevCardComponent = this.#cardComponent;
-    this.#cardComponent = new CardView(movie);
+    const prevMovieComponent = this.#movieComponent;
+    this.#movieComponent = new MovieView(movie);
 
-    this.#cardComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
-    this.#cardComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
-    this.#cardComponent.setFavoriteClickHandler(this.#onFavoriteClick);
+    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
+    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
+    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick);
 
     this.#addClickHandler();
 
-    if (prevCardComponent === null) {
-      this.#renderCard();
+    if (prevMovieComponent === null) {
+      this.#renderMovie();
       return;
     }
 
-    if (this.#cardContainer.contains(prevCardComponent.element)) {
-      this.#replaceCard(prevCardComponent);
+    if (this.#movieContainer.contains(prevMovieComponent.element)) {
+      this.#replaceMovie(prevMovieComponent);
     }
 
-    remove(prevCardComponent);
+    remove(prevMovieComponent);
   }
 
-  #renderCard() {
-    render(this.#cardComponent, this.#cardContainer);
+  #renderMovie() {
+    render(this.#movieComponent, this.#movieContainer);
   }
 
-  #replaceCard(prevCardComponent) {
-    replace(this.#cardComponent, prevCardComponent);
+  #replaceMovie(prevMovieComponent) {
+    replace(this.#movieComponent, prevMovieComponent);
   }
 
   #addClickHandler() {
-    this.#cardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-      const popupPresenter = new PopupPresenter(this.#comments, this.#cardComponent);
-      popupPresenter.init(this.movie);
+    this.#movieComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+      const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
+      popupPresenter.init(this.#movie);
     });
   }
 
   #onAddToWatchlistClick = () => {
     this.#toggleWatchlist();
-    updateItem(this.#moviesModel.movies, this.movie);
-    this.#updateContent(this.movie);
+    updateItem(this.#moviesModel.movies, this.#movie);
+    this.#updateContent(this.#movie);
     this.#updateFilter();
   };
 
   #onAlreadyWatchedClick = () => {
     this.#toggleAlreadyWatched();
-    updateItem(this.#moviesModel.movies, this.movie);
-    this.#updateContent(this.movie);
+    updateItem(this.#moviesModel.movies, this.#movie);
+    this.#updateContent(this.#movie);
     this.#updateFilter();
   };
 
   #onFavoriteClick = () => {
     this.#toggleFavorite();
-    updateItem(this.#moviesModel.movies, this.movie);
-    this.#updateContent(this.movie);
+    updateItem(this.#moviesModel.movies, this.#movie);
+    this.#updateContent(this.#movie);
     this.#updateFilter();
   };
 
-  #updateCard() {
-    this.init(this.movie);
-  }
+  destroy = () => {
+    remove(this.#movieComponent);
+  };
 
   #updateFilter() {
     this.#filterPresenter.init(this.#moviesModel);
   }
 
   #toggleWatchlist() {
-    this.movie.userDetails.watchlist = !this.movie.userDetails.watchlist;
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
   }
 
   #toggleAlreadyWatched() {
-    this.movie.userDetails.alreadyWatched = !this.movie.userDetails.alreadyWatched;
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
   }
 
   #toggleFavorite() {
-    this.movie.userDetails.favorite = !this.movie.userDetails.favorite;
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
   }
 }

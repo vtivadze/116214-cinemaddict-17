@@ -1,5 +1,6 @@
-import {RenderPosition, render} from '../framework/render.js';
-import {MOVIE_COUNT_PER_STEP, MOST_COMMETNTED_COUNT, TOP_RATED_COUNT} from '../const.js';
+import {RenderPosition, render, remove} from '../framework/render.js';
+import {SortType} from '../const.js';
+import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
 import MoviePresenter from './movie-presenter.js';
 import BoardView from '../view/board-view.js';
 import MainContentView from '../view/main-content-view.js';
@@ -9,6 +10,10 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import SortView from '../view/sort-view.js';
+
+const MOVIE_COUNT_PER_STEP = 5;
+const MOST_COMMETNTED_COUNT = 2;
+const TOP_RATED_COUNT = 2;
 
 export default class BoardPresenter {
   #siteMainElement = null;
@@ -24,6 +29,8 @@ export default class BoardPresenter {
   #sortComponent = new SortView();
 
   #movies = [];
+  #sourceMovies = [];
+  #currentSortType = SortType.DEFAULT;
 
   #movieContainers = {
     Main: new MoviesListContainerView(),
@@ -48,6 +55,7 @@ export default class BoardPresenter {
 
   init() {
     this.#movies = [...this.#moviesModel.movies];
+    this.#sourceMovies = [...this.#moviesModel.movies];
     this.#renderBoard();
   }
 
@@ -71,6 +79,7 @@ export default class BoardPresenter {
     if (this.#movies.length === 0) {
       this.#renderNoMovie();
     } else {
+      render(this.#movieContainers.Main, this.#mainContentComponent.element);
       this.#renderMainContentMovies();
     }
   }
@@ -80,8 +89,6 @@ export default class BoardPresenter {
   }
 
   #renderMainContentMovies() {
-    render(this.#movieContainers.Main, this.#mainContentComponent.element);
-
     this.#renderMovies('Main', this.#getMainContentMovies());
 
     if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
@@ -141,15 +148,44 @@ export default class BoardPresenter {
   };
 
   #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
 
+    this.#sortMovies(sortType);
+    this.#clearMoviesList();
+    this.#renderMainContentMovies();
+    // this.#renderMovies('Main', this.#getMainContentMovies());
   };
+
+  #sortMovies(sortType) {
+    switch(sortType) {
+      case SortType.DATE:
+        this.#movies.sort(sortMovieByDate);
+        break;
+      case SortType.RATING:
+        this.#movies.sort(sortMovieByRating);
+        break;
+      case SortType.DEFAULT:
+        this.#movies = [...this.#sourceMovies];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #clearMoviesList() {
+    this.#moviePresenters.Main.forEach((presenter) => presenter.destroy());
+    this.#moviePresenters.Main.clear();
+    this.#renderedMoviesCount = MOVIE_COUNT_PER_STEP;
+    remove(this.#loadMoreButtonComponent);
+  }
 
   #getMainContentMovies() {
     return this.#movies.slice(0, Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP));
   }
 
   #getMoviesToLoad() {
-    return this.#moviesModel.movies.slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP);
+    return this.#movies.slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP);
   }
 
   #getMostCommentedMovies() {

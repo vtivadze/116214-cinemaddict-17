@@ -19,7 +19,7 @@ const createFavoriteButtonTemplate = (favorite) => (
     type="button">Mark as favorite</button>`
 );
 
-const createCardTemplate = (movie) => {
+const createMovieTemplate = (movie) => {
   const {
     comments,
     filmInfo: {
@@ -81,7 +81,7 @@ export default class CardView extends AbstractView {
   }
 
   get template() {
-    return createCardTemplate(this.#movie);
+    return createMovieTemplate(this.#movie);
   }
 
   setAddToWatchlistClickHandler = (callback) => {
