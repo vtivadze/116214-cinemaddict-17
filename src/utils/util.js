@@ -88,11 +88,13 @@ const getWeightForNullDate = (dateA, dateB) => {
   return null;
 };
 
-const sortMoviesByDate = (movieA, movieB) => {
+const sortMovieByDate = (movieA, movieB) => {
   const weight = getWeightForNullDate(movieA.release.date, movieB.release.date);
 
   return weight ?? dayjs(movieB.release.date).diff(dayjs(movieA.release.date));
 };
+
+const sortMovieByRating = (movieA, movieB) => movieB.filmInfo.totalRating - movieA.filmInfo.totalRating;
 
 export {
   getRandomInteger,
