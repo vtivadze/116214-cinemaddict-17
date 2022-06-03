@@ -31,7 +31,7 @@ export default class CardPresenter {
     this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
     this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick);
 
-    this.#addClickHandler();
+    this.#onMovieClick();
 
     if (prevMovieComponent === null) {
       this.#renderMovie();
@@ -53,7 +53,7 @@ export default class CardPresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #addClickHandler() {
+  #onMovieClick() {
     this.#movieComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
       const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
       popupPresenter.init(this.#movie);
