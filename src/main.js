@@ -1,9 +1,5 @@
-import {render} from './framework/render.js';
-
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
-
-import SortView from './view/sort-view.js';
 
 import UserProfilePresenter from './presenter/user-profile-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -23,8 +19,6 @@ userProfilePresenter.init();
 
 const filterPresenter = new FilterPresenter(siteMainElement);
 filterPresenter.init(moviesModel);
-
-render(new SortView(), siteMainElement);
 
 const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, commentsModel, filterPresenter);
 boardPresenter.init();

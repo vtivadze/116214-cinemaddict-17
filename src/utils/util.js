@@ -58,6 +58,44 @@ const getRandomeDate = (maxPassedDays) => {
 
 const isEscape = (code) => code === 'Escape';
 
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortMovieByDate = (movieA, movieB) => {
+  const weight = getWeightForNullDate(movieA.filmInfo.release.date, movieB.filmInfo.release.date);
+
+  return weight ?? dayjs(movieB.filmInfo.release.date).diff(dayjs(movieA.filmInfo.release.date));
+};
+
+const sortMovieByRating = (movieA, movieB) => movieB.filmInfo.totalRating - movieA.filmInfo.totalRating;
+
 export {
   getRandomInteger,
   getRandomFloat,
@@ -70,5 +108,8 @@ export {
   getMockText,
   getRandomBoolean,
   getRandomeDate,
-  isEscape
+  isEscape,
+  updateItem,
+  sortMovieByDate,
+  sortMovieByRating
 };
