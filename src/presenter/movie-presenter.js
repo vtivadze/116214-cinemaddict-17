@@ -30,8 +30,7 @@ export default class CardPresenter {
     this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
     this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
     this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick);
-
-    this.#addClickHandler();
+    this.#movieComponent.setMovieClickHandler(this.#onMovieClick);
 
     if (prevMovieComponent === null) {
       this.#renderMovie();
@@ -53,12 +52,10 @@ export default class CardPresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #addClickHandler() {
-    this.#movieComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-      const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
-      popupPresenter.init(this.#movie);
-    });
-  }
+  #onMovieClick = () => {
+    const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
+    popupPresenter.init(this.#movie);
+  };
 
   #onAddToWatchlistClick = () => {
     this.#toggleWatchlist();
@@ -81,9 +78,9 @@ export default class CardPresenter {
     this.#updateFilter();
   };
 
-  destroy = () => {
+  destroy() {
     remove(this.#movieComponent);
-  };
+  }
 
   #updateFilter() {
     this.#filterPresenter.init(this.#moviesModel);
