@@ -27,10 +27,10 @@ export default class CardPresenter {
     const prevMovieComponent = this.#movieComponent;
     this.#movieComponent = new MovieView(movie);
 
-    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick);
-    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick);
-    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick);
-    this.#movieComponent.setMovieClickHandler(this.#onMovieClick);
+    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
+    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
+    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
+    this.#movieComponent.setMovieClickHandler(this.#onMovieClick.bind(this));
 
     if (prevMovieComponent === null) {
       this.#renderMovie();
@@ -52,31 +52,31 @@ export default class CardPresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #onMovieClick = () => {
+  #onMovieClick() {
     const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
     popupPresenter.init(this.#movie);
-  };
+  }
 
-  #onAddToWatchlistClick = () => {
+  #onAddToWatchlistClick() {
     this.#toggleWatchlist();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
-  };
+  }
 
-  #onAlreadyWatchedClick = () => {
+  #onAlreadyWatchedClick() {
     this.#toggleAlreadyWatched();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
-  };
+  }
 
-  #onFavoriteClick = () => {
+  #onFavoriteClick() {
     this.#toggleFavorite();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
-  };
+  }
 
   destroy() {
     remove(this.#movieComponent);

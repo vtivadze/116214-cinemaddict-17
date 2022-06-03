@@ -7,13 +7,13 @@ export default class LoadMoreButtonView extends AbstractView {
     return createLoadMoreButtonTemplate();
   }
 
-  setClickHandler = (callback) => {
+  setClickHandler(callback) {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#clickHandler);
-  };
+    this.element.addEventListener('click', this.#clickHandler.bind(this));
+  }
 
-  #clickHandler = (evt) => {
+  #clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
-  };
+  }
 }

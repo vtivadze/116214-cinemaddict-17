@@ -211,52 +211,52 @@ export default class PopupView extends AbstractView {
     return createPopupTemplate(this.#movie, this.#comments);
   }
 
-  setCloseButtonClickHandler = (callback) => {
+  setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick);
-  };
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick.bind(this));
+  }
 
-  #onCloseButtonClick = (evt) => {
+  #onCloseButtonClick(evt) {
     evt.preventDefault();
     this._callback.closeButtonClick();
-  };
+  }
 
-  setAddToWatchlistClickHandler = (callback) => {
+  setAddToWatchlistClickHandler(callback) {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#onAddToWatchlistClick);
-  };
+      .addEventListener('click', this.#onAddToWatchlistClick.bind(this));
+  }
 
-  #onAddToWatchlistClick = (evt) => {
+  #onAddToWatchlistClick(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.addToWatchlistClick();
     this._callback.addToWatchlistClick();
-  };
+  }
 
-  setAlreadyWatchedClickHandler = (callback) => {
+  setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#onAlreadyWatchedClick);
-  };
+      .addEventListener('click', this.#onAlreadyWatchedClick.bind(this));
+  }
 
-  #onAlreadyWatchedClick = (evt) => {
+  #onAlreadyWatchedClick(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.alreadyWatchedClick();
     this._callback.alreadyWatchedClick();
-  };
+  }
 
-  setFavoriteClickHandler = (callback) => {
+  setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#onFavoriteClick);
-  };
+      .addEventListener('click', this.#onFavoriteClick.bind(this));
+  }
 
-  #onFavoriteClick = (evt) => {
+  #onFavoriteClick(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.favoriteClick();
     this._callback.favoriteClick();
-  };
+  }
 }
