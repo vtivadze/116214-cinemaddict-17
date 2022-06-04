@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
 
 const createMovieGenresListTemplate = (genres) => genres
@@ -195,7 +195,7 @@ const createPopupTemplate = (movie, comments) => {
   );
 };
 
-export default class PopupView extends AbstractView {
+export default class PopupView extends AbstractStatefulView {
   #movie = null;
   #comments = null;
   #cardComponent = null;
@@ -259,4 +259,8 @@ export default class PopupView extends AbstractView {
     this.#cardComponent._callback.favoriteClick();
     this._callback.favoriteClick();
   }
+
+  _restoreHandlers = () => {
+
+  };
 }
