@@ -196,17 +196,33 @@ const createPopupTemplate = (movie, comments) => {
 };
 
 export default class PopupView extends AbstractStatefulView {
-  #movie = null;
-  #comments = null;
-
   constructor(movie, comments) {
     super();
-    this.#movie = movie;
-    this.#comments = comments;
+    this._state = PopupView.parsePopupToState(movie, comments);
+  }
+
+  static parsePopupToState(movie, comments) {
+    const state = {
+      movie: {...movie},
+      comments: [...comments]
+    };
+
+    return state;
+  }
+
+  static parseStateToPopup(state) {
+    const popup = {...state};
+
+    return popup;
   }
 
   get template() {
-    return createPopupTemplate(this.#movie, this.#comments);
+    const popup = PopupView.parseStateToPopup(this._state);
+
+    return createPopupTemplate(
+      popup.movie,
+      popup.comments,
+    );
   }
 
   setCloseButtonClickHandler(callback) {
