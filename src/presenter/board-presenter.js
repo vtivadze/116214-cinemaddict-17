@@ -120,7 +120,7 @@ export default class BoardPresenter {
       this.#getMovieComments(movie),
       this.#moviesModel,
       this.#filterPresenter,
-      this.#updateMovies
+      this.#updateSameMovies
     );
     moviePresenter.init(movie);
 
@@ -195,7 +195,7 @@ export default class BoardPresenter {
     return this.#moviesModel.topRated.slice(0, TOP_RATED_COUNT);
   }
 
-  #updateMovies = (movie) => {
+  #updateSameMovies = (movie) => {
     Object.values(this.#moviePresenters).forEach((presenters) => presenters.get(movie.id)?.init(movie));
   };
 }

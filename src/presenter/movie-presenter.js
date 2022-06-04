@@ -8,17 +8,17 @@ export default class CardPresenter {
   #comments = [];
   #moviesModel = null;
   #filterPresenter = null;
-  #updateContent = null;
+  #updateSameMovies = null;
 
   #movie = null;
   #movieComponent = null;
 
-  constructor(movieContainer, comments, moviesModel, filterPresenter, updateContent) {
+  constructor(movieContainer, comments, moviesModel, filterPresenter, updateSameMovies) {
     this.#movieContainer = movieContainer;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
     this.#filterPresenter = filterPresenter;
-    this.#updateContent = updateContent;
+    this.#updateSameMovies = updateSameMovies;
   }
 
   init(movie) {
@@ -60,21 +60,21 @@ export default class CardPresenter {
   #addToWatchlistClickHandler() {
     this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateContent(this.#movie);
+    this.#updateSameMovies(this.#movie);
     this.#updateFilter();
   }
 
   #alreadyWatchedClickHandler() {
     this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateContent(this.#movie);
+    this.#updateSameMovies(this.#movie);
     this.#updateFilter();
   }
 
   #favoriteClickHandler() {
     this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateContent(this.#movie);
+    this.#updateSameMovies(this.#movie);
     this.#updateFilter();
   }
 
