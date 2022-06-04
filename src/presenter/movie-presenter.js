@@ -58,22 +58,21 @@ export default class CardPresenter {
   }
 
   #addToWatchlistClickHandler() {
-    this.#
-    ();
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
   }
 
   #alreadyWatchedClickHandler() {
-    this.#toggleAlreadyWatched();
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
   }
 
   #favoriteClickHandler() {
-    this.#toggleFavorite();
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
@@ -85,18 +84,5 @@ export default class CardPresenter {
 
   #updateFilter() {
     this.#filterPresenter.init(this.#moviesModel);
-  }
-
-  #
-  () {
-    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
-  }
-
-  #toggleAlreadyWatched() {
-    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
-  }
-
-  #toggleFavorite() {
-    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
   }
 }
