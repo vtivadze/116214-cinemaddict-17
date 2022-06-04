@@ -1,6 +1,6 @@
 import {RenderPosition, render, remove} from '../framework/render.js';
 import {SortType} from '../const.js';
-import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
+import {sortMovieByDate, sortMovieByRating, updateItem} from '../utils/util.js';
 import MoviePresenter from './movie-presenter.js';
 import BoardView from '../view/board-view.js';
 import MainContentView from '../view/main-content-view.js';
@@ -119,8 +119,7 @@ export default class BoardPresenter {
       this.#movieContainers[containerType].element,
       this.#getMovieComments(movie),
       this.#moviesModel,
-      this.#filterPresenter,
-      this.#updateSameMovies
+      this.#updateContent
     );
     moviePresenter.init(movie);
 
@@ -197,5 +196,15 @@ export default class BoardPresenter {
 
   #updateSameMovies = (movie) => {
     Object.values(this.#moviePresenters).forEach((presenters) => presenters.get(movie.id)?.init(movie));
+  };
+
+  #updateFilter() {
+    this.#filterPresenter.init(this.#moviesModel);
+  }
+
+  #updateContent = (movie) => {
+    updateItem(this.#moviesModel.movies, movie);
+    this.#updateSameMovies(movie);
+    this.#updateFilter();
   };
 }

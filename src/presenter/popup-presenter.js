@@ -4,23 +4,23 @@ import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
   #comments = [];
-  #movieComponent = null;
+  #updateContent = null;
 
   #popupComponent = null;
   #movie = null;
 
   static openedPresenter = null;
 
-  constructor(comments, movieComponent) {
+  constructor(comments, updateContent) {
     this.#comments = comments;
-    this.#movieComponent = movieComponent;
+    this.#updateContent = updateContent;
   }
 
   init(movie) {
     this.#movie = movie;
 
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(movie, this.#comments, this.#movieComponent);
+    this.#popupComponent = new PopupView(movie, this.#comments);
 
     this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
@@ -69,15 +69,21 @@ export default class PopupPresenter {
   }
 
   #addToWatchlistClickHandler() {
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
   #alreadyWatchedClickHandler() {
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
   #favoriteClickHandler() {
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
   #updatePopup() {

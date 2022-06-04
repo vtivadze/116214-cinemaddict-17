@@ -1,5 +1,4 @@
 import {render, replace, remove} from '../framework/render.js';
-import { updateItem } from '../utils/util.js';
 import MovieView from '../view/movie-view.js';
 import PopupPresenter from './popup-presenter.js';
 
@@ -7,18 +6,16 @@ export default class CardPresenter {
   #movieContainer = null;
   #comments = [];
   #moviesModel = null;
-  #filterPresenter = null;
-  #updateSameMovies = null;
+  #updateContent = null;
 
   #movie = null;
   #movieComponent = null;
 
-  constructor(movieContainer, comments, moviesModel, filterPresenter, updateSameMovies) {
+  constructor(movieContainer, comments, moviesModel, updateContent) {
     this.#movieContainer = movieContainer;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
-    this.#filterPresenter = filterPresenter;
-    this.#updateSameMovies = updateSameMovies;
+    this.#updateContent = updateContent;
   }
 
   init(movie) {
@@ -53,36 +50,26 @@ export default class CardPresenter {
   }
 
   #movieClickHandler() {
-    const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
+    const popupPresenter = new PopupPresenter(this.#comments, this.#updateContent);
     popupPresenter.init(this.#movie);
   }
 
   #addToWatchlistClickHandler() {
     this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
-    updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateSameMovies(this.#movie);
-    this.#updateFilter();
+    this.#updateContent(this.#movie);
   }
 
   #alreadyWatchedClickHandler() {
     this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
-    updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateSameMovies(this.#movie);
-    this.#updateFilter();
+    this.#updateContent(this.#movie);
   }
 
   #favoriteClickHandler() {
     this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
-    updateItem(this.#moviesModel.movies, this.#movie);
-    this.#updateSameMovies(this.#movie);
-    this.#updateFilter();
+    this.#updateContent(this.#movie);
   }
 
   destroy() {
     remove(this.#movieComponent);
-  }
-
-  #updateFilter() {
-    this.#filterPresenter.init(this.#moviesModel);
   }
 }
