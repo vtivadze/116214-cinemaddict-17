@@ -27,10 +27,10 @@ export default class CardPresenter {
     const prevMovieComponent = this.#movieComponent;
     this.#movieComponent = new MovieView(movie);
 
-    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
-    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
-    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
-    this.#movieComponent.setMovieClickHandler(this.#onMovieClick.bind(this));
+    this.#movieComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
+    this.#movieComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
+    this.#movieComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
+    this.#movieComponent.setMovieClickHandler(this.#movieClickHandler.bind(this));
 
     if (prevMovieComponent === null) {
       this.#renderMovie();
@@ -52,26 +52,27 @@ export default class CardPresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #onMovieClick() {
+  #movieClickHandler() {
     const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
     popupPresenter.init(this.#movie);
   }
 
-  #onAddToWatchlistClick() {
-    this.#toggleWatchlist();
+  #addToWatchlistClickHandler() {
+    this.#
+    ();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
   }
 
-  #onAlreadyWatchedClick() {
+  #alreadyWatchedClickHandler() {
     this.#toggleAlreadyWatched();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
     this.#updateFilter();
   }
 
-  #onFavoriteClick() {
+  #favoriteClickHandler() {
     this.#toggleFavorite();
     updateItem(this.#moviesModel.movies, this.#movie);
     this.#updateContent(this.#movie);
@@ -86,7 +87,8 @@ export default class CardPresenter {
     this.#filterPresenter.init(this.#moviesModel);
   }
 
-  #toggleWatchlist() {
+  #
+  () {
     this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
   }
 

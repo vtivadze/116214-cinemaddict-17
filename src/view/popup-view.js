@@ -213,10 +213,10 @@ export default class PopupView extends AbstractView {
 
   setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick.bind(this));
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonClickHandler.bind(this));
   }
 
-  #onCloseButtonClick(evt) {
+  #closeButtonClickHandler(evt) {
     evt.preventDefault();
     this._callback.closeButtonClick();
   }
@@ -225,10 +225,10 @@ export default class PopupView extends AbstractView {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#onAddToWatchlistClick.bind(this));
+      .addEventListener('click', this.#addWatchClickHandler.bind(this));
   }
 
-  #onAddToWatchlistClick(evt) {
+  #addWatchClickHandler(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.addToWatchlistClick();
     this._callback.addToWatchlistClick();
@@ -238,10 +238,10 @@ export default class PopupView extends AbstractView {
     this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#onAlreadyWatchedClick.bind(this));
+      .addEventListener('click', this.#alreadyWatchedClickHandler.bind(this));
   }
 
-  #onAlreadyWatchedClick(evt) {
+  #alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.alreadyWatchedClick();
     this._callback.alreadyWatchedClick();
@@ -251,10 +251,10 @@ export default class PopupView extends AbstractView {
     this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#onFavoriteClick.bind(this));
+      .addEventListener('click', this.#favoriteClickHandler.bind(this));
   }
 
-  #onFavoriteClick(evt) {
+  #favoriteClickHandler(evt) {
     evt.preventDefault();
     this.#cardComponent._callback.favoriteClick();
     this._callback.favoriteClick();

@@ -70,7 +70,7 @@ export default class BoardPresenter {
 
   #renderSort() {
     render(this.#sortComponent, this.#boardComponent.element, RenderPosition.BEFOREBEGIN);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange.bind(this));
+    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler.bind(this));
   }
 
   #renderMainContent() {
@@ -132,11 +132,11 @@ export default class BoardPresenter {
   }
 
   #renderLoadMoreButton() {
-    this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick.bind(this));
+    this.#loadMoreButtonComponent.setClickHandler(this.#loadMoreButtonClickHandler.bind(this));
     render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
   }
 
-  #onLoadMoreButtonClick() {
+  #loadMoreButtonClickHandler() {
     this.#renderMovies('Main', this.#getMoviesToLoad());
 
     this.#renderedMoviesCount += MOVIE_COUNT_PER_STEP;
@@ -147,7 +147,7 @@ export default class BoardPresenter {
     }
   }
 
-  #handleSortTypeChange(sortType) {
+  #sortTypeChangeHandler(sortType) {
     if (this.#currentSortType === sortType) {
       return;
     }
