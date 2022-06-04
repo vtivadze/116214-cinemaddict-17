@@ -198,13 +198,13 @@ const createPopupTemplate = (movie, comments) => {
 export default class PopupView extends AbstractStatefulView {
   #movie = null;
   #comments = null;
-  #cardComponent = null;
+  #movieComponent = null;
 
-  constructor(movie, comments, cardComponent) {
+  constructor(movie, comments, movieComponent) {
     super();
     this.#movie = movie;
     this.#comments = comments;
-    this.#cardComponent = cardComponent;
+    this.#movieComponent = movieComponent;
   }
 
   get template() {
@@ -230,7 +230,7 @@ export default class PopupView extends AbstractStatefulView {
 
   #addWatchClickHandler(evt) {
     evt.preventDefault();
-    this.#cardComponent._callback.addToWatchlistClick();
+    this.#movieComponent._callback.addToWatchlistClick();
     this._callback.addToWatchlistClick();
   }
 
@@ -243,7 +243,7 @@ export default class PopupView extends AbstractStatefulView {
 
   #alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
-    this.#cardComponent._callback.alreadyWatchedClick();
+    this.#movieComponent._callback.alreadyWatchedClick();
     this._callback.alreadyWatchedClick();
   }
 
@@ -256,7 +256,7 @@ export default class PopupView extends AbstractStatefulView {
 
   #favoriteClickHandler(evt) {
     evt.preventDefault();
-    this.#cardComponent._callback.favoriteClick();
+    this.#movieComponent._callback.favoriteClick();
     this._callback.favoriteClick();
   }
 

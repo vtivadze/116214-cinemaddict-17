@@ -4,23 +4,23 @@ import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
   #comments = [];
-  #cardComponent = null;
+  #movieComponent = null;
 
   #popupComponent = null;
   #movie = null;
 
   static openedPresenter = null;
 
-  constructor(comments, cardComponent) {
+  constructor(comments, movieComponent) {
     this.#comments = comments;
-    this.#cardComponent = cardComponent;
+    this.#movieComponent = movieComponent;
   }
 
   init(movie) {
     this.#movie = movie;
 
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(movie, this.#comments, this.#cardComponent);
+    this.#popupComponent = new PopupView(movie, this.#comments, this.#movieComponent);
 
     this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
