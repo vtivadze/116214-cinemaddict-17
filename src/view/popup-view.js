@@ -57,7 +57,13 @@ const createEmojiListTemplate = (selectedEmoji) => (
   )).join('')
 );
 
-const createPopupTemplate = (movie, comments, selectedEmoji) => {
+const createScrollTopScript = (scrollTop) => (
+  `<script>
+    document.querySelector('.film-details').scrollTop=${scrollTop}
+  </script>`
+);
+
+const createPopupTemplate = (movie, comments, selectedEmoji, scrollTop) => {
   const {
     filmInfo: {
       poster,
@@ -100,8 +106,8 @@ const createPopupTemplate = (movie, comments, selectedEmoji) => {
   const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
   const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
-
   const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
+  const settingScrollTopScript = createScrollTopScript(scrollTop);
 
   return (
     `<section class="film-details">
@@ -191,7 +197,8 @@ const createPopupTemplate = (movie, comments, selectedEmoji) => {
           </section>
         </div>
       </form>
-    </section>`
+    </section>
+    ${settingScrollTopScript}`
   );
 };
 
@@ -208,6 +215,7 @@ export default class PopupView extends AbstractStatefulView {
       movie: {...movie},
       comments: [...comments],
       selectedEmoji: '',
+      scrollTop: 0,
     };
 
     return state;
@@ -225,13 +233,17 @@ export default class PopupView extends AbstractStatefulView {
     return createPopupTemplate(
       popup.movie,
       popup.comments,
-      popup.selectedEmoji
+      popup.selectedEmoji,
+      popup.scrollTop,
     );
   }
 
   #emojiTypeChangeHandler(evt) {
     evt.preventDefault();
-    this.updateElement({selectedEmoji: evt.target.dataset.emojiType});
+    this.updateElement({
+      selectedEmoji: evt.target.dataset.emojiType,
+      scrollTop: this.element.scrollTop,
+    });
   }
 
   setCloseButtonClickHandler(callback) {
