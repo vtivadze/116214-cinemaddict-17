@@ -26,11 +26,11 @@ export default class BoardPresenter {
   #loadMoreButtonComponent = new LoadMoreButtonView();
   #mostCommentedComponent = new MostCommentedView();
   #topRatedComponent = new TopRatedView();
-  #sortComponent = new SortView();
 
   #movies = [];
   #sourceMovies = [];
   #currentSortType = SortType.DEFAULT;
+  #sortComponent = null;
 
   #movieContainers = {
     Main: new MoviesListContainerView(),
@@ -68,7 +68,8 @@ export default class BoardPresenter {
     this.#renderTopRatedMovies();
   }
 
-  #renderSort() {
+  #renderSort(sortType = SortType.DEFAULT) {
+    this.#sortComponent = new SortView(sortType);
     render(this.#sortComponent, this.#boardComponent.element, RenderPosition.BEFOREBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler.bind(this));
   }
@@ -154,6 +155,8 @@ export default class BoardPresenter {
     this.#sortMovies(sortType);
     this.#clearMoviesList();
     this.#renderMainContentMovies();
+    remove(this.#sortComponent);
+    this.#renderSort(sortType);
   }
 
   #sortMovies(sortType) {
