@@ -1,5 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
+import { emojies } from '../const.js';
 
 const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
@@ -47,6 +48,15 @@ const createSelectedEmojiTemplate = (selectedEmoji) => (
   selectedEmoji ? `<img src="images/emoji/${selectedEmoji}.png" width="55" height="55" alt="emoji-smile">` : ''
 );
 
+const createEmojiListTemplate = (selectedEmoji) => (
+  emojies.map((emoji) => (
+    `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${emoji === selectedEmoji && 'checked'}>
+    <label class="film-details__emoji-label" for="emoji-${emoji}">
+      <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji" data-emoji-type="${emoji}">
+    </label>`
+  )).join('')
+);
+
 const createPopupTemplate = (movie, comments, selectedEmoji) => {
   const {
     filmInfo: {
@@ -90,6 +100,8 @@ const createPopupTemplate = (movie, comments, selectedEmoji) => {
   const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
   const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
+
+  const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
 
   return (
     `<section class="film-details">
@@ -173,25 +185,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji) => {
               </label>
 
               <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-                <label class="film-details__emoji-label" for="emoji-smile">
-                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emoji-type="smile">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-                <label class="film-details__emoji-label" for="emoji-sleeping">
-                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emoji-type="sleeping">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-                <label class="film-details__emoji-label" for="emoji-puke">
-                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emoji-type="puke">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-                <label class="film-details__emoji-label" for="emoji-angry">
-                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emoji-type="angry">
-                </label>
+                ${emojiListeTemplate}
               </div>
             </div>
           </section>

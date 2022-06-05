@@ -1,7 +1,14 @@
 const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
-  RATING: 'rating'
+  RATING: 'rating',
 };
 
-export {SortType};
+const emojies = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
+];
+
+export {SortType, emojies};
