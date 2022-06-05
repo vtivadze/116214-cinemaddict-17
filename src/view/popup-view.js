@@ -57,7 +57,7 @@ const createEmojiListTemplate = (selectedEmoji) => (
   )).join('')
 );
 
-const createPopupTemplate = (movie, comments, selectedEmoji) => {
+const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) => {
   const {
     filmInfo: {
       poster,
@@ -180,7 +180,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji) => {
               <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentInputValue}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
@@ -208,6 +208,7 @@ export default class PopupView extends AbstractStatefulView {
       comments: [...comments],
       selectedEmoji: '',
       scrollTop: 0,
+      commentInputValue: '',
     };
 
     return state;
@@ -226,8 +227,15 @@ export default class PopupView extends AbstractStatefulView {
       popup.movie,
       popup.comments,
       popup.selectedEmoji,
-      popup.scrollTop,
+      popup.commentInputValue,
     );
+  }
+
+  #commentInputHandler(evt) {
+    evt.preventDefault();
+    this._setState({
+      commentInputValue: evt.target.value,
+    });
   }
 
   #emojiTypeChangeHandler(evt) {
@@ -287,6 +295,7 @@ export default class PopupView extends AbstractStatefulView {
 
   #setInnerHandlers() {
     this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiTypeChangeHandler.bind(this));
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler.bind(this));
   }
 
   _restoreHandlers = () => {
