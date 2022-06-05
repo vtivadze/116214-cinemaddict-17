@@ -86,10 +86,10 @@ export default class CardView extends AbstractView {
 
   setMovieClickHandler(callback) {
     this._callback.click = callback;
-    this.element.querySelector('.film-card__link').addEventListener('click', this.#onMovieClick.bind(this));
+    this.element.querySelector('.film-card__link').addEventListener('click', this.#movieClickHandler.bind(this));
   }
 
-  #onMovieClick(evt) {
+  #movieClickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
   }
@@ -98,10 +98,10 @@ export default class CardView extends AbstractView {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-card__controls-item--add-to-watchlist')
-      .addEventListener('click', this.#onAddToWatchlistClick.bind(this));
+      .addEventListener('click', this.#addWatchClickHandler.bind(this));
   }
 
-  #onAddToWatchlistClick(evt) {
+  #addWatchClickHandler(evt) {
     evt.preventDefault();
     this._callback.addToWatchlistClick();
   }
@@ -110,10 +110,10 @@ export default class CardView extends AbstractView {
     this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-card__controls-item--mark-as-watched')
-      .addEventListener('click', this.#onAlreadyWatchedClick.bind(this));
+      .addEventListener('click', this.#alreadyWatchedClickHandler.bind(this));
   }
 
-  #onAlreadyWatchedClick(evt) {
+  #alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
     this._callback.alreadyWatchedClick();
   }
@@ -122,10 +122,10 @@ export default class CardView extends AbstractView {
     this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-card__controls-item--favorite')
-      .addEventListener('click', this.#onFavoriteClick.bind(this));
+      .addEventListener('click', this.#favoriteClickHandler.bind(this));
   }
 
-  #onFavoriteClick(evt) {
+  #favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
   }

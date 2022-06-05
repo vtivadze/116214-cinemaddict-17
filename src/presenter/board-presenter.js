@@ -1,6 +1,6 @@
 import {RenderPosition, render, remove} from '../framework/render.js';
 import {SortType} from '../const.js';
-import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
+import {sortMovieByDate, sortMovieByRating, updateItem} from '../utils/util.js';
 import MoviePresenter from './movie-presenter.js';
 import BoardView from '../view/board-view.js';
 import MainContentView from '../view/main-content-view.js';
@@ -70,7 +70,7 @@ export default class BoardPresenter {
 
   #renderSort() {
     render(this.#sortComponent, this.#boardComponent.element, RenderPosition.BEFOREBEGIN);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange.bind(this));
+    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler.bind(this));
   }
 
   #renderMainContent() {
@@ -119,8 +119,7 @@ export default class BoardPresenter {
       this.#movieContainers[containerType].element,
       this.#getMovieComments(movie),
       this.#moviesModel,
-      this.#filterPresenter,
-      this.#updateMovies
+      this.#updateContent
     );
     moviePresenter.init(movie);
 
@@ -132,11 +131,11 @@ export default class BoardPresenter {
   }
 
   #renderLoadMoreButton() {
-    this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick.bind(this));
+    this.#loadMoreButtonComponent.setClickHandler(this.#loadMoreButtonClickHandler.bind(this));
     render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
   }
 
-  #onLoadMoreButtonClick() {
+  #loadMoreButtonClickHandler() {
     this.#renderMovies('Main', this.#getMoviesToLoad());
 
     this.#renderedMoviesCount += MOVIE_COUNT_PER_STEP;
@@ -147,7 +146,7 @@ export default class BoardPresenter {
     }
   }
 
-  #handleSortTypeChange(sortType) {
+  #sortTypeChangeHandler(sortType) {
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -195,7 +194,17 @@ export default class BoardPresenter {
     return this.#moviesModel.topRated.slice(0, TOP_RATED_COUNT);
   }
 
-  #updateMovies = (movie) => {
+  #updateSameMovies = (movie) => {
     Object.values(this.#moviePresenters).forEach((presenters) => presenters.get(movie.id)?.init(movie));
+  };
+
+  #updateFilter() {
+    this.#filterPresenter.init(this.#moviesModel);
+  }
+
+  #updateContent = (movie) => {
+    updateItem(this.#moviesModel.movies, movie);
+    this.#updateSameMovies(movie);
+    this.#updateFilter();
   };
 }

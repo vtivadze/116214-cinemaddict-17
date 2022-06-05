@@ -1,5 +1,4 @@
 import {render, replace, remove} from '../framework/render.js';
-import { updateItem } from '../utils/util.js';
 import MovieView from '../view/movie-view.js';
 import PopupPresenter from './popup-presenter.js';
 
@@ -7,17 +6,15 @@ export default class CardPresenter {
   #movieContainer = null;
   #comments = [];
   #moviesModel = null;
-  #filterPresenter = null;
   #updateContent = null;
 
   #movie = null;
   #movieComponent = null;
 
-  constructor(movieContainer, comments, moviesModel, filterPresenter, updateContent) {
+  constructor(movieContainer, comments, moviesModel, updateContent) {
     this.#movieContainer = movieContainer;
     this.#comments = comments;
     this.#moviesModel = moviesModel;
-    this.#filterPresenter = filterPresenter;
     this.#updateContent = updateContent;
   }
 
@@ -27,10 +24,10 @@ export default class CardPresenter {
     const prevMovieComponent = this.#movieComponent;
     this.#movieComponent = new MovieView(movie);
 
-    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
-    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
-    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
-    this.#movieComponent.setMovieClickHandler(this.#onMovieClick.bind(this));
+    this.#movieComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
+    this.#movieComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
+    this.#movieComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
+    this.#movieComponent.setMovieClickHandler(this.#movieClickHandler.bind(this));
 
     if (prevMovieComponent === null) {
       this.#renderMovie();
@@ -52,49 +49,27 @@ export default class CardPresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #onMovieClick() {
-    const popupPresenter = new PopupPresenter(this.#comments, this.#movieComponent);
+  #movieClickHandler() {
+    const popupPresenter = new PopupPresenter(this.#comments, this.#updateContent);
     popupPresenter.init(this.#movie);
   }
 
-  #onAddToWatchlistClick() {
-    this.#toggleWatchlist();
-    updateItem(this.#moviesModel.movies, this.#movie);
+  #addToWatchlistClickHandler() {
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
     this.#updateContent(this.#movie);
-    this.#updateFilter();
   }
 
-  #onAlreadyWatchedClick() {
-    this.#toggleAlreadyWatched();
-    updateItem(this.#moviesModel.movies, this.#movie);
+  #alreadyWatchedClickHandler() {
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
     this.#updateContent(this.#movie);
-    this.#updateFilter();
   }
 
-  #onFavoriteClick() {
-    this.#toggleFavorite();
-    updateItem(this.#moviesModel.movies, this.#movie);
+  #favoriteClickHandler() {
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     this.#updateContent(this.#movie);
-    this.#updateFilter();
   }
 
   destroy() {
     remove(this.#movieComponent);
-  }
-
-  #updateFilter() {
-    this.#filterPresenter.init(this.#moviesModel);
-  }
-
-  #toggleWatchlist() {
-    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
-  }
-
-  #toggleAlreadyWatched() {
-    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
-  }
-
-  #toggleFavorite() {
-    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
   }
 }

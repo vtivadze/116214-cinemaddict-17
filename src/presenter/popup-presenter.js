@@ -4,30 +4,30 @@ import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
   #comments = [];
-  #cardComponent = null;
+  #updateContent = null;
 
   #popupComponent = null;
   #movie = null;
 
   static openedPresenter = null;
 
-  constructor(comments, cardComponent) {
+  constructor(comments, updateContent) {
     this.#comments = comments;
-    this.#cardComponent = cardComponent;
+    this.#updateContent = updateContent;
   }
 
   init(movie) {
     this.#movie = movie;
 
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(movie, this.#comments, this.#cardComponent);
+    this.#popupComponent = new PopupView(movie, this.#comments);
 
-    this.#popupComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
-    this.#popupComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
+    this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
-    document.addEventListener('keydown', this.#onDocumentKeydown.bind(this));
+    document.addEventListener('keydown', this.#documentKeydownHandler.bind(this));
 
     if (prevPopupComponent === null) {
       if (PopupPresenter.openedPresenter !== null) {
@@ -55,7 +55,7 @@ export default class PopupPresenter {
     replace(this.#popupComponent, prevPopupComponent);
   }
 
-  #onDocumentKeydown(evt) {
+  #documentKeydownHandler(evt) {
     if (isEscape(evt.code)) {
       evt.preventDefault();
       this.#hidePopup();
@@ -65,19 +65,25 @@ export default class PopupPresenter {
   #hidePopup() {
     this.#popupComponent.element.remove();
     document.body.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', this.#onDocumentKeydown);
+    document.removeEventListener('keydown', this.#documentKeydownHandler);
   }
 
-  #onAddToWatchlistClick() {
+  #addToWatchlistClickHandler() {
+    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
-  #onAlreadyWatchedClick() {
+  #alreadyWatchedClickHandler() {
+    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
-  #onFavoriteClick() {
+  #favoriteClickHandler() {
+    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
     this.#updatePopup();
+    this.#updateContent(this.#movie);
   }
 
   #updatePopup() {
