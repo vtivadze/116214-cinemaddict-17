@@ -27,8 +27,6 @@ export default class BoardPresenter {
   #mostCommentedComponent = new MostCommentedView();
   #topRatedComponent = new TopRatedView();
 
-  #movies = [];
-  #sourceMovies = [];
   #currentSortType = SortType.DEFAULT;
   #sortComponent = null;
 
@@ -54,8 +52,6 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#movies = [...this.#moviesModel.movies];
-    this.#sourceMovies = [...this.#moviesModel.movies];
     this.#renderBoard();
   }
 
@@ -81,7 +77,7 @@ export default class BoardPresenter {
   #renderMainContent() {
     render(this.#mainContentComponent, this.#boardComponent.element);
 
-    if (this.#movies.length === 0) {
+    if (this.movies.length === 0) {
       this.#renderNoMovie();
     } else {
       render(this.#movieContainers.Main, this.#mainContentComponent.element);
@@ -96,7 +92,7 @@ export default class BoardPresenter {
   #renderMainContentMovies() {
     this.#renderMovies('Main', this.#getMainContentMovies());
 
-    if (this.#movies.length > MOVIE_COUNT_PER_STEP) {
+    if (this.movies.length > MOVIE_COUNT_PER_STEP) {
       this.#renderLoadMoreButton();
     }
   }
@@ -166,13 +162,13 @@ export default class BoardPresenter {
   #sortMovies(sortType) {
     switch(sortType) {
       case SortType.DATE:
-        this.#movies.sort(sortMovieByDate);
+        this.movies.sort(sortMovieByDate);
         break;
       case SortType.RATING:
-        this.#movies.sort(sortMovieByRating);
+        this.movies.sort(sortMovieByRating);
         break;
       case SortType.DEFAULT:
-        this.#movies = [...this.#sourceMovies];
+        this.movies;
     }
 
     this.#currentSortType = sortType;
@@ -186,11 +182,11 @@ export default class BoardPresenter {
   }
 
   #getMainContentMovies() {
-    return this.#movies.slice(0, Math.min(this.#movies.length, MOVIE_COUNT_PER_STEP));
+    return this.movies.slice(0, Math.min(this.movies.length, MOVIE_COUNT_PER_STEP));
   }
 
   #getMoviesToLoad() {
-    return this.#movies.slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP);
+    return this.movies.slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP);
   }
 
   #getMostCommentedMovies() {
