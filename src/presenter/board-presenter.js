@@ -42,7 +42,7 @@ export default class BoardPresenter {
     TopRated: new Map()
   };
 
-  #renderedMoviesCount = MOVIE_COUNT_PER_STEP;
+  #renderedMovieCount = MOVIE_COUNT_PER_STEP;
 
   constructor(siteMainElement, moviesModel, commentsModel, filterPresenter) {
     this.#siteMainElement = siteMainElement;
@@ -137,13 +137,15 @@ export default class BoardPresenter {
   }
 
   #loadMoreButtonClickHandler() {
-    this.#renderMovies('Main', this.#getMoviesToLoad());
+    const movieCount = this.movies.length;
+    const newRenderedMovieCount = Math.min(movieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP);
+    const movies = this.movies.slice(this.#renderedMovieCount, newRenderedMovieCount);
+    this.#renderMovies('Main', movies);
 
-    this.#renderedMoviesCount += MOVIE_COUNT_PER_STEP;
+    this.#renderedMovieCount = newRenderedMovieCount;
 
-    if (this.#renderedMoviesCount >= this.#moviesModel.movies.length) {
-      this.#loadMoreButtonComponent.element.remove();
-      this.#loadMoreButtonComponent.removeElement();
+    if (this.#renderedMovieCount >= movieCount) {
+      remove(this.#loadMoreButtonComponent);
     }
   }
 
@@ -177,16 +179,12 @@ export default class BoardPresenter {
   #clearMoviesList() {
     this.#moviePresenters.Main.forEach((presenter) => presenter.destroy());
     this.#moviePresenters.Main.clear();
-    this.#renderedMoviesCount = MOVIE_COUNT_PER_STEP;
+    this.#renderedMovieCount = MOVIE_COUNT_PER_STEP;
     remove(this.#loadMoreButtonComponent);
   }
 
   #getMainContentMovies() {
     return this.movies.slice(0, Math.min(this.movies.length, MOVIE_COUNT_PER_STEP));
-  }
-
-  #getMoviesToLoad() {
-    return this.movies.slice(this.#renderedMoviesCount, this.#renderedMoviesCount + MOVIE_COUNT_PER_STEP);
   }
 
   #getMostCommentedMovies() {
