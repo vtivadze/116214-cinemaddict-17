@@ -59,6 +59,10 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
+  get movies() {
+    return this.#moviesModel.movies;
+  }
+
   #renderBoard() {
     render(this.#boardComponent, this.#siteMainElement);
 
