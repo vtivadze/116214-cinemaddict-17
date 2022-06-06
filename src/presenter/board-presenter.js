@@ -56,6 +56,13 @@ export default class BoardPresenter {
   }
 
   get movies() {
+    switch(this.#currentSortType) {
+      case SortType.DATE:
+        return [...this.#moviesModel.movies].sort(sortMovieByDate);
+      case SortType.RATING:
+        return [...this.#moviesModel.movies].sort(sortMovieByRating);
+    }
+
     return this.#moviesModel.movies;
   }
 
@@ -154,26 +161,13 @@ export default class BoardPresenter {
       return;
     }
 
-    this.#sortMovies(sortType);
+    this.#currentSortType = sortType;
+
     this.#clearMoviesList();
     this.#renderMainContentMovies();
+
     remove(this.#sortComponent);
     this.#renderSort(sortType);
-  }
-
-  #sortMovies(sortType) {
-    switch(sortType) {
-      case SortType.DATE:
-        this.movies.sort(sortMovieByDate);
-        break;
-      case SortType.RATING:
-        this.movies.sort(sortMovieByRating);
-        break;
-      case SortType.DEFAULT:
-        this.movies;
-    }
-
-    this.#currentSortType = sortType;
   }
 
   #clearMoviesList() {
