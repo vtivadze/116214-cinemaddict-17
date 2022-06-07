@@ -49,6 +49,8 @@ export default class BoardPresenter {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filterPresenter = filterPresenter;
+
+    this.#moviesModel.addObserver(this.#handleModelEvent);
   }
 
   init() {
