@@ -1,6 +1,6 @@
 import {RenderPosition, render, remove} from '../framework/render.js';
 import {SortType} from '../const.js';
-import {sortMovieByDate, sortMovieByRating, updateItem} from '../utils/util.js';
+import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
 import MoviePresenter from './movie-presenter.js';
 import BoardView from '../view/board-view.js';
 import MainContentView from '../view/main-content-view.js';
@@ -198,7 +198,7 @@ export default class BoardPresenter {
   }
 
   #updateContent = (movie) => {
-    updateItem(this.#moviesModel.movies, movie);
+    // updateItem(this.#moviesModel.movies, movie);
     this.#updateSameMovies(movie);
     this.#updateFilter();
   };
