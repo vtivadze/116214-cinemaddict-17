@@ -68,6 +68,14 @@ export default class BoardPresenter {
     return this.#moviesModel.movies;
   }
 
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+  };
+
   #renderBoard() {
     render(this.#boardComponent, this.#siteMainElement);
 
@@ -129,7 +137,7 @@ export default class BoardPresenter {
       this.#movieContainers[containerType].element,
       this.#getMovieComments(movie),
       this.#moviesModel,
-      this.#updateContent
+      // this.#updateContent
     );
     moviePresenter.init(movie);
 
@@ -199,9 +207,9 @@ export default class BoardPresenter {
     this.#filterPresenter.init(this.#moviesModel);
   }
 
-  #updateContent = (movie) => {
-    // updateItem(this.#moviesModel.movies, movie);
-    this.#updateSameMovies(movie);
-    this.#updateFilter();
-  };
+  // #updateContent = (movie) => {
+  //   updateItem(this.#moviesModel.movies, movie);
+  //   this.#updateSameMovies(movie);
+  //   this.#updateFilter();
+  // };
 }
