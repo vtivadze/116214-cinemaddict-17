@@ -1,23 +1,26 @@
 import { isEscape } from '../utils/util.js';
+import { UserAction, UpdateType } from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
-  #comments = [];
-  #updateContent = null;
+  #changeData = null;
+  #commentsModel = null;
 
-  #popupComponent = null;
   #movie = null;
+  #comments = [];
+  #popupComponent = null;
 
   static openedPresenter = null;
 
-  constructor(comments, updateContent) {
-    this.#comments = comments;
-    this.#updateContent = updateContent;
+  constructor(commentsModel, changeData) {
+    this.#commentsModel = commentsModel;
+    this.#changeData = changeData;
   }
 
   init(movie) {
     this.#movie = movie;
+    this.#comments = this.#getComments();
 
     const prevPopupComponent = this.#popupComponent;
     this.#popupComponent = new PopupView(movie, this.#comments);
@@ -46,6 +49,10 @@ export default class PopupPresenter {
     remove(prevPopupComponent);
   }
 
+  #getComments() {
+    return this.#commentsModel.comments.filter((comment) => this.#movie.comments.includes(String(comment.id)));
+  }
+
   #renderPopup() {
     document.body.classList.add('hide-overflow');
     render(this.#popupComponent, document.body);
@@ -69,24 +76,24 @@ export default class PopupPresenter {
   }
 
   #addToWatchlistClickHandler() {
-    this.#movie.userDetails.watchlist = !this.#movie.userDetails.watchlist;
-    this.#updatePopup();
-    this.#updateContent(this.#movie);
+    const movie = {...this.#movie};
+    movie.userDetails.watchlist = !movie.userDetails.watchlist;
+    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_PATCH, movie);
   }
 
   #alreadyWatchedClickHandler() {
-    this.#movie.userDetails.alreadyWatched = !this.#movie.userDetails.alreadyWatched;
-    this.#updatePopup();
-    this.#updateContent(this.#movie);
+    const movie = {...this.#movie};
+    movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
+    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
   #favoriteClickHandler() {
-    this.#movie.userDetails.favorite = !this.#movie.userDetails.favorite;
-    this.#updatePopup();
-    this.#updateContent(this.#movie);
+    const movie = {...this.#movie};
+    movie.userDetails.favorite = !movie.userDetails.favorite;
+    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_PATCH, movie);
   }
 
-  #updatePopup() {
+  updatePopup() {
     this.init(this.#movie);
   }
 }

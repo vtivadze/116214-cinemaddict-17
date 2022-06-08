@@ -12,28 +12,18 @@ const emojies = [
 ];
 
 const UserAction = {
-  CARD_CONTROLS: 'CARD_CONTROLS',
-  SORT: 'SORT',
-  FILTER: 'FILTER',
+  UPDATE_MOVIE: 'UPDATE_MOVIE',
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 const UpdateType = {
-  // click on buttons: toWatchelist, favorites
-  FILTER: ['cards', 'filter'],
-
-  // click on button: alreadyWathced
-  PROFILE: ['cards', 'filter', 'profile'],
-
-  // add, remove comment
-  COMMENT: ['cards', 'most_commented'],
-
-  // sort, filter
-  BOARD: ['main_container'],
-
-  // click on buttons: toWatchlist, favorites, alreadyWatched
-  ACTIVE_FILTER: ['cards', 'filter', 'profile', 'main_container']
+  PATCH: 'PATCH',
+  POPUP_PATCH: 'POPUP_PATCH',
+  MINOR: 'MINOR',
+  POPUP_MINOR: 'POPUP_MINOR',
+  MINOR_ONE: 'MINOR_ONE',
+  MAJOR: 'MAJOR',
 };
-// 51 min
+
 export {SortType, emojies, UserAction, UpdateType};

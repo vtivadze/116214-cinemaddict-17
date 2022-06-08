@@ -1,16 +1,18 @@
-import {render} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import UserProfileView from '../view/user-profile-view.js';
 
 export default class UserProfilePresenter {
-  #container = null;
+  #userProfileContainer = null;
   #moviesModel = null;
+
+  #userProfileComponent = null;
 
   #userTitle = {
     titles: [
       {min: 0, max: 0, title: ''},
       {min: 1, max: 10, title: 'novice'},
       {min: 11, max: 20, title: 'fan'},
-      {min: 21, max: Number.POSITIVE_INFINITY, title: 'movie buf'},
+      {min: 21, max: Number.POSITIVE_INFINITY, title: 'movie buff'},
     ],
     getTitle: function(count) {
       return this.titles
@@ -19,19 +21,36 @@ export default class UserProfilePresenter {
     }
   };
 
-  constructor(container, moviesModel) {
-    this.#container = container;
-    this.#moviesModel = moviesModel;
+  constructor(userProfileContainer) {
+    this.#userProfileContainer = userProfileContainer;
   }
 
-  init() {
+  init(moviesModel) {
+    this.#moviesModel = moviesModel;
+
     if (this.#getUserTitle()) {
       this.#renderUserProfile();
     }
   }
 
   #renderUserProfile() {
-    render(new UserProfileView(this.#getUserTitle()), this.#container);
+    const prevUserProfileComponent = this.#userProfileComponent;
+    this.#userProfileComponent = new UserProfileView(this.#getUserTitle());
+
+    if (prevUserProfileComponent === null) {
+      render(this.#userProfileComponent, this.#userProfileContainer);
+      return;
+    }
+
+    if (this.#userProfileContainer.contains(prevUserProfileComponent.element)) {
+      this.#replaceUserProfileComponent(prevUserProfileComponent);
+    }
+
+    remove(prevUserProfileComponent);
+  }
+
+  #replaceUserProfileComponent(prevUserProfileComponent) {
+    replace(this.#userProfileComponent, prevUserProfileComponent);
   }
 
   #getAlreadyWatchedCount() {

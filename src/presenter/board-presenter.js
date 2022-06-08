@@ -1,7 +1,9 @@
 import {RenderPosition, render, remove} from '../framework/render.js';
-import {SortType} from '../const.js';
+import {SortType, UpdateType, UserAction} from '../const.js';
 import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
+import UserProfilePresenter from './user-profile-presenter.js';
 import MoviePresenter from './movie-presenter.js';
+import PopupPresenter from './popup-presenter.js';
 import BoardView from '../view/board-view.js';
 import MainContentView from '../view/main-content-view.js';
 import NoMovieView from '../view/no-movie-view.js';
@@ -17,6 +19,7 @@ const TOP_RATED_COUNT = 2;
 
 export default class BoardPresenter {
   #siteMainElement = null;
+  #siteHeaderElement = null;
   #moviesModel = null;
   #commentsModel = null;
   #filterPresenter = null;
@@ -27,8 +30,10 @@ export default class BoardPresenter {
   #mostCommentedComponent = new MostCommentedView();
   #topRatedComponent = new TopRatedView();
 
-  #currentSortType = SortType.DEFAULT;
+  #userProfilePresenter = null;
+  #popupPresenter = null;
   #sortComponent = null;
+  #currentSortType = SortType.DEFAULT;
 
   #movieContainers = {
     Main: new MoviesListContainerView(),
@@ -44,8 +49,9 @@ export default class BoardPresenter {
 
   #renderedMovieCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(siteMainElement, moviesModel, commentsModel, filterPresenter) {
+  constructor(siteMainElement, siteHeaderElement, moviesModel, commentsModel, filterPresenter) {
     this.#siteMainElement = siteMainElement;
+    this.#siteHeaderElement = siteHeaderElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filterPresenter = filterPresenter;
@@ -69,14 +75,45 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
+    switch(actionType) {
+      case UserAction.UPDATE_MOVIE:
+        this.#moviesModel.updateMovie(updateType, update);
+        break;
+    }
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
+    switch(updateType) {
+      case UpdateType.PATCH:
+        this.#updateCards(data);
+        this.#updateFilter();
+        break;
+      case UpdateType.POPUP_PATCH:
+        this.#updatePopup();
+        this.#updateCards(data);
+        this.#updateFilter();
+        break;
+      case UpdateType.MINOR:
+        this.#updateCards(data);
+        this.#updateFilter();
+        this.#updateUserProfile();
+        break;
+      case UpdateType.POPUP_MINOR:
+        this.#updatePopup();
+        this.#updateCards(data);
+        this.#updateFilter();
+        this.#updateUserProfile();
+        break;
+      case UpdateType.MAJOR:
+
+        break;
+    }
   };
 
   #renderBoard() {
+    this.#userProfilePresenter = new UserProfilePresenter(this.#siteHeaderElement);
+    this.#userProfilePresenter.init(this.#moviesModel);
+
     render(this.#boardComponent, this.#siteMainElement);
 
     this.#renderSort();
@@ -132,20 +169,20 @@ export default class BoardPresenter {
     movies.forEach((movie) => this.#renderMovie(containerType, movie));
   }
 
+  #movieClickHandler = (movie) => {
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction);
+    this.#popupPresenter.init(movie);
+  };
+
   #renderMovie(containerType, movie) {
     const moviePresenter = new MoviePresenter(
       this.#movieContainers[containerType].element,
-      this.#getMovieComments(movie),
-      this.#moviesModel,
-      // this.#updateContent
+      this.#handleViewAction,
+      this.#movieClickHandler,
     );
     moviePresenter.init(movie);
 
     this.#moviePresenters[containerType].set(movie.id, moviePresenter);
-  }
-
-  #getMovieComments(movie) {
-    return this.#commentsModel.comments.filter((comment) => movie.comments.includes(String(comment.id)));
   }
 
   #renderLoadMoreButton() {
@@ -199,17 +236,21 @@ export default class BoardPresenter {
     return this.#moviesModel.topRated.slice(0, TOP_RATED_COUNT);
   }
 
-  #updateSameMovies = (movie) => {
-    Object.values(this.#moviePresenters).forEach((presenters) => presenters.get(movie.id)?.init(movie));
-  };
-
   #updateFilter() {
     this.#filterPresenter.init(this.#moviesModel);
   }
 
-  // #updateContent = (movie) => {
-  //   updateItem(this.#moviesModel.movies, movie);
-  //   this.#updateSameMovies(movie);
-  //   this.#updateFilter();
-  // };
+  #updateCards(data) {
+    this.#moviePresenters.Main.get(data.id)?.init(data);
+    this.#moviePresenters.MostCommented.get(data.id)?.init(data);
+    this.#moviePresenters.TopRated.get(data.id)?.init(data);
+  }
+
+  #updateUserProfile() {
+    this.#userProfilePresenter.init(this.#moviesModel);
+  }
+
+  #updatePopup() {
+    this.#popupPresenter.updatePopup();
+  }
 }
