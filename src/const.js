@@ -4,6 +4,13 @@ const SortType = {
   RATING: 'rating',
 };
 
+const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+};
+
 const emojies = [
   'smile',
   'sleeping',
@@ -26,4 +33,4 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export {SortType, emojies, UserAction, UpdateType};
+export {SortType, FilterType, emojies, UserAction, UpdateType};
