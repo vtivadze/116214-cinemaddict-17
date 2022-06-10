@@ -42,13 +42,6 @@ const filters = [
   },
 ];
 
-const userTitles = [
-  {min: 0, max: 0, title: ''},
-  {min: 1, max: 10, title: 'novice'},
-  {min: 11, max: 20, title: 'fan'},
-  {min: 21, max: Number.POSITIVE_INFINITY, title: 'movie buff'},
-];
-
 const emojies = [
   'smile',
   'sleeping',
@@ -70,4 +63,11 @@ const UpdateType = {
   FILTER: 'FILTER',
 };
 
-export {SortType, filters, FilterType, emojies, UserAction, UpdateType, userTitles};
+export {
+  SortType,
+  filters,
+  FilterType,
+  emojies,
+  UserAction,
+  UpdateType,
+};

@@ -1,52 +1,50 @@
-import { userTitles } from '../const.js';
-import {render, replace, remove} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import UserProfileView from '../view/user-profile-view.js';
 
 export default class UserProfilePresenter {
-  #userProfileContainer = null;
+  #siteMainElement = null;
+  #userProfilesModel = null;
   #moviesModel = null;
 
+  #userProfile = null;
   #userProfileComponent = null;
 
-  #userTitles = userTitles;
-
-  constructor(userProfileContainer) {
-    this.#userProfileContainer = userProfileContainer;
-  }
-
-  init(moviesModel) {
+  constructor(siteMainElement, userProfilesModel, moviesModel) {
+    this.#siteMainElement = siteMainElement;
+    this.#userProfilesModel = userProfilesModel;
     this.#moviesModel = moviesModel;
 
-    if (this.#getUserTitle()) {
+    this.#moviesModel.addObserver(this.#handleModelEvent.bind(this));
+  }
+
+  init() {
+    this.#removePreviousUserProfileComponent();
+    this.#userProfile = this.#getUserProfile();
+
+    if (this.#userProfile) {
       this.#renderUserProfile();
     }
   }
 
   #renderUserProfile() {
-    const prevUserProfileComponent = this.#userProfileComponent;
-    this.#userProfileComponent = new UserProfileView(this.#getUserTitle());
-
-    if (prevUserProfileComponent === null) {
-      render(this.#userProfileComponent, this.#userProfileContainer);
-      return;
-    }
-
-    if (this.#userProfileContainer.contains(prevUserProfileComponent.element)) {
-      this.#replaceUserProfileComponent(prevUserProfileComponent);
-    }
-
-    remove(prevUserProfileComponent);
+    this.#userProfileComponent = new UserProfileView(this.#userProfile);
+    render(this.#userProfileComponent, this.#siteMainElement);
   }
 
-  #replaceUserProfileComponent(prevUserProfileComponent) {
-    replace(this.#userProfileComponent, prevUserProfileComponent);
+  #removePreviousUserProfileComponent() {
+    if (this.#userProfileComponent && this.#siteMainElement.contains(this.#userProfileComponent.element)) {
+      remove(this.#userProfileComponent);
+    }
   }
 
-  #getUserTitle() {
-    const count = this.#moviesModel.movies.filter((movie) => movie.userDetails.alreadyWatched).length;
+  #getUserProfile() {
+    const alreadyWatchedCount = this.#moviesModel.movies.filter((movie) => movie.userDetails.alreadyWatched).length;
 
-    return this.#userTitles
-      .find((item) => count >= item.min && count <= item.max)
-      .title;
+    return this.#userProfilesModel.userProfiles
+      .find((item) => alreadyWatchedCount >= item.range.min && alreadyWatchedCount <= item.range.max);
+  }
+
+  #handleModelEvent() {
+    this.init();
   }
 }
