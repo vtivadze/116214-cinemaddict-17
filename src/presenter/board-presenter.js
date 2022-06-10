@@ -1,7 +1,6 @@
-import {RenderPosition, render, remove} from '../framework/render.js';
+import {render, remove, replace} from '../framework/render.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
-import UserProfilePresenter from './user-profile-presenter.js';
 import FilterPresenter from './filter-presenter.js';
 import MoviePresenter from './movie-presenter.js';
 import PopupPresenter from './popup-presenter.js';
@@ -20,7 +19,6 @@ const TOP_RATED_COUNT = 2;
 
 export default class BoardPresenter {
   #siteMainElement = null;
-  #siteHeaderElement = null;
   #moviesModel = null;
   #commentsModel = null;
   #filtersModel = null;
@@ -31,9 +29,9 @@ export default class BoardPresenter {
   #mostCommentedComponent = new MostCommentedView();
   #topRatedComponent = new TopRatedView();
 
-  #userProfilePresenter = null;
   #popupPresenter = null;
   #filterPresenter = null;
+  #noMovieComponent = null;
   #sortComponent = null;
   #currentSortType = SortType.DEFAULT;
 
@@ -51,9 +49,8 @@ export default class BoardPresenter {
 
   #renderedMovieCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(siteMainElement, siteHeaderElement, moviesModel, commentsModel, filtersModel) {
+  constructor(siteMainElement, moviesModel, commentsModel, filtersModel) {
     this.#siteMainElement = siteMainElement;
-    this.#siteHeaderElement = siteHeaderElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filtersModel = filtersModel;
@@ -63,6 +60,10 @@ export default class BoardPresenter {
   }
 
   init() {
+    this.#filterPresenter = new FilterPresenter(this.#siteMainElement, this.#filtersModel, this.#moviesModel);
+    this.#filterPresenter.init(this.#moviesModel);
+
+    this.#renderSort();
     this.#renderBoard();
   }
 
@@ -90,46 +91,38 @@ export default class BoardPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
+    console.log(updateType);
     switch(updateType) {
       case UpdateType.PATCH:
         this.#updateCards(data);
         break;
-      case UpdateType.POPUP_PATCH:
-        this.#updatePopup();
-        this.#updateCards(data);
+      case UpdateType.BOARD:
+        this.#updateBoard();
         break;
       case UpdateType.MINOR:
         this.#updateCards(data);
-        this.#updateUserProfile();
+        this.#updateBoard();
         break;
-      case UpdateType.POPUP_MINOR:
-        this.#updatePopup();
-        this.#updateCards(data);
-        this.#updateUserProfile();
-        break;
-      case UpdateType.FILTER:
-        this.#clearMainContentMovies();
-        this.#renderMovies('Main', this.#getMainContentMovies());
 
-        this.#clearMostCommentedContentMovies();
-        this.#renderMovies('MostCommented', this.#getMostCommentedMovies());
-
-        this.#clearTopRatedContentMovies();
-        this.#renderMovies('TopRated', this.#getTopRatedMovies());
-        break;
+      // case UpdateType.POPUP_PATCH:
+      //   this.#updatePopup();
+      //   this.#updateCards(data);
+      //   break;
+      // case UpdateType.POPUP_MINOR:
+      //   this.#updatePopup();
+      //   this.#updateCards(data);
+      //   break;
+      // case UpdateType.FILTER:
+      //   this.#cliearContentMovies();
+      //   remove(this.#boardComponent);
+      //   this.#renderBoard();
+      //   break;
     }
   };
 
   #renderBoard() {
-    this.#userProfilePresenter = new UserProfilePresenter(this.#siteHeaderElement);
-    this.#userProfilePresenter.init(this.#moviesModel);
-
-    this.#filterPresenter = new FilterPresenter(this.#siteMainElement, this.#filtersModel, this.#moviesModel);
-    this.#filterPresenter.init(this.#moviesModel);
-
     render(this.#boardComponent, this.#siteMainElement);
 
-    this.#renderSort();
     this.#renderMainContent();
     this.#renderMostCommentedContent();
     this.#renderTopRatedContent();
@@ -137,37 +130,57 @@ export default class BoardPresenter {
 
   #renderSort(sortType = SortType.DEFAULT) {
     this.#sortComponent = new SortView(sortType);
-    render(this.#sortComponent, this.#boardComponent.element, RenderPosition.BEFOREBEGIN);
+    render(this.#sortComponent, this.#siteMainElement);
     this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler.bind(this));
   }
 
   #renderMainContent() {
-    render(this.#mainContentComponent, this.#boardComponent.element);
-
     if (this.movies.length === 0) {
       this.#renderNoMovie();
     } else {
+      render(this.#mainContentComponent, this.#boardComponent.element);
       render(this.#movieContainers.Main, this.#mainContentComponent.element);
       this.#renderMovies('Main', this.#getMainContentMovies());
     }
   }
 
   #renderNoMovie() {
-    render(new NoMovieView(), this.#mainContentComponent.element);
+    const prevNoMovieComponent = this.#noMovieComponent;
+    this.#noMovieComponent = new NoMovieView(this.#filtersModel.currentFilterType);
+
+    if (prevNoMovieComponent && this.#boardComponent.element.contains(prevNoMovieComponent.element)) {
+      replace(this.#noMovieComponent, prevNoMovieComponent);
+      return;
+    }
+
+    if (this.#mainContentComponent && this.#boardComponent.element.contains(this.#mainContentComponent.element)) {
+      replace(this.#noMovieComponent, this.#mainContentComponent);
+      return;
+    }
+
+    render(this.#noMovieComponent, this.#boardComponent.element);
   }
 
   #renderMostCommentedContent() {
-    render(this.#mostCommentedComponent, this.#boardComponent.element);
-    render(this.#movieContainers.MostCommented, this.#mostCommentedComponent.element);
+    const mostCommentedMovies = this.#getMostCommentedMovies();
 
-    this.#renderMovies('MostCommented', this.#getMostCommentedMovies());
+    if (mostCommentedMovies.length > 0) {
+      render(this.#mostCommentedComponent, this.#boardComponent.element);
+      render(this.#movieContainers.MostCommented, this.#mostCommentedComponent.element);
+
+      this.#renderMovies('MostCommented', mostCommentedMovies);
+    }
   }
 
   #renderTopRatedContent() {
-    render(this.#topRatedComponent, this.#boardComponent.element);
-    render(this.#movieContainers.TopRated, this.#topRatedComponent.element);
+    const topRatedMovies = this.#getTopRatedMovies();
 
-    this.#renderMovies('TopRated', this.#getTopRatedMovies());
+    if (topRatedMovies.length > 0) {
+      render(this.#topRatedComponent, this.#boardComponent.element);
+      render(this.#movieContainers.TopRated, this.#topRatedComponent.element);
+
+      this.#renderMovies('TopRated', topRatedMovies);
+    }
   }
 
   #renderMovies(containerType, movies) {
@@ -188,6 +201,7 @@ export default class BoardPresenter {
       this.#movieContainers[containerType].element,
       this.#handleViewAction,
       this.#movieClickHandler,
+      this.#filtersModel
     );
     moviePresenter.init(movie);
 
@@ -224,6 +238,12 @@ export default class BoardPresenter {
 
     remove(this.#sortComponent);
     this.#renderSort(sortType);
+  }
+
+  #cliearContentMovies() {
+    this.#clearMainContentMovies();
+    this.#clearMostCommentedContentMovies();
+    this.#clearTopRatedContentMovies();
   }
 
   #clearMainContentMovies() {
@@ -265,8 +285,10 @@ export default class BoardPresenter {
     this.#moviePresenters.TopRated.get(data.id)?.init(data);
   }
 
-  #updateUserProfile() {
-    this.#userProfilePresenter.init(this.#moviesModel);
+  #updateBoard() {
+    this.#cliearContentMovies();
+    remove(this.#boardComponent);
+    this.#renderBoard();
   }
 
   #updatePopup() {

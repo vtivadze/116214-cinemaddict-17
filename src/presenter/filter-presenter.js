@@ -61,6 +61,6 @@ export default class FilterPresenter {
       return;
     }
 
-    this.#filtersModel.updateFilter(UpdateType.FILTER, filterType);
+    this.#filtersModel.updateFilter(UpdateType.BOARD, filterType);
   };
 }

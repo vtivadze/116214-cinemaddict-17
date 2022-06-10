@@ -1,19 +1,21 @@
 import {render, replace, remove} from '../framework/render.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, FilterType } from '../const.js';
 import MovieView from '../view/movie-view.js';
 
 export default class MoviePresenter {
   #movieContainer = null;
   #changeData = null;
   #movieClickHandler = null;
+  #filtersModel = null;
 
   #movie = null;
   #movieComponent = null;
 
-  constructor(movieContainer, changeData, movieClickHandler) {
+  constructor(movieContainer, changeData, movieClickHandler, filtersModel) {
     this.#movieContainer = movieContainer;
     this.#changeData = changeData;
     this.#movieClickHandler = movieClickHandler;
+    this.#filtersModel = filtersModel;
   }
 
   init(movie) {
@@ -51,21 +53,39 @@ export default class MoviePresenter {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
 
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
+    const currentFilterType = this.#filtersModel.currentFilterType;
+
+    if (currentFilterType === FilterType.ALL) {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
+    } else {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
+    }
   }
 
   #alreadyWatchedClickHandler() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
 
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
+    const currentFilterType = this.#filtersModel.currentFilterType;
+
+    if (currentFilterType === FilterType.ALL) {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
+    } else {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
+    }
   }
 
   #favoriteClickHandler() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
 
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
+    const currentFilterType = this.#filtersModel.currentFilterType;
+
+    if (currentFilterType === FilterType.ALL) {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
+    } else {
+      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
+    }
   }
 
   destroy() {
