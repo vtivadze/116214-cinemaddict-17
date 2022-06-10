@@ -4,7 +4,12 @@ import { SortType } from '../const.js';
 const createSortTemplate = (currentSortType) => (
   `<ul class="sort">
     ${Object.values(SortType).map((sortType) => (
-    `<li><a href="#" class="sort__button${sortType === currentSortType ? ' sort__button--active' : ''}" data-sort-type="${sortType}">Sort by ${sortType}</a></li>`
+    `<li>
+      <a
+        href="#"
+        class="sort__button${sortType === currentSortType ? ' sort__button--active' : ''}"
+        data-sort-type="${sortType}">Sort by ${sortType}</a>
+    </li>`
   )).join('')}
   </ul>`
 );
