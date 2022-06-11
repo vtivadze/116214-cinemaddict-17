@@ -1,5 +1,5 @@
 import { UpdateType } from '../const.js';
-import { render, remove } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 
 export default class FilterPresenter {
@@ -20,25 +20,25 @@ export default class FilterPresenter {
   }
 
   init() {
-    this.#removePreviousFilter();
-
     this.#filters = this.#filtersModel.filters;
     this.#setFilterCounts();
+
+    const previousFilterComponent = this.#filterComponent;
 
     this.#filterComponent = new FilterView(this.#filters);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
 
-    this.#renderFilter();
+    if (previousFilterComponent === null) {
+      this.#renderFilter();
+      return;
+    }
+
+    replace(this.#filterComponent, previousFilterComponent);
+    remove(previousFilterComponent);
   }
 
   #renderFilter() {
     render(this.#filterComponent, this.#siteMainElement);
-  }
-
-  #removePreviousFilter() {
-    if (this.#filterComponent && this.#siteMainElement.contains(this.#filterComponent.element)) {
-      remove(this.#filterComponent);
-    }
   }
 
   #setFilterCounts() {
