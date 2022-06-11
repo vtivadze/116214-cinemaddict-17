@@ -91,6 +91,9 @@ export default class BoardPresenter {
       case UserAction.UPDATE_MOVIE:
         this.#moviesModel.updateMovie(updateType, update);
         break;
+      case UserAction.DELETE_COMMENT:
+        this.#commentsModel.updateComment(updateType, update);
+        break;
     }
   };
 
