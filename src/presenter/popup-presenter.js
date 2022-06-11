@@ -16,6 +16,8 @@ export default class PopupPresenter {
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
     this.#changeData = changeData;
+
+    this.#commentsModel.addObserver(this.#handleModelEvent.bind(this));
   }
 
   init(movie) {
@@ -28,6 +30,7 @@ export default class PopupPresenter {
     this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
     this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
+    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
     document.addEventListener('keydown', this.#documentKeydownHandler.bind(this));
@@ -78,7 +81,7 @@ export default class PopupPresenter {
   #addToWatchlistClickHandler() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_PATCH, movie);
+    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
   #alreadyWatchedClickHandler() {
@@ -90,7 +93,15 @@ export default class PopupPresenter {
   #favoriteClickHandler() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_PATCH, movie);
+    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
+  }
+
+  #handleCommentDelete(commentId) {
+    this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MINOR, commentId);
+  }
+
+  #handleModelEvent() {
+    this.init(this.#movie);
   }
 
   updatePopup() {

@@ -10,8 +10,8 @@ export default class CommentsModel extends Observable {
     return this.#comments;
   }
 
-  updateComment = (updateType, update) => {
-    const index = this.#comments.findIndex((comment) => comment.id === update.id);
+  deleteComment = (updateType, commentId) => {
+    const index = this.#comments.findIndex((comment) => comment.id === commentId);
 
     if (index === -1) {
       throw new Error('Can\'t update unexiting comment');
@@ -19,10 +19,9 @@ export default class CommentsModel extends Observable {
 
     this.#comments = [
       ...this.#comments.slice(0, index),
-      update,
       ...this.#comments.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, commentId);
   };
 }

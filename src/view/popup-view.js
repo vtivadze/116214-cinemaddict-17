@@ -306,7 +306,7 @@ export default class PopupView extends AbstractStatefulView {
     }
 
     evt.preventDefault();
-    this._callback.commentDelete();
+    this._callback.commentDelete(evt.target.dataset.commentId);
   }
 
   #setInnerHandlers() {
