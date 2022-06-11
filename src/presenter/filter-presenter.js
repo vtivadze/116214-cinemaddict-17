@@ -3,15 +3,15 @@ import { render, replace, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 
 export default class FilterPresenter {
-  #filterContainer = null;
+  #siteMainElement = null;
   #filtersModel = null;
   #moviesModel = null;
 
   #filters = null;
   #filterComponent = null;
 
-  constructor(filterContainer, filtersModel, moviesModel) {
-    this.#filterContainer = filterContainer;
+  constructor(siteMainElement, filtersModel, moviesModel) {
+    this.#siteMainElement = siteMainElement;
     this.#filtersModel = filtersModel;
     this.#moviesModel = moviesModel;
 
@@ -33,7 +33,7 @@ export default class FilterPresenter {
       return;
     }
 
-    if (this.#filterContainer.contains(prevFilterComponent.element)) {
+    if (this.#siteMainElement.contains(prevFilterComponent.element)) {
       replace(this.#filterComponent, prevFilterComponent);
     }
 
@@ -41,7 +41,7 @@ export default class FilterPresenter {
   }
 
   #renderFilter() {
-    render(this.#filterComponent, this.#filterContainer);
+    render(this.#filterComponent, this.#siteMainElement);
   }
 
   #handleModelEvent = () => {
