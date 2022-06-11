@@ -1,5 +1,5 @@
 import { UpdateType } from '../const.js';
-import { render, replace, remove } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 
 export default class FilterPresenter {
@@ -20,28 +20,29 @@ export default class FilterPresenter {
   }
 
   init() {
-    this.#filters = this.#filtersModel.filters;
-    this.#filters.forEach((filter) => {filter.count = this.#moviesModel.movies.filter((movie) => movie.userDetails[filter.type]).length;});
+    this.#removePreviousFilter();
 
-    const prevFilterComponent = this.#filterComponent;
+    this.#filters = this.#filtersModel.filters;
+    this.#setFilterCounts();
 
     this.#filterComponent = new FilterView(this.#filters);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
 
-    if (prevFilterComponent === null) {
-      this.#renderFilter();
-      return;
-    }
-
-    if (this.#siteMainElement.contains(prevFilterComponent.element)) {
-      replace(this.#filterComponent, prevFilterComponent);
-    }
-
-    remove(prevFilterComponent);
+    this.#renderFilter();
   }
 
   #renderFilter() {
     render(this.#filterComponent, this.#siteMainElement);
+  }
+
+  #removePreviousFilter() {
+    if (this.#filterComponent && this.#siteMainElement.contains(this.#filterComponent.element)) {
+      remove(this.#filterComponent);
+    }
+  }
+
+  #setFilterCounts() {
+    this.#filters.forEach((filter) => {filter.count = this.#moviesModel.movies.filter((movie) => movie.userDetails[filter.type]).length;});
   }
 
   #handleModelEvent = () => {
