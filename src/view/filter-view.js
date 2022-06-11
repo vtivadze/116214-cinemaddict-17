@@ -37,7 +37,15 @@ export default class FilterView extends AbstractView {
   }
 
   #handleFilterTypeChange(evt) {
+    if (evt.target.tagName !== 'A' && evt.target.tagName !== 'SPAN') {
+      return;
+    }
+
+    const filterType = evt.target.tagName === 'A'
+      ? evt.target.dataset.filterType
+      : evt.target.parentElement.dataset.filterType;
+
     evt.preventDefault();
-    this._callback.click(evt);
+    this._callback.click(filterType);
   }
 }

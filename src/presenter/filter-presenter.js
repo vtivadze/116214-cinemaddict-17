@@ -49,15 +49,7 @@ export default class FilterPresenter {
     this.init();
   };
 
-  #handleFilterTypeChange = (evt) => {
-    if (evt.target.tagName !== 'A' && evt.target.tagName !== 'SPAN') {
-      return;
-    }
-
-    const filterType = evt.target.tagName === 'A'
-      ? evt.target.dataset.filterType
-      : evt.target.parentElement.dataset.filterType;
-
+  #handleFilterTypeChange = (filterType) => {
     if (this.#filters.find((filter) => filter.type === filterType).isActive) {
       return;
     }
