@@ -107,6 +107,11 @@ export default class BoardPresenter {
         this.#updateCards(data);
         this.#updateBoard();
         break;
+      case UpdateType.POPUP_MINOR:
+        this.#updateCards(data);
+        this.#updateBoard();
+        this.#updatePopup();
+        break;
 
       // case UpdateType.POPUP_PATCH:
       //   this.#updatePopup();
@@ -190,7 +195,7 @@ export default class BoardPresenter {
   }
 
   #movieClickHandler = (movie) => {
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction);
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
     this.#popupPresenter.init(movie);
   };
 
