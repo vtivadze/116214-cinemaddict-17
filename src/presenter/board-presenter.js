@@ -2,6 +2,7 @@ import {render, remove, replace} from '../framework/render.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
 import FilterPresenter from './filter-presenter.js';
+import SortPresenter from './sort-presenter.js';
 import MoviePresenter from './movie-presenter.js';
 import PopupPresenter from './popup-presenter.js';
 import BoardView from '../view/board-view.js';
@@ -11,7 +12,6 @@ import MoviesListContainerView from '../view/movies-list-container-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
-import SortView from '../view/sort-view.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const MOST_COMMETNTED_COUNT = 2;
@@ -22,6 +22,7 @@ export default class BoardPresenter {
   #moviesModel = null;
   #commentsModel = null;
   #filtersModel = null;
+  #sortModel = null;
 
   #boardComponent = new BoardView();
   #mainContentComponent = new MainContentView();
@@ -32,8 +33,7 @@ export default class BoardPresenter {
   #popupPresenter = null;
   #filterPresenter = null;
   #noMovieComponent = null;
-  #sortComponent = null;
-  #currentSortType = SortType.DEFAULT;
+  #sortPresenter = null;
 
   #movieContainers = {
     Main: new MoviesListContainerView(),
@@ -49,21 +49,25 @@ export default class BoardPresenter {
 
   #renderedMovieCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(siteMainElement, moviesModel, commentsModel, filtersModel) {
+  constructor(siteMainElement, moviesModel, commentsModel, filtersModel, sortModel) {
     this.#siteMainElement = siteMainElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filtersModel = filtersModel;
+    this.#sortModel = sortModel;
 
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
+    this.#sortModel.addObserver(this.#handleModelEvent);
   }
 
   init() {
     this.#filterPresenter = new FilterPresenter(this.#siteMainElement, this.#filtersModel, this.#moviesModel);
     this.#filterPresenter.init(this.#moviesModel);
 
-    this.#renderSort();
+    this.#sortPresenter = new SortPresenter(this.#siteMainElement, this.#sortModel);
+    this.#sortPresenter.init(this.#moviesModel);
+
     this.#renderBoard();
   }
 
@@ -72,7 +76,7 @@ export default class BoardPresenter {
       ? [...this.#moviesModel.movies]
       : [...this.#moviesModel.movies].filter((movie) => movie.userDetails[this.#filtersModel.currentFilterType]);
 
-    switch(this.#currentSortType) {
+    switch(this.#sortModel.currentSortType) {
       case SortType.DATE:
         return filteredMovies.sort(sortMovieByDate);
       case SortType.RATING:
@@ -126,12 +130,6 @@ export default class BoardPresenter {
     this.#renderMainContent();
     this.#renderMostCommentedContent();
     this.#renderTopRatedContent();
-  }
-
-  #renderSort(sortType = SortType.DEFAULT) {
-    this.#sortComponent = new SortView(sortType);
-    render(this.#sortComponent, this.#siteMainElement);
-    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler.bind(this));
   }
 
   #renderMainContent() {
@@ -224,20 +222,6 @@ export default class BoardPresenter {
     if (this.#renderedMovieCount >= movieCount) {
       remove(this.#loadMoreButtonComponent);
     }
-  }
-
-  #sortTypeChangeHandler(sortType) {
-    if (this.#currentSortType === sortType) {
-      return;
-    }
-
-    this.#currentSortType = sortType;
-
-    this.#clearMainContentMovies();
-    this.#renderMovies('Main', this.#getMainContentMovies());
-
-    remove(this.#sortComponent);
-    this.#renderSort(sortType);
   }
 
   #cliearContentMovies() {
