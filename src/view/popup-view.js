@@ -6,7 +6,7 @@ const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
 
 const createCommentsListTemplate = (comments) => comments
-  .reduce((previousValue, {emotion, comment, author, date}) => (
+  .reduce((previousValue, {id, emotion, comment, author, date}) => (
     `${previousValue}
     <li class="film-details__comment">
         <span class="film-details__comment-emoji">
@@ -17,7 +17,7 @@ const createCommentsListTemplate = (comments) => comments
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
             <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete" data-comment-id="${id}">Delete</button>
           </p>
         </div>
       </li>`
@@ -293,6 +293,22 @@ export default class PopupView extends AbstractStatefulView {
     this._callback.favoriteClick();
   }
 
+  setCommentDeleteHandler(callback) {
+    this._callback.commentDelete = callback;
+    this.element
+      .querySelector('.film-details__comments-list')
+      .addEventListener('click', this.#handleCommentDelete.bind(this));
+  }
+
+  #handleCommentDelete(evt) {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.commentDelete();
+  }
+
   #setInnerHandlers() {
     this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiTypeChangeHandler.bind(this));
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler.bind(this));
@@ -304,5 +320,6 @@ export default class PopupView extends AbstractStatefulView {
     this.setAddToWatchlistClickHandler(this._callback.addToWatchlistClick);
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setCommentDeleteHandler(this._callback.commentDelete);
   };
 }
