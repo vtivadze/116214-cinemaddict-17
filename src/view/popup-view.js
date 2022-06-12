@@ -346,6 +346,5 @@ export default class PopupView extends AbstractStatefulView {
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setCommentDeleteHandler(this._callback.commentDelete);
-    this.setCommentAddHandler(this._callback.commentAdd);
   };
 }
