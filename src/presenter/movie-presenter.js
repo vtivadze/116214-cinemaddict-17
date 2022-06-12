@@ -55,11 +55,8 @@ export default class MoviePresenter {
 
     const currentFilterType = this.#filtersModel.currentFilterType;
 
-    if (currentFilterType === FilterType.ALL) {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
-    } else {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
-    }
+    const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   #alreadyWatchedClickHandler() {
@@ -68,11 +65,8 @@ export default class MoviePresenter {
 
     const currentFilterType = this.#filtersModel.currentFilterType;
 
-    if (currentFilterType === FilterType.ALL) {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
-    } else {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
-    }
+    const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   #favoriteClickHandler() {
@@ -81,11 +75,8 @@ export default class MoviePresenter {
 
     const currentFilterType = this.#filtersModel.currentFilterType;
 
-    if (currentFilterType === FilterType.ALL) {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.PATCH, movie);
-    } else {
-      this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.MINOR, movie);
-    }
+    const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   destroy() {
