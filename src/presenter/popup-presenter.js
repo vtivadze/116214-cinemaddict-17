@@ -29,6 +29,7 @@ export default class PopupPresenter {
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
     this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
     this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
+    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
     document.addEventListener('keydown', this.#documentKeydownHandler.bind(this));
@@ -104,6 +105,10 @@ export default class PopupPresenter {
     ];
 
     this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, movie);
+  }
+
+  #handleCommentAdd() {
+
   }
 
   updatePopup(movie) {

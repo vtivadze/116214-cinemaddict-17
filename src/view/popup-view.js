@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate, isEnter} from '../utils/util.js';
 import { emojies } from '../const.js';
 
 const createMovieGenresListTemplate = (genres) => genres
@@ -309,6 +309,31 @@ export default class PopupView extends AbstractStatefulView {
     this._callback.commentDelete(evt.target.dataset.commentId);
   }
 
+  setCommentAddHandler(callback) {
+    this._callback.commentAdd = callback;
+    document.addEventListener('keydown', this.#handleCommentAdd.bind(this));
+  }
+
+  #handleCommentAdd(evt) {
+    if (!isEnter(evt.code)) {
+      return;
+    }
+
+    if (evt.target.classList.contains('film-details__comment-input')) {
+      return;
+    }
+
+    const comment = document.querySelector('.film-details__comment-input').value;
+    const emoji = document.querySelector('.film-details__emoji-list input[checked]')?.value;
+
+    if (!comment || !emoji) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.commentAdd();
+  }
+
   #setInnerHandlers() {
     this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiTypeChangeHandler.bind(this));
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler.bind(this));
@@ -321,5 +346,6 @@ export default class PopupView extends AbstractStatefulView {
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setCommentDeleteHandler(this._callback.commentDelete);
+    this.setCommentAddHandler(this._callback.commentAdd);
   };
 }
