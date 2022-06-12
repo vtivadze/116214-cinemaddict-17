@@ -261,10 +261,10 @@ export default class PopupView extends AbstractStatefulView {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#addWatchClickHandler.bind(this));
+      .addEventListener('click', this.#addToWatchClickHandler.bind(this));
   }
 
-  #addWatchClickHandler(evt) {
+  #addToWatchClickHandler(evt) {
     evt.preventDefault();
     this._callback.addToWatchlistClick();
   }
