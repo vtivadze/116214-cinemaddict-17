@@ -97,14 +97,19 @@ export default class PopupPresenter {
 
   #handleCommentDelete(commentId) {
     const movie = {...this.#movie};
-    const commentIndex = movie.comments.findIndex((comment) => comment === commentId);
+
+    const commentIndex = movie.comments.findIndex((id) => id === commentId);
+
+    if (commentIndex === -1) {
+      return;
+    }
 
     movie.comments = [
       ...movie.comments.slice(0, commentIndex),
-      ...movie.comments.slice(commentIndex + 1)
+      ...movie.comments.slice(commentIndex + 1),
     ];
 
-    this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, movie);
+    this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, {commentId, movie});
   }
 
   #handleCommentAdd() {

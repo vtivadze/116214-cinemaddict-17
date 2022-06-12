@@ -8,4 +8,17 @@ export default class CommentsModel extends Observable {
   get comments () {
     return this.#comments;
   }
+
+  deleteComment(commentId) {
+    const commentIndex = this.#comments.findIndex((comment) => comment.id === commentId);
+
+    if (commentIndex === -1) {
+      throw new Error('Can\'t delete unexiting comment');
+    }
+
+    this.#comments = [
+      ...this.#comments.slice(0, commentIndex),
+      ...this.#comments.slice(commentIndex + 1)
+    ];
+  }
 }

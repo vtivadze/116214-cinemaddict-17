@@ -93,7 +93,8 @@ export default class BoardPresenter {
         this.#moviesModel.updateMovie(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#moviesModel.updateMovie(updateType, update);
+        this.#commentsModel.deleteComment(update.commentId);
+        this.#moviesModel.updateMovie(updateType, update.movie);
         break;
     }
   };
@@ -203,7 +204,7 @@ export default class BoardPresenter {
   };
 
   #renderPopup = (movie) => {
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction.bind(this));
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
     this.#popupPresenter.init(movie);
   };
 
