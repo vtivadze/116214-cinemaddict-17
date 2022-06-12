@@ -1,16 +1,16 @@
 import Observable from '../framework/observable.js';
 import { generateComment } from '../mock/comment.js';
-
-const COMMENTS_COUNT = 20;
+import { COMMENTS_ALL_COUNT } from '../const.js';
 
 export default class CommentsModel extends Observable {
-  #comments = Array.from({length: COMMENTS_COUNT}, generateComment);
+  #comments = Array.from({length: COMMENTS_ALL_COUNT}, generateComment);
 
   get comments () {
     return this.#comments;
   }
 
-  deleteComment = (updateType, commentId) => {
+  deleteComment = (updateType, data) => {
+    const commentId = data.commentId;
     const index = this.#comments.findIndex((comment) => comment.id === commentId);
 
     if (index === -1) {
@@ -22,6 +22,6 @@ export default class CommentsModel extends Observable {
       ...this.#comments.slice(index + 1)
     ];
 
-    this._notify(updateType, commentId);
+    this._notify(updateType, data);
   };
 }

@@ -63,6 +63,10 @@ const UpdateType = {
   FILTER: 'FILTER',
 };
 
+const MOVIES_COUNT = 12;
+const MAX_MOVIE_COMMENT_COUNT = 10;
+const COMMENTS_ALL_COUNT = MOVIES_COUNT * MAX_MOVIE_COMMENT_COUNT;
+
 export {
   SortType,
   filters,
@@ -70,4 +74,7 @@ export {
   emojies,
   UserAction,
   UpdateType,
+  MOVIES_COUNT,
+  MAX_MOVIE_COMMENT_COUNT,
+  COMMENTS_ALL_COUNT
 };
