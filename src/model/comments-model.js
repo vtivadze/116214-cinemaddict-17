@@ -21,4 +21,11 @@ export default class CommentsModel extends Observable {
       ...this.#comments.slice(commentIndex + 1)
     ];
   }
+
+  addComment(comment) {
+    this.#comments = [
+      ...this.#comments,
+      comment,
+    ];
+  }
 }

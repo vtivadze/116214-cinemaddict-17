@@ -323,15 +323,17 @@ export default class PopupView extends AbstractStatefulView {
       return;
     }
 
-    const comment = document.querySelector('.film-details__comment-input').value;
+    const commentBody = document.querySelector('.film-details__comment-input').value;
     const emoji = document.querySelector('.film-details__emoji-list input[checked]')?.value;
 
-    if (!comment || !emoji) {
+    if (!commentBody || !emoji) {
       return;
     }
 
+    const comment = {comment: commentBody, emotion: emoji};
+
     evt.preventDefault();
-    this._callback.commentAdd();
+    this._callback.commentAdd(comment);
   }
 
   #setInnerHandlers() {

@@ -1,4 +1,5 @@
 import { isEscape } from '../utils/util.js';
+import { generateComment } from '../mock/comment.js';
 import { UserAction, UpdateType } from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
@@ -112,7 +113,19 @@ export default class PopupPresenter {
     this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, {commentId, movie});
   }
 
-  #handleCommentAdd() {
+  #handleCommentAdd(newComment) {
+    const comment = {
+      ...generateComment(),
+      ...newComment,
+    };
+    const movie = {...this.#movie};
+
+    movie.comments = [
+      ...movie.comments,
+      comment.id,
+    ];
+
+    this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
 
   }
 
