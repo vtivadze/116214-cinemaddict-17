@@ -16,8 +16,6 @@ export default class PopupPresenter {
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
     this.#changeData = changeData;
-
-    this.#commentsModel.addObserver(this.#handleModelEvent.bind(this));
   }
 
   init(movie) {
@@ -53,7 +51,7 @@ export default class PopupPresenter {
   }
 
   #getComments() {
-    return this.#commentsModel.comments.filter((comment) => this.#movie.comments.includes(String(comment.id)));
+    return this.#commentsModel.comments.filter((comment) => this.#movie?.comments.includes(String(comment.id)));
   }
 
   #renderPopup() {
@@ -97,14 +95,18 @@ export default class PopupPresenter {
   }
 
   #handleCommentDelete(commentId) {
-    this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MINOR, commentId);
+    const movie = {...this.#movie};
+    const commentIndex = movie.comments.findIndex((comment) => comment === commentId);
+
+    movie.comments = [
+      ...movie.comments.slice(0, commentIndex),
+      ...movie.comments.slice(commentIndex + 1)
+    ];
+
+    this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, movie);
   }
 
-  #handleModelEvent() {
-    this.init(this.#movie);
-  }
-
-  updatePopup() {
-    this.init(this.#movie);
+  updatePopup(movie) {
+    this.init(movie);
   }
 }

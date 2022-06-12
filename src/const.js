@@ -60,6 +60,7 @@ const UpdateType = {
   BOARD: 'BOARD',
   MINOR: 'MINOR',
   POPUP_MINOR: 'POPUP_MINOR',
+  POPUP_MAJOR: 'POPUP_MAJOR',
   FILTER: 'FILTER',
 };
 

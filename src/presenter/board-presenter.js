@@ -27,7 +27,7 @@ export default class BoardPresenter {
   #boardComponent = new BoardView();
   #mainContentComponent = new MainContentView();
   #loadMoreButtonComponent = new LoadMoreButtonView();
-  #mostCommentedComponent = new MostCommentedView();
+  #mostCommentedComponent = null;
   #topRatedComponent = new TopRatedView();
 
   #popupPresenter = null;
@@ -59,6 +59,7 @@ export default class BoardPresenter {
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   init() {
@@ -92,13 +93,12 @@ export default class BoardPresenter {
         this.#moviesModel.updateMovie(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.updateComment(updateType, update);
+        this.#moviesModel.updateMovie(updateType, update);
         break;
     }
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType);
     switch(updateType) {
       case UpdateType.PATCH:
         this.#updateCards(data);
@@ -112,23 +112,13 @@ export default class BoardPresenter {
         break;
       case UpdateType.POPUP_MINOR:
         this.#updateCards(data);
-        this.#updateBoard();
-        this.#updatePopup();
+        this.#updatePopup(data);
         break;
-
-      // case UpdateType.POPUP_PATCH:
-      //   this.#updatePopup();
-      //   this.#updateCards(data);
-      //   break;
-      // case UpdateType.POPUP_MINOR:
-      //   this.#updatePopup();
-      //   this.#updateCards(data);
-      //   break;
-      // case UpdateType.FILTER:
-      //   this.#cliearContentMovies();
-      //   remove(this.#boardComponent);
-      //   this.#renderBoard();
-      //   break;
+      case UpdateType.POPUP_MAJOR:
+        this.#updateCards(data);
+        this.#updatePopup(data);
+        this.#updateMostCommented();
+        break;
     }
   };
 
@@ -171,11 +161,22 @@ export default class BoardPresenter {
     const mostCommentedMovies = this.#getMostCommentedMovies();
 
     if (mostCommentedMovies.length > 0) {
-      render(this.#mostCommentedComponent, this.#boardComponent.element);
-      render(this.#movieContainers.MostCommented, this.#mostCommentedComponent.element);
-
+      this.#rednerMostCommented();
       this.#renderMovies('MostCommented', mostCommentedMovies);
     }
+  }
+
+  #rednerMostCommented() {
+    const prevMosteCommentedComponent = this.#mostCommentedComponent;
+    this.#mostCommentedComponent = new MostCommentedView();
+
+    if (prevMosteCommentedComponent === null) {
+      render(this.#mostCommentedComponent, this.#boardComponent.element);
+    } else {
+      replace(this.#mostCommentedComponent, prevMosteCommentedComponent);
+    }
+
+    render(this.#movieContainers.MostCommented, this.#mostCommentedComponent.element);
   }
 
   #renderTopRatedContent() {
@@ -198,7 +199,11 @@ export default class BoardPresenter {
   }
 
   #movieClickHandler = (movie) => {
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
+    this.#renderPopup(movie);
+  };
+
+  #renderPopup = (movie) => {
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#moviesModel, this.#handleViewAction.bind(this));
     this.#popupPresenter.init(movie);
   };
 
@@ -283,7 +288,12 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  #updatePopup() {
-    this.#popupPresenter.updatePopup();
+  #updateMostCommented() {
+    this.#clearMostCommentedContentMovies();
+    this.#renderMostCommentedContent();
+  }
+
+  #updatePopup(movie) {
+    this.#popupPresenter.updatePopup(movie);
   }
 }
