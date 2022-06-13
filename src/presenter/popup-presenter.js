@@ -42,6 +42,7 @@ export default class PopupPresenter {
     }
 
     if (document.body.contains(prevPopupComponent.element)) {
+      document.removeEventListener('keydown', this.#keyDownHandler);
       replace(this.#popupComponent, prevPopupComponent);
     }
 
