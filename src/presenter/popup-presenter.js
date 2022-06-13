@@ -119,7 +119,6 @@ export default class PopupPresenter {
     ];
 
     this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
-
   }
 
   updatePopup(movie) {
