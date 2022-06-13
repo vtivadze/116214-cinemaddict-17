@@ -54,7 +54,7 @@ export default class PopupPresenter {
 
   #renderPopup() {
     render(this.#popupComponent, document.body);
-    document.body.parentElement.classList.add('hide-overflow');
+    document.body.classList.add('hide-overflow');
   }
 
   #documentKeydownHandler(evt) {
