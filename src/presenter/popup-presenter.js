@@ -13,8 +13,6 @@ export default class PopupPresenter {
   #popupComponent = null;
   #keyDownHandler = null;
 
-  #popupContainer = document.body;
-
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
     this.#changeData = changeData;
@@ -43,7 +41,7 @@ export default class PopupPresenter {
       return;
     }
 
-    if (this.#popupContainer.contains(prevPopupComponent.element)) {
+    if (document.body.contains(prevPopupComponent.element)) {
       replace(this.#popupComponent, prevPopupComponent);
     }
 
@@ -55,8 +53,8 @@ export default class PopupPresenter {
   }
 
   #renderPopup() {
-    this.#popupContainer.classList.add('hide-overflow');
-    render(this.#popupComponent, this.#popupContainer);
+    document.body.classList.add('hide-overflow');
+    render(this.#popupComponent, document.body);
   }
 
   #documentKeydownHandler(evt) {
@@ -67,8 +65,9 @@ export default class PopupPresenter {
   }
 
   #hidePopup() {
-    this.#popupComponent.element.remove();
-    this.#popupContainer.classList.remove('hide-overflow');
+    remove(this.#popupComponent);
+    this.#popupComponent = null;
+    document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#keyDownHandler);
   }
 
