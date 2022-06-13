@@ -11,7 +11,7 @@ const createCommentsListTemplate = (comments) => comments
     `${previousValue}
     <li class="film-details__comment">
         <span class="film-details__comment-emoji">
-          <img src="./images/emoji/${he.encode(emotion)}.png" width="55" height="55" alt="emoji-${he.encode(emotion)}">
+          <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${he.encode(emotion)}">
         </span>
         <div>
           <p class="film-details__comment-text">${he.encode(comment)}</p>
