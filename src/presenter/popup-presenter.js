@@ -122,6 +122,8 @@ export default class PopupPresenter {
   }
 
   updatePopup(movie) {
+    const scrollTop = this.#popupComponent.element.scrollTop;
     this.init(movie);
+    this.#popupComponent.element.scrollTop = scrollTop;
   }
 }
