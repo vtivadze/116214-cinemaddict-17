@@ -57,7 +57,6 @@ const getRandomeDate = (maxPassedDays) => {
 };
 
 const isEscape = (code) => code === 'Escape' || code === 'Esc';
-const isEnter = (code) => code === 'Enter' || code === 'NumpadEnter';
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -96,7 +95,6 @@ export {
   getRandomBoolean,
   getRandomeDate,
   isEscape,
-  isEnter,
   sortMovieByDate,
   sortMovieByRating
 };

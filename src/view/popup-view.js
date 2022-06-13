@@ -1,6 +1,6 @@
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate, isEnter} from '../utils/util.js';
+import {humanizeReleaseDate, humanizeRuntime, humanizeCommentDate} from '../utils/util.js';
 import { emojies } from '../const.js';
 
 const createMovieGenresListTemplate = (genres) => genres
@@ -312,15 +312,11 @@ export default class PopupView extends AbstractStatefulView {
 
   setCommentAddHandler(callback) {
     this._callback.commentAdd = callback;
-    document.addEventListener('keydown', this.#handleCommentAdd.bind(this));
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#handleCommentAdd.bind(this));
   }
 
   #handleCommentAdd(evt) {
-    if (!isEnter(evt.code)) {
-      return;
-    }
-
-    if (evt.target.classList.contains('film-details__comment-input')) {
+    if (!evt.ctrlKey || evt.key !== 'Enter') {
       return;
     }
 
@@ -349,5 +345,6 @@ export default class PopupView extends AbstractStatefulView {
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setCommentDeleteHandler(this._callback.commentDelete);
+    this.setCommentAddHandler(this._callback.commentAdd);
   };
 }

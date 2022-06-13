@@ -69,6 +69,8 @@ export default class BoardPresenter {
     this.#sortPresenter = new SortPresenter(this.#siteMainElement, this.#sortModel);
     this.#sortPresenter.init(this.#moviesModel);
 
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
+
     this.#renderBoard();
   }
 
@@ -203,11 +205,6 @@ export default class BoardPresenter {
   }
 
   #movieClickHandler = (movie) => {
-    this.#renderPopup(movie);
-  };
-
-  #renderPopup = (movie) => {
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
     this.#popupPresenter.init(movie);
   };
 

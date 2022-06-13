@@ -11,8 +11,9 @@ export default class PopupPresenter {
   #movie = null;
   #comments = [];
   #popupComponent = null;
+  #keyDownHandler = null;
 
-  static openedPresenter = null;
+  #popupContainer = document.body;
 
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
@@ -33,20 +34,17 @@ export default class PopupPresenter {
     this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
-    document.addEventListener('keydown', this.#documentKeydownHandler.bind(this));
+
+    this.#keyDownHandler = this.#documentKeydownHandler.bind(this);
+    document.addEventListener('keydown', this.#keyDownHandler);
 
     if (prevPopupComponent === null) {
-      if (PopupPresenter.openedPresenter !== null) {
-        PopupPresenter.openedPresenter.#hidePopup();
-      }
-
       this.#renderPopup();
-      PopupPresenter.openedPresenter = this;
       return;
     }
 
-    if (document.body.contains(prevPopupComponent.element)) {
-      this.#replacePopup(prevPopupComponent);
+    if (this.#popupContainer.contains(prevPopupComponent.element)) {
+      replace(this.#popupComponent, prevPopupComponent);
     }
 
     remove(prevPopupComponent);
@@ -57,12 +55,8 @@ export default class PopupPresenter {
   }
 
   #renderPopup() {
-    document.body.classList.add('hide-overflow');
-    render(this.#popupComponent, document.body);
-  }
-
-  #replacePopup(prevPopupComponent) {
-    replace(this.#popupComponent, prevPopupComponent);
+    this.#popupContainer.classList.add('hide-overflow');
+    render(this.#popupComponent, this.#popupContainer);
   }
 
   #documentKeydownHandler(evt) {
@@ -74,8 +68,8 @@ export default class PopupPresenter {
 
   #hidePopup() {
     this.#popupComponent.element.remove();
-    document.body.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', this.#documentKeydownHandler);
+    this.#popupContainer.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this.#keyDownHandler);
   }
 
   #addToWatchlistClickHandler() {
