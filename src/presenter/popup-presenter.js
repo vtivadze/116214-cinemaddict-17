@@ -54,7 +54,7 @@ export default class PopupPresenter {
     this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
     this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
     this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
-    this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
+    this.#popupComponent.setCloseButtonClickHandler(this.#removePopup.bind(this));
     this.#setDocumentKeydownHandler();
   }
 
@@ -69,11 +69,11 @@ export default class PopupPresenter {
   #documentKeydownHandler(evt) {
     if (isEscape(evt.code)) {
       evt.preventDefault();
-      this.#hidePopup();
+      this.#removePopup();
     }
   }
 
-  #hidePopup() {
+  #removePopup() {
     remove(this.#popupComponent);
     this.#popupComponent = null;
     document.body.classList.remove('hide-overflow');
