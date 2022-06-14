@@ -221,8 +221,10 @@ export default class BoardPresenter {
   }
 
   #renderLoadMoreButton() {
-    this.#loadMoreButtonComponent.setClickHandler(this.#loadMoreButtonClickHandler.bind(this));
-    render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
+    if (!this.#mainContentComponent.element.contains(this.#loadMoreButtonComponent.element)) {
+      this.#loadMoreButtonComponent.setClickHandler(this.#loadMoreButtonClickHandler.bind(this));
+      render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
+    }
   }
 
   #loadMoreButtonClickHandler() {
