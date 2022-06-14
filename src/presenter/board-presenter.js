@@ -35,7 +35,7 @@ export default class BoardPresenter {
   #noMovieComponent = null;
   #sortPresenter = null;
 
-  #movieContainers = {
+  #movieListContainer = {
     Main: new MoviesListContainerView(),
     MostCommented: new MoviesListContainerView(),
     TopRated: new MoviesListContainerView()
@@ -141,7 +141,7 @@ export default class BoardPresenter {
       this.#renderNoMovie();
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
-      render(this.#movieContainers.Main, this.#mainContentComponent.element);
+      render(this.#movieListContainer.Main, this.#mainContentComponent.element);
       this.#renderMovies('Main', this.#getMainContentMovies());
     }
   }
@@ -182,7 +182,7 @@ export default class BoardPresenter {
       replace(this.#mostCommentedComponent, prevMosteCommentedComponent);
     }
 
-    render(this.#movieContainers.MostCommented, this.#mostCommentedComponent.element);
+    render(this.#movieListContainer.MostCommented, this.#mostCommentedComponent.element);
   }
 
   #renderTopRatedContent() {
@@ -190,7 +190,7 @@ export default class BoardPresenter {
 
     if (topRatedMovies.length > 0) {
       render(this.#topRatedComponent, this.#boardComponent.element);
-      render(this.#movieContainers.TopRated, this.#topRatedComponent.element);
+      render(this.#movieListContainer.TopRated, this.#topRatedComponent.element);
 
       this.#renderMovies('TopRated', topRatedMovies);
     }
@@ -210,7 +210,7 @@ export default class BoardPresenter {
 
   #renderMovie(containerType, movie) {
     const moviePresenter = new MoviePresenter(
-      this.#movieContainers[containerType].element,
+      this.#movieListContainer[containerType].element,
       this.#handleViewAction,
       this.#movieClickHandler,
       this.#filtersModel
