@@ -173,11 +173,11 @@ export default class BoardPresenter {
   }
 
   #rednerMostCommentedContainer() {
-    const prevMosteCommentedComponent = this.#mostCommentedComponent;
+    const prevMostCommentedComponent = this.#mostCommentedComponent;
     this.#mostCommentedComponent = new MostCommentedView();
 
-    if (prevMosteCommentedComponent && this.#boardComponent.element.contains(prevMosteCommentedComponent.element)) {
-      replace(this.#mostCommentedComponent, prevMosteCommentedComponent);
+    if (prevMostCommentedComponent && this.#boardComponent.element.contains(prevMostCommentedComponent.element)) {
+      replace(this.#mostCommentedComponent, prevMostCommentedComponent);
     } else {
       render(this.#mostCommentedComponent, this.#boardComponent.element);
     }
