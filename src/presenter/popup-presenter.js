@@ -33,8 +33,7 @@ export default class PopupPresenter {
 
     this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
 
-    this.#keyDownHandler = this.#documentKeydownHandler.bind(this);
-    document.addEventListener('keydown', this.#keyDownHandler);
+    this.#setDocumentKeydownHandler();
 
     if (prevPopupComponent === null) {
       this.#renderPopup();
@@ -42,7 +41,6 @@ export default class PopupPresenter {
     }
 
     if (document.body.contains(prevPopupComponent.element)) {
-      document.removeEventListener('keydown', this.#keyDownHandler);
       replace(this.#popupComponent, prevPopupComponent);
     }
 
@@ -56,6 +54,14 @@ export default class PopupPresenter {
   #renderPopup() {
     render(this.#popupComponent, document.body);
     document.body.classList.add('hide-overflow');
+  }
+
+  #setDocumentKeydownHandler() {
+    if (this.#keyDownHandler !== null) {
+      document.removeEventListener('keydown', this.#keyDownHandler);
+    }
+    this.#keyDownHandler = this.#documentKeydownHandler.bind(this);
+    document.addEventListener('keydown', this.#keyDownHandler);
   }
 
   #documentKeydownHandler(evt) {
