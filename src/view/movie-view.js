@@ -91,7 +91,7 @@ export default class CardView extends AbstractView {
 
   #movieClickHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.click(this.#movie);
   }
 
   setAddToWatchlistClickHandler(callback) {

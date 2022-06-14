@@ -1,38 +1,51 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterTemplate = (filter) => {
-  const {watchListCount, alreadyWatchedCount, favoriteCount} = filter;
+const createFilterItemTemplate = (filter) => (
+  `<a
+    href="#${filter.url}"
+    class="main-navigation__item${filter.isActive ? ' main-navigation__item--active' : ''}"
+    data-filter-type="${filter.type}"
+  >
+    ${filter.name}
+    ${filter.type !== 'all' ? `<span class="main-navigation__item-count">${filter.count}</span>` : ''}
+  </a>`
+);
 
-  return (
-    `<nav class="main-navigation">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">
-        All movies
-      </a>
-      <a href="#watchlist" class="main-navigation__item">
-        Watchlist
-        <span class="main-navigation__item-count">${watchListCount}</span>
-      </a>
-      <a href="#history" class="main-navigation__item">
-        History
-        <span class="main-navigation__item-count">${alreadyWatchedCount}</span>
-      </a>
-      <a href="#favorites" class="main-navigation__item">
-        Favorites
-        <span class="main-navigation__item-count">${favoriteCount}</span>
-      </a>
-    </nav>`
-  );
-};
+const createFilterItemsTemplate = (filters) => filters.map((filter) => createFilterItemTemplate(filter)).join('');
+
+const createFilterTemplate = (filters) => (
+  `<nav class="main-navigation">
+    ${createFilterItemsTemplate(filters)}
+  </nav>`
+);
 
 export default class FilterView extends AbstractView {
-  #filter = null;
+  #filters = null;
 
-  constructor(filter) {
+  constructor(filters) {
     super();
-    this.#filter = filter;
+    this.#filters = filters;
   }
 
   get template() {
-    return createFilterTemplate(this.#filter);
+    return createFilterTemplate(this.#filters);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#handleFilterTypeChange.bind(this));
+  }
+
+  #handleFilterTypeChange(evt) {
+    if (evt.target.tagName !== 'A' && evt.target.tagName !== 'SPAN') {
+      return;
+    }
+
+    const filterType = evt.target.tagName === 'A'
+      ? evt.target.dataset.filterType
+      : evt.target.parentElement.dataset.filterType;
+
+    evt.preventDefault();
+    this._callback.click(filterType);
   }
 }

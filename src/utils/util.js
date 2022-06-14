@@ -56,21 +56,7 @@ const getRandomeDate = (maxPassedDays) => {
   return dayjs().add(-daysGap, 'day').add(hoursGap, 'hour').toDate();
 };
 
-const isEscape = (code) => code === 'Escape';
-
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
+const isEscape = (code) => code === 'Escape' || code === 'Esc';
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -109,7 +95,6 @@ export {
   getRandomBoolean,
   getRandomeDate,
   isEscape,
-  updateItem,
   sortMovieByDate,
   sortMovieByRating
 };

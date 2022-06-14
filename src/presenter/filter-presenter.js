@@ -1,42 +1,59 @@
+import { UpdateType } from '../const.js';
 import { render, replace, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 
 export default class FilterPresenter {
-  #filterContainer = null;
+  #siteMainElement = null;
+  #filtersModel = null;
+  #moviesModel = null;
 
-  #filter = null;
+  #filters = null;
   #filterComponent = null;
 
-  constructor(filterContainer) {
-    this.#filterContainer = filterContainer;
+  constructor(siteMainElement, filtersModel, moviesModel) {
+    this.#siteMainElement = siteMainElement;
+    this.#filtersModel = filtersModel;
+    this.#moviesModel = moviesModel;
+
+    this.#moviesModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
-  init(moviesModel) {
-    const {watchListCount, alreadyWatchedCount, favoriteCount} = moviesModel;
-    this.#filter = {
-      watchListCount,
-      alreadyWatchedCount,
-      favoriteCount
-    };
+  init() {
+    this.#filters = this.#filtersModel.filters;
+    this.#setFilterCounts();
 
-    const prevFilterComponent = this.#filterComponent;
+    const previousFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new FilterView(this.#filter);
+    this.#filterComponent = new FilterView(this.#filters);
+    this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
 
-    if (prevFilterComponent === null) {
+    if (previousFilterComponent === null) {
       this.#renderFilter();
       return;
     }
 
-    if (this.#filterContainer.contains(prevFilterComponent.element)) {
-      replace(this.#filterComponent, prevFilterComponent);
-    }
-
-    remove(prevFilterComponent);
+    replace(this.#filterComponent, previousFilterComponent);
+    remove(previousFilterComponent);
   }
 
   #renderFilter() {
-    render(this.#filterComponent, this.#filterContainer);
+    render(this.#filterComponent, this.#siteMainElement);
   }
 
+  #setFilterCounts() {
+    this.#filters.forEach((filter) => {filter.count = this.#moviesModel.movies.filter((movie) => movie.userDetails[filter.type]).length;});
+  }
+
+  #handleModelEvent = () => {
+    this.init();
+  };
+
+  #handleFilterTypeChange = (filterType) => {
+    if (this.#filters.find((filter) => filter.type === filterType).isActive) {
+      return;
+    }
+
+    this.#filtersModel.updateFilter(UpdateType.BOARD, filterType);
+  };
 }

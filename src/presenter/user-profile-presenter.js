@@ -1,45 +1,50 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import UserProfileView from '../view/user-profile-view.js';
 
 export default class UserProfilePresenter {
-  #container = null;
+  #siteMainElement = null;
+  #userProfilesModel = null;
   #moviesModel = null;
 
-  #userTitle = {
-    titles: [
-      {min: 0, max: 0, title: ''},
-      {min: 1, max: 10, title: 'novice'},
-      {min: 11, max: 20, title: 'fan'},
-      {min: 21, max: Number.POSITIVE_INFINITY, title: 'movie buf'},
-    ],
-    getTitle: function(count) {
-      return this.titles
-        .find((item) => count >= item.min && count <= item.max)
-        .title;
-    }
-  };
+  #userProfile = null;
+  #userProfileComponent = null;
 
-  constructor(container, moviesModel) {
-    this.#container = container;
+  constructor(siteMainElement, userProfilesModel, moviesModel) {
+    this.#siteMainElement = siteMainElement;
+    this.#userProfilesModel = userProfilesModel;
     this.#moviesModel = moviesModel;
+
+    this.#moviesModel.addObserver(this.#handleModelEvent.bind(this));
   }
 
   init() {
-    if (this.#getUserTitle()) {
+    this.#removePreviousUserProfileComponent();
+    this.#userProfile = this.#getUserProfile();
+
+    if (this.#userProfile) {
       this.#renderUserProfile();
     }
   }
 
   #renderUserProfile() {
-    render(new UserProfileView(this.#getUserTitle()), this.#container);
+    this.#userProfileComponent = new UserProfileView(this.#userProfile);
+    render(this.#userProfileComponent, this.#siteMainElement);
   }
 
-  #getAlreadyWatchedCount() {
-    return this.#moviesModel.alreadyWatchedCount;
+  #removePreviousUserProfileComponent() {
+    if (this.#userProfileComponent && this.#siteMainElement.contains(this.#userProfileComponent.element)) {
+      remove(this.#userProfileComponent);
+    }
   }
 
-  #getUserTitle() {
-    const count = this.#getAlreadyWatchedCount();
-    return this.#userTitle.getTitle(count);
+  #getUserProfile() {
+    const alreadyWatchedCount = this.#moviesModel.movies.filter((movie) => movie.userDetails.alreadyWatched).length;
+
+    return this.#userProfilesModel.userProfiles
+      .find((item) => alreadyWatchedCount >= item.range.min && alreadyWatchedCount <= item.range.max);
+  }
+
+  #handleModelEvent() {
+    this.init();
   }
 }

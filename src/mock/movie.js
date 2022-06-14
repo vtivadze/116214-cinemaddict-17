@@ -8,10 +8,10 @@ import {
   getRandomeDate
 } from '../utils/util.js';
 import {nanoid} from 'nanoid';
+import { MAX_MOVIE_COMMENT_COUNT } from '../const.js';
 
 const MAX_TOTAL_RAITING = 10;
 const MAX_AGE_RAITING = 100;
-const MAX_COMMENT_ID = 20;
 const MAX_WRITERS_COUNT = 3;
 const MAX_ACTORS_COUNT = 5;
 const MAX_GENRES_COUNT = 3;
@@ -104,10 +104,10 @@ const generateAlreadyWatched = () => getRandomBoolean();
 const generateFavorite = () => getRandomBoolean();
 const generateReleaseDate = () => getRandomeDate(DAYS_IN_YEAR * 100);
 const generateWatchingDate = () => getRandomeDate(DAYS_IN_YEAR * 10);
+const generateCommentId = getId();
 
 const generateCommentIdsArray = () => {
-  const generateCommentId = getId();
-  const commentsCount = getRandomInteger(0, MAX_COMMENT_ID);
+  const commentsCount = getRandomInteger(0, MAX_MOVIE_COMMENT_COUNT);
   return Array.from({length: commentsCount}, generateCommentId);
 };
 
