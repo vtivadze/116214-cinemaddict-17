@@ -22,13 +22,22 @@ export default class PopupPresenter {
     this.#movie = movie;
     this.#comments = this.#getComments();
 
+    this.#renderPopup();
+  }
+
+  #getComments() {
+    return this.#commentsModel.comments.filter((comment) => this.#movie?.comments.includes(String(comment.id)));
+  }
+
+  #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(movie, this.#comments);
+    this.#popupComponent = new PopupView(this.#movie, this.#comments);
 
     this.#setHandlers();
 
     if (prevPopupComponent === null) {
-      this.#renderPopup();
+      render(this.#popupComponent, document.body);
+      document.body.classList.add('hide-overflow');
       return;
     }
 
@@ -37,15 +46,6 @@ export default class PopupPresenter {
     }
 
     remove(prevPopupComponent);
-  }
-
-  #getComments() {
-    return this.#commentsModel.comments.filter((comment) => this.#movie?.comments.includes(String(comment.id)));
-  }
-
-  #renderPopup() {
-    render(this.#popupComponent, document.body);
-    document.body.classList.add('hide-overflow');
   }
 
   #setHandlers() {
