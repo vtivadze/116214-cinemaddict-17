@@ -25,15 +25,7 @@ export default class PopupPresenter {
     const prevPopupComponent = this.#popupComponent;
     this.#popupComponent = new PopupView(movie, this.#comments);
 
-    this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
-    this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
-    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
-    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
-
-    this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
-
-    this.#setDocumentKeydownHandler();
+    this.#setHandlers();
 
     if (prevPopupComponent === null) {
       this.#renderPopup();
@@ -54,6 +46,16 @@ export default class PopupPresenter {
   #renderPopup() {
     render(this.#popupComponent, document.body);
     document.body.classList.add('hide-overflow');
+  }
+
+  #setHandlers() {
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
+    this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
+    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
+    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
+    this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
+    this.#setDocumentKeydownHandler();
   }
 
   #setDocumentKeydownHandler() {
