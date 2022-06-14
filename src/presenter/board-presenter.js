@@ -167,12 +167,12 @@ export default class BoardPresenter {
     const mostCommentedMovies = this.#getMostCommentedMovies();
 
     if (mostCommentedMovies.length > 0) {
-      this.#rednerMostCommented();
+      this.#rednerMostCommentedContainer();
       this.#renderMovies('MostCommented', mostCommentedMovies);
     }
   }
 
-  #rednerMostCommented() {
+  #rednerMostCommentedContainer() {
     const prevMosteCommentedComponent = this.#mostCommentedComponent;
     this.#mostCommentedComponent = new MostCommentedView();
 
