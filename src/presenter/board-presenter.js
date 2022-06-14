@@ -176,10 +176,10 @@ export default class BoardPresenter {
     const prevMosteCommentedComponent = this.#mostCommentedComponent;
     this.#mostCommentedComponent = new MostCommentedView();
 
-    if (prevMosteCommentedComponent === null) {
-      render(this.#mostCommentedComponent, this.#boardComponent.element);
-    } else {
+    if (prevMosteCommentedComponent && this.#boardComponent.element.contains(prevMosteCommentedComponent.element)) {
       replace(this.#mostCommentedComponent, prevMosteCommentedComponent);
+    } else {
+      render(this.#mostCommentedComponent, this.#boardComponent.element);
     }
 
     render(this.#movieListContainerComponent.MostCommented, this.#mostCommentedComponent.element);
