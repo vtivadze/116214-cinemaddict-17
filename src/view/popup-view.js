@@ -196,20 +196,25 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
 };
 
 export default class PopupView extends AbstractStatefulView {
-  constructor(movie, comments) {
+  static defaultState = {
+    selectedEmoji: '',
+    scrollTop: 0,
+    commentInputValue: '',
+  };
+
+  constructor(movie, comments, prevState) {
     super();
-    this._state = PopupView.parsePopupToState(movie, comments);
+    this._state = PopupView.parsePopupToState(movie, comments, prevState);
 
     this.#setInnerHandlers();
   }
 
-  static parsePopupToState(movie, comments) {
+  static parsePopupToState(movie, comments, prevState) {
     const state = {
       movie: {...movie},
       comments: [...comments],
-      selectedEmoji: '',
-      scrollTop: 0,
-      commentInputValue: '',
+      ...PopupView.defaultState,
+      ...prevState,
     };
 
     return state;
@@ -246,6 +251,13 @@ export default class PopupView extends AbstractStatefulView {
       scrollTop: this.element.scrollTop,
     });
     this.element.scrollTop = this._state.scrollTop;
+  }
+
+  #popupScrollHandler(evt) {
+    evt.preventDefault();
+    this._setState({
+      scrollTop: this.element.scrollTop,
+    });
   }
 
   setCloseButtonClickHandler(callback) {
@@ -329,6 +341,11 @@ export default class PopupView extends AbstractStatefulView {
 
     const comment = {comment: commentBody, emotion: emoji};
 
+    this._setState({
+      selectedEmoji: '',
+      commentInputValue: '',
+    });
+
     evt.preventDefault();
     this._callback.commentAdd(comment);
   }
@@ -336,6 +353,7 @@ export default class PopupView extends AbstractStatefulView {
   #setInnerHandlers() {
     this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiTypeChangeHandler.bind(this));
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler.bind(this));
+    this.element.addEventListener('scroll', this.#popupScrollHandler.bind(this));
   }
 
   _restoreHandlers = () => {

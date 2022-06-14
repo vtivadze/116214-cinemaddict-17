@@ -12,6 +12,7 @@ export default class PopupPresenter {
   #comments = [];
   #popupComponent = null;
   #keyDownHandler = null;
+  #prevState = {};
 
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
@@ -31,21 +32,32 @@ export default class PopupPresenter {
 
   #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(this.#movie, this.#comments);
+    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState);
 
     this.#setHandlers();
 
     if (prevPopupComponent === null) {
       render(this.#popupComponent, document.body);
       document.body.classList.add('hide-overflow');
+      this.#scrollTopPopup();
       return;
     }
 
     if (document.body.contains(prevPopupComponent.element)) {
       replace(this.#popupComponent, prevPopupComponent);
+      this.#scrollTopPopup();
     }
 
     remove(prevPopupComponent);
+  }
+
+  #getPrevState() {
+    const {selectedEmoji, commentInputValue, scrollTop} = this.#popupComponent._state;
+    return {selectedEmoji, commentInputValue, scrollTop};
+  }
+
+  #scrollTopPopup() {
+    this.#popupComponent.element.scrollTop = this.#popupComponent._state.scrollTop;
   }
 
   #setHandlers() {
@@ -76,6 +88,7 @@ export default class PopupPresenter {
   #removePopup() {
     remove(this.#popupComponent);
     this.#popupComponent = null;
+    this.#prevState = {};
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#keyDownHandler);
   }
@@ -120,8 +133,8 @@ export default class PopupPresenter {
       ...generateComment(),
       ...newComment,
     };
-    const movie = {...this.#movie};
 
+    const movie = {...this.#movie};
     movie.comments = [
       ...movie.comments,
       comment.id,
@@ -131,8 +144,7 @@ export default class PopupPresenter {
   }
 
   updatePopup(movie) {
-    const scrollTop = this.#popupComponent.element.scrollTop;
+    this.#prevState = this.#getPrevState();
     this.init(movie);
-    this.#popupComponent.element.scrollTop = scrollTop;
   }
 }
