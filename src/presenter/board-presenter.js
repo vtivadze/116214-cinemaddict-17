@@ -26,16 +26,16 @@ export default class BoardPresenter {
 
   #boardComponent = new BoardView();
   #mainContentComponent = new MainContentView();
-  #loadMoreButtonComponent = new LoadMoreButtonView();
-  #mostCommentedComponent = null;
   #topRatedComponent = new TopRatedView();
+  #mostCommentedComponent = null;
+  #loadMoreButtonComponent = new LoadMoreButtonView();
 
   #popupPresenter = null;
   #filterPresenter = null;
   #noMovieComponent = null;
   #sortPresenter = null;
 
-  #movieListContainer = {
+  #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
     MostCommented: new MoviesListContainerView(),
     TopRated: new MoviesListContainerView()
@@ -141,7 +141,7 @@ export default class BoardPresenter {
       this.#renderNoMovie();
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
-      render(this.#movieListContainer.Main, this.#mainContentComponent.element);
+      render(this.#movieListContainerComponent.Main, this.#mainContentComponent.element);
       this.#renderMovies('Main', this.#getMainContentMovies());
     }
   }
@@ -182,7 +182,7 @@ export default class BoardPresenter {
       replace(this.#mostCommentedComponent, prevMosteCommentedComponent);
     }
 
-    render(this.#movieListContainer.MostCommented, this.#mostCommentedComponent.element);
+    render(this.#movieListContainerComponent.MostCommented, this.#mostCommentedComponent.element);
   }
 
   #renderTopRatedContent() {
@@ -190,7 +190,7 @@ export default class BoardPresenter {
 
     if (topRatedMovies.length > 0) {
       render(this.#topRatedComponent, this.#boardComponent.element);
-      render(this.#movieListContainer.TopRated, this.#topRatedComponent.element);
+      render(this.#movieListContainerComponent.TopRated, this.#topRatedComponent.element);
 
       this.#renderMovies('TopRated', topRatedMovies);
     }
@@ -210,7 +210,7 @@ export default class BoardPresenter {
 
   #renderMovie(containerType, movie) {
     const moviePresenter = new MoviePresenter(
-      this.#movieListContainer[containerType].element,
+      this.#movieListContainerComponent[containerType].element,
       this.#handleViewAction,
       this.#movieClickHandler,
       this.#filtersModel
@@ -241,26 +241,19 @@ export default class BoardPresenter {
   }
 
   #cliearContentMovies() {
-    this.#clearMainContentMovies();
-    this.#clearMostCommentedContentMovies();
-    this.#clearTopRatedContentMovies();
+    this.#clearMovieListContent('Main');
+    this.#clearMovieListContent('MostCommented');
+    this.#clearMovieListContent('TopRated');
   }
 
-  #clearMainContentMovies() {
-    this.#moviePresenters.Main.forEach((presenter) => presenter.destroy());
-    this.#moviePresenters.Main.clear();
-    this.#renderedMovieCount = MOVIE_COUNT_PER_STEP;
-    remove(this.#loadMoreButtonComponent);
-  }
+  #clearMovieListContent(contentType) {
+    this.#moviePresenters[contentType].forEach((presenter) => presenter.destroy());
+    this.#moviePresenters[contentType].clear();
 
-  #clearMostCommentedContentMovies() {
-    this.#moviePresenters.MostCommented.forEach((presenter) => presenter.destroy());
-    this.#moviePresenters.MostCommented.clear();
-  }
-
-  #clearTopRatedContentMovies() {
-    this.#moviePresenters.TopRated.forEach((presenter) => presenter.destroy());
-    this.#moviePresenters.TopRated.clear();
+    if (contentType === 'Main') {
+      this.#renderedMovieCount = MOVIE_COUNT_PER_STEP;
+      remove(this.#loadMoreButtonComponent);
+    }
   }
 
   #getMainContentMovies() {
@@ -292,7 +285,7 @@ export default class BoardPresenter {
   }
 
   #updateMostCommented() {
-    this.#clearMostCommentedContentMovies();
+    this.#clearMovieListContent('MostCommented');
     this.#renderMostCommentedContent();
   }
 
