@@ -3,7 +3,17 @@ import { generateMovie } from '../mock/movie.js';
 import { MOVIES_COUNT } from '../const.js';
 
 export default class MoviesModel extends Observable {
+  #moviesApiService = null;
   #movies = Array.from({length: MOVIES_COUNT}, generateMovie);
+
+  constructor(moviesApiService) {
+    super();
+    this.#moviesApiService = moviesApiService;
+
+    this.#moviesApiService.movies.then((movies) => {
+      console.log(movies);
+    });
+  }
 
   get movies() {
     return this.#movies;

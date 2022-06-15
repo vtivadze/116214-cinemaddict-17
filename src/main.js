@@ -6,16 +6,17 @@ import FiltersModel from './model/filters-model.js';
 import SortModel from './model/sort-model.js';
 import StatisticsPresenter from './presenter/statistics-presenter.js';
 import BoardPresenter from './presenter/board-presenter.js';
+import MoviesApiService from './api/movies-api-service.js';
 
 const AUTHORIZATION = 'Basic a58foKb0bHj190F3';
-const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict/';
+const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const footerStatisticsElement = document.querySelector('.footer__statistics');
 
 const userProfileModel = new UserProfilesModel();
-const moviesModel = new MoviesModel();
+const moviesModel = new MoviesModel(new MoviesApiService(END_POINT, AUTHORIZATION));
 const commentsModel = new CommentsModel();
 const filtersModel = new FiltersModel();
 const sortModel = new SortModel();
