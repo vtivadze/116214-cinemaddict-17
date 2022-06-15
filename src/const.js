@@ -57,6 +57,7 @@ const UserAction = {
 
 const UpdateType = {
   PATCH: 'PATCH',
+  SORT: 'SORT',
   BOARD: 'BOARD',
   MINOR: 'MINOR',
   POPUP_MINOR: 'POPUP_MINOR',

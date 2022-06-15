@@ -35,6 +35,8 @@ export default class BoardPresenter {
   #noMovieComponent = null;
   #sortPresenter = null;
 
+  #isPreservedRenderedMovieCount = false;
+
   #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
     MostCommented: new MoviesListContainerView(),
@@ -108,6 +110,10 @@ export default class BoardPresenter {
     switch(updateType) {
       case UpdateType.PATCH:
         this.#updateCards(data);
+        break;
+      case UpdateType.SORT:
+        this.#isPreservedRenderedMovieCount = true;
+        this.#updateBoard();
         break;
       case UpdateType.BOARD:
         this.#updateBoard();
@@ -251,13 +257,18 @@ export default class BoardPresenter {
     this.#moviePresenters[contentType].clear();
 
     if (contentType === 'Main') {
-      this.#renderedMovieCount = MOVIE_COUNT_PER_STEP;
+      this.#renderedMovieCount = this.#isPreservedRenderedMovieCount
+        ? this.#renderedMovieCount
+        : MOVIE_COUNT_PER_STEP;
+
+      this.#isPreservedRenderedMovieCount = false;
+
       remove(this.#loadMoreButtonComponent);
     }
   }
 
   #getMainContentMovies() {
-    return this.movies.slice(0, Math.min(this.movies.length, MOVIE_COUNT_PER_STEP));
+    return this.movies.slice(0, Math.min(this.movies.length, Math.max(MOVIE_COUNT_PER_STEP, this.#renderedMovieCount)));
   }
 
   #getMostCommentedMovies() {
