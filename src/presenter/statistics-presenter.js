@@ -1,14 +1,18 @@
-import {render} from '../framework/render.js';
+import {remove, render, replace} from '../framework/render.js';
 import StatisticsView from '../view/statistics-view.js';
 
 export default class StatisticsPresenter {
-  #container = null;
+  #footerStatisticsElement = null;
   #moviesModel = null;
   #moviesCount = 0;
 
-  constructor(container, moviesModel) {
-    this.#container = container;
+  #statisticsComponent = null;
+
+  constructor(footerStatisticsElement, moviesModel) {
+    this.#footerStatisticsElement = footerStatisticsElement;
     this.#moviesModel = moviesModel;
+
+    this.#moviesModel.addObserver(this.#handleModelEvent.bind(this));
   }
 
   init() {
@@ -17,6 +21,19 @@ export default class StatisticsPresenter {
   }
 
   #renderStatistics() {
-    render(new StatisticsView(this.#moviesCount), this.#container);
+    const prevStatisticsComponent = this.#statisticsComponent;
+    this.#statisticsComponent = new StatisticsView(this.#moviesCount);
+
+    if (prevStatisticsComponent && this.#footerStatisticsElement.contains(prevStatisticsComponent.element)) {
+      replace(this.#statisticsComponent, prevStatisticsComponent);
+    } else {
+      render(this.#statisticsComponent, this.#footerStatisticsElement);
+    }
+
+    remove(prevStatisticsComponent);
+  }
+
+  #handleModelEvent() {
+    this.init();
   }
 }
