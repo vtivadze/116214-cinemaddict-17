@@ -116,6 +116,9 @@ export default class BoardPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.LOAD_COMMENTS:
+        this.#popupPresenter.refreshPopup();
+        break;
       case UpdateType.PATCH:
         this.#updateCards(data);
         break;

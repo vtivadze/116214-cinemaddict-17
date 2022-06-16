@@ -1,9 +1,26 @@
+import dayjs from 'dayjs';
+import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
-import { generateComment } from '../mock/comment.js';
-import { COMMENTS_ALL_COUNT } from '../const.js';
 
 export default class CommentsModel extends Observable {
-  #comments = Array.from({length: COMMENTS_ALL_COUNT}, generateComment);
+  #commentsApiService = null;
+  #comments = [];
+
+  constructor(commentsApiService) {
+    super();
+    this.#commentsApiService = commentsApiService;
+  }
+
+  init = async (movie) => {
+    try {
+      const comments = await this.#commentsApiService.getMovieComments(movie.id);
+      this.#comments = comments.map(this.#adaptToClient);
+    } catch(err) {
+      this.#comments = [];
+    }
+
+    this._notify(UpdateType.LOAD_COMMENTS, movie);
+  };
 
   get comments () {
     return this.#comments;
@@ -27,5 +44,13 @@ export default class CommentsModel extends Observable {
       ...this.#comments,
       comment,
     ];
+  }
+
+  #adaptToClient(comments) {
+    const adaptedComments = {...comments,
+      date: dayjs(comments.date).toDate()
+    };
+
+    return adaptedComments;
   }
 }

@@ -21,13 +21,14 @@ export default class PopupPresenter {
 
   init(movie) {
     this.#movie = movie;
-    this.#comments = this.#getComments();
+    this.#commentsModel.init(movie);
 
     this.#renderPopup();
   }
 
-  #getComments() {
-    return this.#commentsModel.comments.filter((comment) => this.#movie?.comments.includes(String(comment.id)));
+  refreshPopup() {
+    this.#comments = this.#commentsModel.comments;
+    this.#renderPopup();
   }
 
   #renderPopup() {
