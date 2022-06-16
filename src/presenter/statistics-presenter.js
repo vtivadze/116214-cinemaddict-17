@@ -4,7 +4,7 @@ import StatisticsView from '../view/statistics-view.js';
 export default class StatisticsPresenter {
   #container = null;
   #moviesModel = null;
-  #moviecCount = 0;
+  #moviesCount = 0;
 
   constructor(container, moviesModel) {
     this.#container = container;
@@ -12,11 +12,11 @@ export default class StatisticsPresenter {
   }
 
   init() {
-    this.#moviecCount = this.#moviesModel.movies.length;
+    this.#moviesCount = this.#moviesModel.movies.length;
     this.#renderStatistics();
   }
 
   #renderStatistics() {
-    render(new StatisticsView(this.#moviecCount), this.#container);
+    render(new StatisticsView(this.#moviesCount), this.#container);
   }
 }
