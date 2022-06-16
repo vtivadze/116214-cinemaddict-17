@@ -12,6 +12,7 @@ import MoviesListContainerView from '../view/movies-list-container-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
+import LoadingView from '../view/loading-view.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const MOST_COMMETNTED_COUNT = 2;
@@ -29,6 +30,7 @@ export default class BoardPresenter {
   #topRatedComponent = new TopRatedView();
   #mostCommentedComponent = null;
   #loadMoreButtonComponent = new LoadMoreButtonView();
+  #loadingComponent = new LoadingView();
 
   #popupPresenter = null;
   #filterPresenter = null;
@@ -36,6 +38,7 @@ export default class BoardPresenter {
   #sortPresenter = null;
 
   #isPreservedRenderedMovieCount = false;
+  #isLoading = true;
 
   #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
@@ -109,7 +112,9 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
     switch(updateType) {
       case UpdateType.INIT:
-        this.#updateBoard();
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
         break;
       case UpdateType.PATCH:
         this.#updateCards(data);
@@ -138,11 +143,20 @@ export default class BoardPresenter {
   };
 
   #renderBoard() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     render(this.#boardComponent, this.#siteMainElement);
 
     this.#renderMainContent();
     this.#renderMostCommentedContent();
     this.#renderTopRatedContent();
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#siteMainElement);
   }
 
   #renderMainContent() {
