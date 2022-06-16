@@ -66,10 +66,10 @@ export default class BoardPresenter {
 
   init() {
     this.#filterPresenter = new FilterPresenter(this.#siteMainElement, this.#filtersModel, this.#moviesModel);
-    this.#filterPresenter.init(this.#moviesModel);
+    this.#filterPresenter.init();
 
     this.#sortPresenter = new SortPresenter(this.#siteMainElement, this.#sortModel);
-    this.#sortPresenter.init(this.#moviesModel);
+    this.#sortPresenter.init();
 
     this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
 
@@ -108,6 +108,9 @@ export default class BoardPresenter {
 
   #handleModelEvent = (updateType, data) => {
     switch(updateType) {
+      case UpdateType.INIT:
+        this.#updateBoard();
+        break;
       case UpdateType.PATCH:
         this.#updateCards(data);
         break;

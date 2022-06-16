@@ -21,6 +21,7 @@ const commentsModel = new CommentsModel();
 const filtersModel = new FiltersModel();
 const sortModel = new SortModel();
 
+
 const userProfilePresenter = new UserProfilePresenter(siteHeaderElement, userProfileModel, moviesModel);
 const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, commentsModel, filtersModel, sortModel);
 const statisticsPresenter = new StatisticsPresenter(footerStatisticsElement, moviesModel);
@@ -28,3 +29,4 @@ const statisticsPresenter = new StatisticsPresenter(footerStatisticsElement, mov
 userProfilePresenter.init();
 boardPresenter.init();
 statisticsPresenter.init();
+moviesModel.init();

@@ -1,20 +1,26 @@
 import dayjs from 'dayjs';
+import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
-import { generateMovie } from '../mock/movie.js';
-import { MOVIES_COUNT } from '../const.js';
 
 export default class MoviesModel extends Observable {
   #moviesApiService = null;
-  #movies = Array.from({length: MOVIES_COUNT}, generateMovie);
+  #movies = [];
 
   constructor(moviesApiService) {
     super();
     this.#moviesApiService = moviesApiService;
-
-    this.#moviesApiService.movies.then((movies) => {
-      console.log(movies.map((movie) => this.#adaptToClient(movie)));
-    });
   }
+
+  init = async () => {
+    try {
+      const movies = await this.#moviesApiService.movies;
+      this.#movies = movies.map(this.#adaptToClient);
+    } catch(err) {
+      this.#movies = [];
+    }
+
+    this._notify(UpdateType.INIT);
+  };
 
   get movies() {
     return this.#movies;

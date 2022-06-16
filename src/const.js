@@ -63,6 +63,7 @@ const UpdateType = {
   POPUP_MINOR: 'POPUP_MINOR',
   POPUP_MAJOR: 'POPUP_MAJOR',
   FILTER: 'FILTER',
+  INIT: 'INIT',
 };
 
 const MOVIES_COUNT = 17;
