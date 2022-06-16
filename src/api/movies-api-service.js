@@ -35,9 +35,9 @@ export default class MoviesApiService extends ApiService {
           'release_country': movie.filmInfo.release.releaseCountry,
         },
       },
-      'user_etails': {...movie.userDetails,
+      'user_details': {...movie.userDetails,
         'already_watched': movie.userDetails.alreadyWatched,
-        'watching_date': dayjs(movie.userDetails.watchingDate).toISOString(),
+        'watching_date': movie.userDetails.watchingDate && dayjs(movie.userDetails.watchingDate).toISOString(),
       },
     };
 

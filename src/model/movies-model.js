@@ -26,20 +26,28 @@ export default class MoviesModel extends Observable {
     return this.#movies;
   }
 
-  updateMovie = (updateType, update) => {
+  updateMovie = async (updateType, update) => {
     const index = this.#movies.findIndex((movie) => movie.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexiting movie');
     }
 
-    this.#movies = [
-      ...this.#movies.slice(0, index),
-      update,
-      ...this.#movies.slice(index + 1)
-    ];
+    try {
+      const updatedMovie = await this.#moviesApiService.updateMovie(update);
 
-    this._notify(updateType, update);
+      const adaptedMovie = this.#adaptToClient(updatedMovie);
+
+      this.#movies = [
+        ...this.#movies.slice(0, index),
+        adaptedMovie,
+        ...this.#movies.slice(index + 1)
+      ];
+
+      this._notify(updateType, adaptedMovie);
+    } catch(err) {
+      // what to do
+    }
   };
 
   #adaptToClient = (movie) => {
@@ -54,7 +62,7 @@ export default class MoviesModel extends Observable {
       },
       userDetails: {...movie.user_details,
         alreadyWatched: movie.user_details.already_watched,
-        watchingDate: dayjs(movie.user_details.watching_date).toDate(),
+        watchingDate: movie.user_details.watching_date && dayjs(movie.user_details.watching_date).toDate(),
       },
     };
 
