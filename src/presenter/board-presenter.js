@@ -117,7 +117,12 @@ export default class BoardPresenter {
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
       render(this.#movieListContainerComponent.Main, this.#mainContentComponent.element);
-      this.#renderMovies('Main', this.#getMainContentMovies());
+      const mainContentMovies = this.#getMainContentMovies();
+      this.#renderMovies('Main', mainContentMovies);
+
+      if (this.movies.length > this.#renderedMovieCount) {
+        this.#renderLoadMoreButton();
+      }
     }
   }
 
@@ -173,10 +178,6 @@ export default class BoardPresenter {
 
   #renderMovies(containerType, movies) {
     movies.forEach((movie) => this.#renderMovie(containerType, movie));
-
-    if (containerType === 'Main' && this.movies.length > MOVIE_COUNT_PER_STEP) {
-      this.#renderLoadMoreButton();
-    }
   }
 
   #renderMovie(containerType, movie) {
@@ -219,8 +220,12 @@ export default class BoardPresenter {
     }
   }
 
+  #getMoviesToLoad(from, to) {
+    return this.movies.slice(from, to);
+  }
+
   #getMainContentMovies() {
-    return this.movies.slice(0, Math.min(this.movies.length, Math.max(MOVIE_COUNT_PER_STEP, this.#renderedMovieCount)));
+    return this.movies.slice(0, Math.min(this.movies.length, this.#renderedMovieCount));
   }
 
   #getMostCommentedMovies() {
@@ -291,10 +296,15 @@ export default class BoardPresenter {
         this.#isPreservedRenderedMovieCount = true;
         this.#updateBoard();
         break;
+      case UpdateType.FILTER:
+        this.#updateBoard();
+        break;
       case UpdateType.BOARD:
+        this.#isPreservedRenderedMovieCount = true;
         this.#updateBoard();
         break;
       case UpdateType.MINOR:
+        this.#isPreservedRenderedMovieCount = true;
         this.#updateCards(data);
         this.#updateBoard();
         if (this.#popupPresenter.popupMovieId && this.#popupPresenter.popupMovieId === data.id) {
@@ -320,7 +330,8 @@ export default class BoardPresenter {
   #handleLoadMoreButtonClick() {
     const movieCount = this.movies.length;
     const newRenderedMovieCount = Math.min(movieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP);
-    const movies = this.movies.slice(this.#renderedMovieCount, newRenderedMovieCount);
+
+    const movies = this.#getMoviesToLoad(this.#renderedMovieCount, newRenderedMovieCount);
     this.#renderMovies('Main', movies);
 
     this.#renderedMovieCount = newRenderedMovieCount;
