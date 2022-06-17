@@ -13,6 +13,8 @@ export default class PopupPresenter {
   #keyDownHandler = null;
   #prevState = {};
 
+  popupMovieId = null;
+
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
     this.#changeData = changeData;
@@ -20,6 +22,7 @@ export default class PopupPresenter {
 
   init(movie) {
     this.#movie = movie;
+    this.popupMovieId = movie.id;
     this.#commentsModel.init(movie);
 
     this.#renderPopup();
@@ -91,6 +94,7 @@ export default class PopupPresenter {
     this.#prevState = {};
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#keyDownHandler);
+    this.popupMovieId = null;
   }
 
   #addToWatchlistClickHandler() {

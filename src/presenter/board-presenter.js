@@ -121,6 +121,9 @@ export default class BoardPresenter {
         break;
       case UpdateType.PATCH:
         this.#updateCards(data);
+        if (this.#popupPresenter.popupMovieId && this.#popupPresenter.popupMovieId === data.id) {
+          this.#updatePopup(data);
+        }
         break;
       case UpdateType.SORT:
         this.#isPreservedRenderedMovieCount = true;
@@ -132,6 +135,9 @@ export default class BoardPresenter {
       case UpdateType.MINOR:
         this.#updateCards(data);
         this.#updateBoard();
+        if (this.#popupPresenter.popupMovieId && this.#popupPresenter.popupMovieId === data.id) {
+          this.#updatePopup(data);
+        }
         break;
       case UpdateType.POPUP_MINOR:
         this.#updateCards(data);
