@@ -1,5 +1,4 @@
 import { isEscape } from '../utils/util.js';
-import { generateComment } from '../mock/comment.js';
 import { UserAction, UpdateType } from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
@@ -12,6 +11,9 @@ export default class PopupPresenter {
   #comments = [];
   #popupComponent = null;
   #keyDownHandler = null;
+  #prevState = {};
+
+  popupMovieId = null;
 
   constructor(commentsModel, changeData) {
     this.#commentsModel = commentsModel;
@@ -20,77 +22,92 @@ export default class PopupPresenter {
 
   init(movie) {
     this.#movie = movie;
-    this.#comments = this.#getComments();
+    this.popupMovieId = movie.id;
+    this.#commentsModel.init(movie);
 
+    this.#renderPopup();
+  }
+
+  refreshPopup() {
+    this.#comments = this.#commentsModel.comments;
+    this.#renderPopup();
+  }
+
+  updatePopup(movie) {
+    this.#prevState = this.#getPrevState();
+    this.init(movie);
+  }
+
+  #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(movie, this.#comments);
+    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState);
 
-    this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
-    this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
-    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
-    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
-
-    this.#popupComponent.setCloseButtonClickHandler(this.#hidePopup.bind(this));
-
-    this.#setDocumentKeydownHandler();
+    this.#setHandlers();
 
     if (prevPopupComponent === null) {
-      this.#renderPopup();
+      render(this.#popupComponent, document.body);
+      document.body.classList.add('hide-overflow');
+      this.#scrollTopPopup();
       return;
     }
 
     if (document.body.contains(prevPopupComponent.element)) {
       replace(this.#popupComponent, prevPopupComponent);
+      this.#scrollTopPopup();
     }
 
     remove(prevPopupComponent);
   }
 
-  #getComments() {
-    return this.#commentsModel.comments.filter((comment) => this.#movie?.comments.includes(String(comment.id)));
+  #getPrevState() {
+    const {selectedEmoji, commentInputValue, scrollTop} = this.#popupComponent._state;
+    return {selectedEmoji, commentInputValue, scrollTop};
   }
 
-  #renderPopup() {
-    render(this.#popupComponent, document.body);
-    document.body.classList.add('hide-overflow');
+  #scrollTopPopup() {
+    this.#popupComponent.element.scrollTop = this.#popupComponent._state.scrollTop;
+  }
+
+  #setHandlers() {
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#handleAddToWatchlistClick.bind(this));
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick.bind(this));
+    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));
+    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
+    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
+    this.#popupComponent.setCloseButtonClickHandler(this.#removePopup.bind(this));
+    this.#setDocumentKeydownHandler();
   }
 
   #setDocumentKeydownHandler() {
     if (this.#keyDownHandler !== null) {
       document.removeEventListener('keydown', this.#keyDownHandler);
     }
-    this.#keyDownHandler = this.#documentKeydownHandler.bind(this);
+    this.#keyDownHandler = this.#handleDocumentKeydown.bind(this);
     document.addEventListener('keydown', this.#keyDownHandler);
   }
 
-  #documentKeydownHandler(evt) {
-    if (isEscape(evt.code)) {
-      evt.preventDefault();
-      this.#hidePopup();
-    }
-  }
-
-  #hidePopup() {
+  #removePopup() {
     remove(this.#popupComponent);
     this.#popupComponent = null;
+    this.#prevState = {};
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#keyDownHandler);
+    this.popupMovieId = null;
   }
 
-  #addToWatchlistClickHandler() {
+  #handleAddToWatchlistClick() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
-  #alreadyWatchedClickHandler() {
+  #handleAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
-  #favoriteClickHandler() {
+  #handleFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
@@ -115,11 +132,11 @@ export default class PopupPresenter {
 
   #handleCommentAdd(newComment) {
     const comment = {
-      ...generateComment(),
+      // ...generateComment(),
       ...newComment,
     };
-    const movie = {...this.#movie};
 
+    const movie = {...this.#movie};
     movie.comments = [
       ...movie.comments,
       comment.id,
@@ -128,9 +145,10 @@ export default class PopupPresenter {
     this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
   }
 
-  updatePopup(movie) {
-    const scrollTop = this.#popupComponent.element.scrollTop;
-    this.init(movie);
-    this.#popupComponent.element.scrollTop = scrollTop;
+  #handleDocumentKeydown(evt) {
+    if (isEscape(evt.code)) {
+      evt.preventDefault();
+      this.#removePopup();
+    }
   }
 }

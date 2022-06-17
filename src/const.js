@@ -57,11 +57,14 @@ const UserAction = {
 
 const UpdateType = {
   PATCH: 'PATCH',
+  SORT: 'SORT',
   BOARD: 'BOARD',
   MINOR: 'MINOR',
   POPUP_MINOR: 'POPUP_MINOR',
   POPUP_MAJOR: 'POPUP_MAJOR',
   FILTER: 'FILTER',
+  INIT: 'INIT',
+  LOAD_COMMENTS: 'LOAD_COMMENTS',
 };
 
 const MOVIES_COUNT = 17;

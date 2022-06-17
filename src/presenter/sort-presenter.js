@@ -45,6 +45,6 @@ export default class SortPresenter {
       return;
     }
 
-    this.#sortModel.updateSort(UpdateType.BOARD, sortType);
+    this.#sortModel.updateSort(UpdateType.SORT, sortType);
   }
 }
