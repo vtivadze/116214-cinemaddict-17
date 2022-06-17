@@ -33,6 +33,11 @@ export default class PopupPresenter {
     this.#renderPopup();
   }
 
+  updatePopup(movie) {
+    this.#prevState = this.#getPrevState();
+    this.init(movie);
+  }
+
   #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
     this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState);
@@ -64,9 +69,9 @@ export default class PopupPresenter {
   }
 
   #setHandlers() {
-    this.#popupComponent.setAddToWatchlistClickHandler(this.#addToWatchlistClickHandler.bind(this));
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#alreadyWatchedClickHandler.bind(this));
-    this.#popupComponent.setFavoriteClickHandler(this.#favoriteClickHandler.bind(this));
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#handleAddToWatchlistClick.bind(this));
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick.bind(this));
+    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));
     this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
     this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
     this.#popupComponent.setCloseButtonClickHandler(this.#removePopup.bind(this));
@@ -77,15 +82,8 @@ export default class PopupPresenter {
     if (this.#keyDownHandler !== null) {
       document.removeEventListener('keydown', this.#keyDownHandler);
     }
-    this.#keyDownHandler = this.#documentKeydownHandler.bind(this);
+    this.#keyDownHandler = this.#handleDocumentKeydown.bind(this);
     document.addEventListener('keydown', this.#keyDownHandler);
-  }
-
-  #documentKeydownHandler(evt) {
-    if (isEscape(evt.code)) {
-      evt.preventDefault();
-      this.#removePopup();
-    }
   }
 
   #removePopup() {
@@ -97,19 +95,19 @@ export default class PopupPresenter {
     this.popupMovieId = null;
   }
 
-  #addToWatchlistClickHandler() {
+  #handleAddToWatchlistClick() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
-  #alreadyWatchedClickHandler() {
+  #handleAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
   }
 
-  #favoriteClickHandler() {
+  #handleFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
     this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
@@ -147,8 +145,10 @@ export default class PopupPresenter {
     this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
   }
 
-  updatePopup(movie) {
-    this.#prevState = this.#getPrevState();
-    this.init(movie);
+  #handleDocumentKeydown(evt) {
+    if (isEscape(evt.code)) {
+      evt.preventDefault();
+      this.#removePopup();
+    }
   }
 }

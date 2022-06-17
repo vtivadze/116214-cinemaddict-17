@@ -209,23 +209,6 @@ export default class PopupView extends AbstractStatefulView {
     this.#setInnerHandlers();
   }
 
-  static parsePopupToState(movie, comments, prevState) {
-    const state = {
-      movie: {...movie},
-      comments: [...comments],
-      ...PopupView.defaultState,
-      ...prevState,
-    };
-
-    return state;
-  }
-
-  static parseStateToPopup(state) {
-    const popup = {...state};
-
-    return popup;
-  }
-
   get template() {
     const popup = PopupView.parseStateToPopup(this._state);
 
@@ -237,73 +220,40 @@ export default class PopupView extends AbstractStatefulView {
     );
   }
 
-  #commentInputHandler(evt) {
-    evt.preventDefault();
-    this._setState({
-      commentInputValue: evt.target.value,
-    });
-  }
-
-  #emojiTypeChangeHandler(evt) {
-    evt.preventDefault();
-    this.updateElement({
-      selectedEmoji: evt.target.dataset.emojiType,
-      scrollTop: this.element.scrollTop,
-    });
-    this.element.scrollTop = this._state.scrollTop;
-  }
-
-  #popupScrollHandler(evt) {
-    evt.preventDefault();
-    this._setState({
-      scrollTop: this.element.scrollTop,
-    });
-  }
+  _restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setCloseButtonClickHandler(this._callback.closeButtonClick);
+    this.setAddToWatchlistClickHandler(this._callback.addToWatchlistClick);
+    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setCommentDeleteHandler(this._callback.commentDelete);
+    this.setCommentAddHandler(this._callback.commentAdd);
+  };
 
   setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonClickHandler.bind(this));
-  }
-
-  #closeButtonClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.closeButtonClick();
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#handleCloseButtonClick.bind(this));
   }
 
   setAddToWatchlistClickHandler(callback) {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#addToWatchClickHandler.bind(this));
-  }
-
-  #addToWatchClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.addToWatchlistClick();
+      .addEventListener('click', this.#handleAddToWatchClick.bind(this));
   }
 
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#alreadyWatchedClickHandler.bind(this));
-  }
-
-  #alreadyWatchedClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.alreadyWatchedClick();
+      .addEventListener('click', this.#handleAlreadyWatchedClick.bind(this));
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#favoriteClickHandler.bind(this));
-  }
-
-  #favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
+      .addEventListener('click', this.#handleFavoriteClick.bind(this));
   }
 
   setCommentDeleteHandler(callback) {
@@ -313,6 +263,60 @@ export default class PopupView extends AbstractStatefulView {
       .addEventListener('click', this.#handleCommentDelete.bind(this));
   }
 
+  setCommentAddHandler(callback) {
+    this._callback.commentAdd = callback;
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#handleCommentAdd.bind(this));
+  }
+
+  #setInnerHandlers() {
+    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#handleEmojiTypeChange.bind(this));
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#handleCommentInput.bind(this));
+    this.element.addEventListener('scroll', this.#handlePopupScroll.bind(this));
+  }
+
+  #handleCommentInput(evt) {
+    evt.preventDefault();
+    this._setState({
+      commentInputValue: evt.target.value,
+    });
+  }
+
+  #handleEmojiTypeChange(evt) {
+    evt.preventDefault();
+    this.updateElement({
+      selectedEmoji: evt.target.dataset.emojiType,
+      scrollTop: this.element.scrollTop,
+    });
+    this.element.scrollTop = this._state.scrollTop;
+  }
+
+  #handlePopupScroll(evt) {
+    evt.preventDefault();
+    this._setState({
+      scrollTop: this.element.scrollTop,
+    });
+  }
+
+  #handleCloseButtonClick(evt) {
+    evt.preventDefault();
+    this._callback.closeButtonClick();
+  }
+
+  #handleAddToWatchClick(evt) {
+    evt.preventDefault();
+    this._callback.addToWatchlistClick();
+  }
+
+  #handleAlreadyWatchedClick(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  #handleFavoriteClick(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   #handleCommentDelete(evt) {
     if (evt.target.tagName !== 'BUTTON') {
       return;
@@ -320,11 +324,6 @@ export default class PopupView extends AbstractStatefulView {
 
     evt.preventDefault();
     this._callback.commentDelete(evt.target.dataset.commentId);
-  }
-
-  setCommentAddHandler(callback) {
-    this._callback.commentAdd = callback;
-    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#handleCommentAdd.bind(this));
   }
 
   #handleCommentAdd(evt) {
@@ -350,19 +349,20 @@ export default class PopupView extends AbstractStatefulView {
     this._callback.commentAdd(comment);
   }
 
-  #setInnerHandlers() {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiTypeChangeHandler.bind(this));
-    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler.bind(this));
-    this.element.addEventListener('scroll', this.#popupScrollHandler.bind(this));
+  static parsePopupToState(movie, comments, prevState) {
+    const state = {
+      movie: {...movie},
+      comments: [...comments],
+      ...PopupView.defaultState,
+      ...prevState,
+    };
+
+    return state;
   }
 
-  _restoreHandlers = () => {
-    this.#setInnerHandlers();
-    this.setCloseButtonClickHandler(this._callback.closeButtonClick);
-    this.setAddToWatchlistClickHandler(this._callback.addToWatchlistClick);
-    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
-    this.setFavoriteClickHandler(this._callback.favoriteClick);
-    this.setCommentDeleteHandler(this._callback.commentDelete);
-    this.setCommentAddHandler(this._callback.commentAdd);
-  };
+  static parseStateToPopup(state) {
+    const popup = {...state};
+
+    return popup;
+  }
 }
