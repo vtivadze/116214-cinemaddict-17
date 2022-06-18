@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
-import { UpdateType } from '../const';
+import { SortType, UpdateType } from '../const';
 
 export default class SortPresenter {
   #sortModel = null;
@@ -33,6 +33,11 @@ export default class SortPresenter {
 
     replace(this.#sortComponent, previousSortcomponent);
     remove(previousSortcomponent);
+  }
+
+  setToDefault() {
+    this.#sortModel.currentSortType = SortType.DEFAULT;
+    this.init(false);
   }
 
   #renderSort() {

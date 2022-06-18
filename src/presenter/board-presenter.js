@@ -373,6 +373,7 @@ export default class BoardPresenter {
         this.#updateBoard();
         break;
       case UpdateType.FILTER:
+        this.#sortPresenter.setToDefault();
         this.#updateBoard();
         break;
       case UpdateType.BOARD:
