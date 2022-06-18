@@ -19,14 +19,14 @@ export default class FilterPresenter {
     this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
-  init() {
+  init(isMovieLoading) {
     this.#filters = this.#filtersModel.filters;
     this.#setFilterCounts();
 
     const previousFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new FilterView(this.#filters);
-    this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    this.#filterComponent = new FilterView(this.#filters, isMovieLoading);
+    this.#filterComponent.setFilterTypeChangeHandler(this.#onFilterTypeChange);
 
     if (previousFilterComponent === null) {
       this.#renderFilter();
@@ -49,7 +49,7 @@ export default class FilterPresenter {
     this.init();
   };
 
-  #handleFilterTypeChange = (filterType) => {
+  #onFilterTypeChange = (filterType) => {
     if (this.#filters.find((filter) => filter.type === filterType).isActive) {
       return;
     }

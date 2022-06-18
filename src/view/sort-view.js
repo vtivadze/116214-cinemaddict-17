@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { SortType } from '../const.js';
 
-const createSortTemplate = (currentSortType) => (
-  `<ul class="sort">
+const createSortTemplate = (currentSortType, isSortDisplayed) => (
+  `<ul class="sort${isSortDisplayed ? '' : ' visually-hidden'}">
     ${Object.values(SortType).map((sortType) => (
     `<li>
       <a
@@ -16,22 +16,24 @@ const createSortTemplate = (currentSortType) => (
 
 export default class SortView extends AbstractView {
   #sortType = null;
+  #isSortDisplayed = false;
 
-  constructor(sortType) {
+  constructor(sortType, isSortDisplayed) {
     super();
     this.#sortType = sortType;
+    this.#isSortDisplayed = isSortDisplayed;
   }
 
   get template() {
-    return createSortTemplate(this.#sortType);
+    return createSortTemplate(this.#sortType, this.#isSortDisplayed);
   }
 
   setSortTypeChangeHandler(callback) {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#handleSortTypeChange.bind(this));
+    this.element.addEventListener('click', this.#onSortTypeChange.bind(this));
   }
 
-  #handleSortTypeChange(evt) {
+  #onSortTypeChange(evt) {
     if (evt.target.tagName !== 'A') {
       return;
     }

@@ -24,9 +24,9 @@ export default class MoviePresenter {
     const prevMovieComponent = this.#movieComponent;
     this.#movieComponent = new MovieView(movie);
 
-    this.#movieComponent.setAddToWatchlistClickHandler(this.#handleAddToWatchlistClick.bind(this));
-    this.#movieComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick.bind(this));
-    this.#movieComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));
+    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
+    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
+    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
     this.#movieComponent.setMovieClickHandler(this.#handleMovieClick);
 
     if (prevMovieComponent === null) {
@@ -53,7 +53,7 @@ export default class MoviePresenter {
     replace(this.#movieComponent, prevMovieComponent);
   }
 
-  #handleAddToWatchlistClick() {
+  #onAddToWatchlistClick() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
 
@@ -63,7 +63,7 @@ export default class MoviePresenter {
     this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
-  #handleAlreadyWatchedClick() {
+  #onAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
 
@@ -73,7 +73,7 @@ export default class MoviePresenter {
     this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
-  #handleFavoriteClick() {
+  #onFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
 

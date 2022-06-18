@@ -1,27 +1,34 @@
 import { render, replace, remove } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
-import { UpdateType } from '../const';
+import { SortType, UpdateType } from '../const';
 
 export default class SortPresenter {
   #sortModel = null;
   #siteMainElement = null;
+  #moviesModel = null;
 
   #sortComponent = null;
   #currentSortType = null;
+  #isSortHidden = false;
+  #isSortDisplayed = true;
 
-  constructor(siteMainElement, sortModel) {
+  constructor(siteMainElement, sortModel, moviesModel) {
     this.#sortModel = sortModel;
     this.#siteMainElement = siteMainElement;
+    this.#moviesModel = moviesModel;
 
     this.#sortModel.addObserver(this.#handleModelEvent);
+    this.#moviesModel.addObserver(this.#handleModelEvent);
   }
 
-  init() {
+  init(isMovieLoading) {
+    this.#isSortDisplayed = !this.#isSortHidden && !isMovieLoading;
+
     const previousSortcomponent = this.#sortComponent;
 
     this.#currentSortType = this.#sortModel.currentSortType;
-    this.#sortComponent = new SortView(this.#currentSortType);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange.bind(this));
+    this.#sortComponent = new SortView(this.#currentSortType, this.#isSortDisplayed);
+    this.#sortComponent.setSortTypeChangeHandler(this.#onSortTypeChange.bind(this));
 
     if (previousSortcomponent === null) {
       this.#renderSort();
@@ -32,15 +39,34 @@ export default class SortPresenter {
     remove(previousSortcomponent);
   }
 
+  reset() {
+    this.#sortModel.currentSortType = SortType.DEFAULT;
+    this.#refreshSort();
+  }
+
+  hideSort() {
+    this.#isSortHidden = true;
+    this.#refreshSort();
+  }
+
+  displaySort() {
+    this.#isSortHidden = false;
+    this.#refreshSort();
+  }
+
+  #refreshSort() {
+    this.init(false);
+  }
+
   #renderSort() {
     render(this.#sortComponent, this.#siteMainElement);
   }
 
   #handleModelEvent = () => {
-    this.init();
+    this.#refreshSort();
   };
 
-  #handleSortTypeChange(sortType) {
+  #onSortTypeChange(sortType) {
     if (this.#currentSortType === sortType) {
       return;
     }

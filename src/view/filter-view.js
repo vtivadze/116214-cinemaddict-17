@@ -13,30 +13,32 @@ const createFilterItemTemplate = (filter) => (
 
 const createFilterItemsTemplate = (filters) => filters.map((filter) => createFilterItemTemplate(filter)).join('');
 
-const createFilterTemplate = (filters) => (
-  `<nav class="main-navigation">
+const createFilterTemplate = (filters, isMovieLoading) => (
+  `<nav class="main-navigation${isMovieLoading ? ' visually-hidden': ''}">
     ${createFilterItemsTemplate(filters)}
   </nav>`
 );
 
 export default class FilterView extends AbstractView {
   #filters = null;
+  #isMovieLoading = true;
 
-  constructor(filters) {
+  constructor(filters, isMovieLoading) {
     super();
     this.#filters = filters;
+    this.#isMovieLoading = isMovieLoading;
   }
 
   get template() {
-    return createFilterTemplate(this.#filters);
+    return createFilterTemplate(this.#filters, this.#isMovieLoading);
   }
 
   setFilterTypeChangeHandler(callback) {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#handleFilterTypeChange.bind(this));
+    this.element.addEventListener('click', this.#onFilterTypeChange.bind(this));
   }
 
-  #handleFilterTypeChange(evt) {
+  #onFilterTypeChange(evt) {
     if (evt.target.tagName !== 'A' && evt.target.tagName !== 'SPAN') {
       return;
     }
