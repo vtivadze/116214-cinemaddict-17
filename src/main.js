@@ -22,7 +22,6 @@ const commentsModel = new CommentsModel(new CommentsApiService(END_POINT, AUTHOR
 const filtersModel = new FiltersModel();
 const sortModel = new SortModel();
 
-
 const userProfilePresenter = new UserProfilePresenter(siteHeaderElement, userProfileModel, moviesModel);
 const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, commentsModel, filtersModel, sortModel);
 const statisticsPresenter = new StatisticsPresenter(footerStatisticsElement, moviesModel);
