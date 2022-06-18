@@ -94,7 +94,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
 
   const commentsListTemplate = commentsCount
     ? createCommentsListTemplate(comments)
-    : 'Loading...';
+    : '';
 
   const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
   const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
