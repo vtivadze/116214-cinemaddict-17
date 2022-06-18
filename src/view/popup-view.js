@@ -63,8 +63,28 @@ const createCommentsTemplate = (comments) => (
 );
 
 const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
+const createCommentLoadErrorTemplate = () => '<h3>Error while comments\' loading</h3>';
 
-const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, isCommentLoading) => {
+const createCommentFormTemplate = (selectedEmoji, commentInputValue) => {
+  const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
+  const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
+
+  return (
+    `<div class="film-details__new-comment">
+      <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
+
+      <label class="film-details__comment-label">
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentInputValue}</textarea>
+      </label>
+
+      <div class="film-details__emoji-list">
+        ${emojiListeTemplate}
+      </div>
+    </div>`
+  );
+};
+
+const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, isCommentLoading, isCommentLoadError) => {
   const {
     filmInfo: {
       poster,
@@ -104,10 +124,10 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, 
   const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
   const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
 
-  const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
-  const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
-
   const commentLoadingTemplate = createCommentLoadingTemplate();
+  const commentLoadErrorTemplate = createCommentLoadErrorTemplate();
+
+  const commentFormTemplate = createCommentFormTemplate(selectedEmoji, commentInputValue);
 
   return (
     `<section class="film-details">
@@ -181,19 +201,11 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, 
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
-            ${isCommentLoading ? commentLoadingTemplate : commentsTemplate}
+            ${isCommentLoading ? commentLoadingTemplate : ''}
+            ${isCommentLoadError ? commentLoadErrorTemplate : ''}
+            ${!isCommentLoading && !isCommentLoadError ? commentsTemplate : ''}
 
-            <div class="film-details__new-comment">
-              <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
-
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentInputValue}</textarea>
-              </label>
-
-              <div class="film-details__emoji-list">
-                ${emojiListeTemplate}
-              </div>
-            </div>
+            ${!isCommentLoadError ? commentFormTemplate : ''}
           </section>
         </div>
       </form>
@@ -203,6 +215,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, 
 
 export default class PopupView extends AbstractStatefulView {
   #isCommentLoading = true;
+  #isCommentLoadError = false;
 
   static defaultState = {
     selectedEmoji: '',
@@ -210,9 +223,10 @@ export default class PopupView extends AbstractStatefulView {
     commentInputValue: '',
   };
 
-  constructor(movie, comments, prevState, isCommentLoading) {
+  constructor(movie, comments, prevState, isCommentLoading, isCommentLoadError) {
     super();
     this.#isCommentLoading = isCommentLoading;
+    this.#isCommentLoadError = isCommentLoadError;
     this._state = PopupView.parsePopupToState(movie, comments, prevState);
 
     this.#setInnerHandlers();
@@ -227,6 +241,7 @@ export default class PopupView extends AbstractStatefulView {
       popup.selectedEmoji,
       popup.commentInputValue,
       this.#isCommentLoading,
+      this.#isCommentLoadError,
     );
   }
 
@@ -276,13 +291,17 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   setCommentAddHandler(callback) {
-    this._callback.commentAdd = callback;
-    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#onCommentAdd.bind(this));
+    if (this.#isCommentLoadError === false) {
+      this._callback.commentAdd = callback;
+      this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#onCommentAdd.bind(this));
+    }
   }
 
   #setInnerHandlers() {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#onEmojiTypeChange.bind(this));
-    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#onCommentInput.bind(this));
+    if (this.#isCommentLoadError === false) {
+      this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#onEmojiTypeChange.bind(this));
+      this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#onCommentInput.bind(this));
+    }
     this.element.addEventListener('scroll', this.#onPopupScroll.bind(this));
   }
 

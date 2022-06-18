@@ -353,7 +353,10 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.COMMENT_LOAD:
-        this.#popupPresenter.refreshPopup();
+        this.#popupPresenter.refreshPopup(false);
+        break;
+      case UpdateType.COMMENT_LOAD_ERROR:
+        this.#popupPresenter.refreshPopup(true);
         break;
       case UpdateType.PATCH:
         this.#updateCards(data);

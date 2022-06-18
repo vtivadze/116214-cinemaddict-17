@@ -16,16 +16,20 @@ export default class CommentsModel extends Observable {
   }
 
   init = async (movie) => {
+    let updateType = null;
+
     try {
       const comments = await this.#commentsApiService.getMovieComments(
         movie.id
       );
       this.#comments = comments.map(this.#adaptToClient);
+      updateType = UpdateType.COMMENT_LOAD;
     } catch (err) {
       this.#comments = [];
+      updateType = UpdateType.COMMENT_LOAD_ERROR;
     }
 
-    this._notify(UpdateType.COMMENT_LOAD, movie);
+    this._notify(updateType, movie);
   };
 
   deleteComment(commentId) {

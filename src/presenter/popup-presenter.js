@@ -14,6 +14,7 @@ export default class PopupPresenter {
   #keyDownHandler = null;
   #prevState = {};
   #isCommentLoading = true;
+  #isCommentLoadError = false;
 
   popupMovieId = null;
 
@@ -32,7 +33,8 @@ export default class PopupPresenter {
     this.#renderPopup();
   }
 
-  refreshPopup() {
+  refreshPopup(isCommentLoadError) {
+    this.#isCommentLoadError = isCommentLoadError;
     this.#isCommentLoading = false;
     this.#comments = this.#commentsModel.comments;
     this.#renderPopup();
@@ -45,7 +47,7 @@ export default class PopupPresenter {
 
   #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState, this.#isCommentLoading);
+    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState, this.#isCommentLoading, this.#isCommentLoadError);
 
     this.#setHandlers();
 
