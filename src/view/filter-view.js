@@ -33,10 +33,10 @@ export default class FilterView extends AbstractView {
 
   setFilterTypeChangeHandler(callback) {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#handleFilterTypeChange.bind(this));
+    this.element.addEventListener('click', this.#onFilterTypeChange.bind(this));
   }
 
-  #handleFilterTypeChange(evt) {
+  #onFilterTypeChange(evt) {
     if (evt.target.tagName !== 'A' && evt.target.tagName !== 'SPAN') {
       return;
     }

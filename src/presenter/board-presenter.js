@@ -184,7 +184,7 @@ export default class BoardPresenter {
     const moviePresenter = new MoviePresenter(
       this.#movieListContainerComponent[containerType].element,
       this.#handleViewAction,
-      this.#handleMovieClick,
+      this.#onMovieClick,
       this.#filtersModel
     );
     moviePresenter.init(movie);
@@ -194,7 +194,7 @@ export default class BoardPresenter {
 
   #renderLoadMoreButton() {
     if (!this.#mainContentComponent.element.contains(this.#loadMoreButtonComponent.element)) {
-      this.#loadMoreButtonComponent.setClickHandler(this.#handleLoadMoreButtonClick.bind(this));
+      this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick.bind(this));
       render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
     }
   }
@@ -329,11 +329,11 @@ export default class BoardPresenter {
     }
   };
 
-  #handleMovieClick = (movie) => {
+  #onMovieClick = (movie) => {
     this.#popupPresenter.init(movie);
   };
 
-  #handleLoadMoreButtonClick() {
+  #onLoadMoreButtonClick() {
     const movieCount = this.movies.length;
     const newRenderedMovieCount = Math.min(movieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP);
 

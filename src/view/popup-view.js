@@ -232,56 +232,56 @@ export default class PopupView extends AbstractStatefulView {
 
   setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#handleCloseButtonClick.bind(this));
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#onCloseButtonClick.bind(this));
   }
 
   setAddToWatchlistClickHandler(callback) {
     this._callback.addToWatchlistClick = callback;
     this.element
       .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#handleAddToWatchClick.bind(this));
+      .addEventListener('click', this.#onAddToWatchlistClick.bind(this));
   }
 
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
     this.element
       .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#handleAlreadyWatchedClick.bind(this));
+      .addEventListener('click', this.#onAlreadyWatchedClick.bind(this));
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.element
       .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#handleFavoriteClick.bind(this));
+      .addEventListener('click', this.#onFavoriteClick.bind(this));
   }
 
   setCommentDeleteHandler(callback) {
     this._callback.commentDelete = callback;
     this.element
       .querySelector('.film-details__comments-list')
-      .addEventListener('click', this.#handleCommentDelete.bind(this));
+      .addEventListener('click', this.#onCommentDelete.bind(this));
   }
 
   setCommentAddHandler(callback) {
     this._callback.commentAdd = callback;
-    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#handleCommentAdd.bind(this));
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#onCommentAdd.bind(this));
   }
 
   #setInnerHandlers() {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#handleEmojiTypeChange.bind(this));
-    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#handleCommentInput.bind(this));
-    this.element.addEventListener('scroll', this.#handlePopupScroll.bind(this));
+    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#onEmojiTypeChange.bind(this));
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#onCommentInput.bind(this));
+    this.element.addEventListener('scroll', this.#onPopupScroll.bind(this));
   }
 
-  #handleCommentInput(evt) {
+  #onCommentInput(evt) {
     evt.preventDefault();
     this._setState({
       commentInputValue: evt.target.value,
     });
   }
 
-  #handleEmojiTypeChange(evt) {
+  #onEmojiTypeChange(evt) {
     evt.preventDefault();
     this.updateElement({
       selectedEmoji: evt.target.dataset.emojiType,
@@ -290,34 +290,34 @@ export default class PopupView extends AbstractStatefulView {
     this.element.scrollTop = this._state.scrollTop;
   }
 
-  #handlePopupScroll(evt) {
+  #onPopupScroll(evt) {
     evt.preventDefault();
     this._setState({
       scrollTop: this.element.scrollTop,
     });
   }
 
-  #handleCloseButtonClick(evt) {
+  #onCloseButtonClick(evt) {
     evt.preventDefault();
     this._callback.closeButtonClick();
   }
 
-  #handleAddToWatchClick(evt) {
+  #onAddToWatchlistClick(evt) {
     evt.preventDefault();
     this._callback.addToWatchlistClick();
   }
 
-  #handleAlreadyWatchedClick(evt) {
+  #onAlreadyWatchedClick(evt) {
     evt.preventDefault();
     this._callback.alreadyWatchedClick();
   }
 
-  #handleFavoriteClick(evt) {
+  #onFavoriteClick(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
   }
 
-  #handleCommentDelete(evt) {
+  #onCommentDelete(evt) {
     if (evt.target.tagName !== 'BUTTON') {
       return;
     }
@@ -326,7 +326,7 @@ export default class PopupView extends AbstractStatefulView {
     this._callback.commentDelete(evt.target.dataset.commentId);
   }
 
-  #handleCommentAdd(evt) {
+  #onCommentAdd(evt) {
     if (!evt.ctrlKey || evt.key !== 'Enter') {
       return;
     }

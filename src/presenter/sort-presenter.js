@@ -21,7 +21,7 @@ export default class SortPresenter {
 
     this.#currentSortType = this.#sortModel.currentSortType;
     this.#sortComponent = new SortView(this.#currentSortType);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange.bind(this));
+    this.#sortComponent.setSortTypeChangeHandler(this.#onSortTypeChange.bind(this));
 
     if (previousSortcomponent === null) {
       this.#renderSort();
@@ -40,7 +40,7 @@ export default class SortPresenter {
     this.init();
   };
 
-  #handleSortTypeChange(sortType) {
+  #onSortTypeChange(sortType) {
     if (this.#currentSortType === sortType) {
       return;
     }

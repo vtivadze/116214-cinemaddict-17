@@ -71,11 +71,11 @@ export default class PopupPresenter {
   }
 
   #setHandlers() {
-    this.#popupComponent.setAddToWatchlistClickHandler(this.#handleAddToWatchlistClick.bind(this));
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick.bind(this));
-    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));
-    this.#popupComponent.setCommentDeleteHandler(this.#handleCommentDelete.bind(this));
-    this.#popupComponent.setCommentAddHandler(this.#handleCommentAdd.bind(this));
+    this.#popupComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
+    this.#popupComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
+    this.#popupComponent.setCommentDeleteHandler(this.#onCommentDelete.bind(this));
+    this.#popupComponent.setCommentAddHandler(this.#onCommentAdd.bind(this));
     this.#popupComponent.setCloseButtonClickHandler(this.#removePopup.bind(this));
     this.#setDocumentKeydownHandler();
   }
@@ -84,7 +84,7 @@ export default class PopupPresenter {
     if (this.#keyDownHandler !== null) {
       document.removeEventListener('keydown', this.#keyDownHandler);
     }
-    this.#keyDownHandler = this.#handleDocumentKeydown.bind(this);
+    this.#keyDownHandler = this.#onDocumentKeydown.bind(this);
     document.addEventListener('keydown', this.#keyDownHandler);
   }
 
@@ -97,28 +97,28 @@ export default class PopupPresenter {
     this.popupMovieId = null;
   }
 
-  #handleAddToWatchlistClick() {
+  #onAddToWatchlistClick() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
     const updateType = this.#filtersModel.currentFilterType === FilterType.WATCHLIST ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
     this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
-  #handleAlreadyWatchedClick() {
+  #onAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
     const updateType = this.#filtersModel.currentFilterType === FilterType.HISTORY ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
     this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
-  #handleFavoriteClick() {
+  #onFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
     const updateType = this.#filtersModel.currentFilterType === FilterType.FAVORITES ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
     this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
-  #handleCommentDelete(commentId) {
+  #onCommentDelete(commentId) {
     const movie = {...this.#movie};
 
     const commentIndex = movie.comments.findIndex((id) => id === commentId);
@@ -135,7 +135,7 @@ export default class PopupPresenter {
     this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, {commentId, movie});
   }
 
-  #handleCommentAdd(newComment) {
+  #onCommentAdd(newComment) {
     const comment = {
       // ...generateComment(),
       ...newComment,
@@ -150,7 +150,7 @@ export default class PopupPresenter {
     this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
   }
 
-  #handleDocumentKeydown(evt) {
+  #onDocumentKeydown(evt) {
     if (isEscape(evt.code)) {
       evt.preventDefault();
       this.#removePopup();

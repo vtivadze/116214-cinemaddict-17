@@ -28,10 +28,10 @@ export default class SortView extends AbstractView {
 
   setSortTypeChangeHandler(callback) {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#handleSortTypeChange.bind(this));
+    this.element.addEventListener('click', this.#onSortTypeChange.bind(this));
   }
 
-  #handleSortTypeChange(evt) {
+  #onSortTypeChange(evt) {
     if (evt.target.tagName !== 'A') {
       return;
     }
