@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { SortType } from '../const.js';
 
-const createSortTemplate = (currentSortType) => (
-  `<ul class="sort">
+const createSortTemplate = (currentSortType, isMovieLoading) => (
+  `<ul class="sort${isMovieLoading ? ' visually-hidden' : ''}">
     ${Object.values(SortType).map((sortType) => (
     `<li>
       <a
@@ -16,14 +16,16 @@ const createSortTemplate = (currentSortType) => (
 
 export default class SortView extends AbstractView {
   #sortType = null;
+  #isMovieLoading = true;
 
-  constructor(sortType) {
+  constructor(sortType, isMovieLoading) {
     super();
     this.#sortType = sortType;
+    this.#isMovieLoading = isMovieLoading;
   }
 
   get template() {
-    return createSortTemplate(this.#sortType);
+    return createSortTemplate(this.#sortType, this.#isMovieLoading);
   }
 
   setSortTypeChangeHandler(callback) {

@@ -16,11 +16,11 @@ export default class SortPresenter {
     this.#sortModel.addObserver(this.#handleModelEvent);
   }
 
-  init() {
+  init(isMovieLoading) {
     const previousSortcomponent = this.#sortComponent;
 
     this.#currentSortType = this.#sortModel.currentSortType;
-    this.#sortComponent = new SortView(this.#currentSortType);
+    this.#sortComponent = new SortView(this.#currentSortType, isMovieLoading);
     this.#sortComponent.setSortTypeChangeHandler(this.#onSortTypeChange.bind(this));
 
     if (previousSortcomponent === null) {

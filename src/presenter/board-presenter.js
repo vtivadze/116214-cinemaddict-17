@@ -100,13 +100,13 @@ export default class BoardPresenter {
       this.#filtersModel,
       this.#moviesModel
     );
-    this.#filterPresenter.init();
+    this.#filterPresenter.init(this.#isMovieLoading);
 
     this.#sortPresenter = new SortPresenter(
       this.#siteMainElement,
       this.#sortModel
     );
-    this.#sortPresenter.init();
+    this.#sortPresenter.init(this.#isMovieLoading);
 
     this.#popupPresenter = new PopupPresenter(
       this.#commentsModel,
