@@ -58,7 +58,13 @@ const createEmojiListTemplate = (selectedEmoji) => (
   )).join('')
 );
 
-const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) => {
+const createCommentsTemplate = (comments) => (
+  `<ul class="film-details__comments-list">${createCommentsListTemplate(comments)}</ul>`
+);
+
+const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
+
+const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, isCommentLoading) => {
   const {
     filmInfo: {
       poster,
@@ -92,9 +98,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
 
   const movieGenresListTemplate = createMovieGenresListTemplate(genre);
 
-  const commentsListTemplate = commentsCount
-    ? createCommentsListTemplate(comments)
-    : '';
+  const commentsTemplate = createCommentsTemplate(comments);
 
   const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
   const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
@@ -102,6 +106,8 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
 
   const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
   const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
+
+  const commentLoadingTemplate = createCommentLoadingTemplate();
 
   return (
     `<section class="film-details">
@@ -175,7 +181,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
-            <ul class="film-details__comments-list">${commentsListTemplate}</ul>
+            ${isCommentLoading ? commentLoadingTemplate : commentsTemplate}
 
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
@@ -196,14 +202,17 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue) 
 };
 
 export default class PopupView extends AbstractStatefulView {
+  #isCommentLoading = true;
+
   static defaultState = {
     selectedEmoji: '',
     scrollTop: 0,
     commentInputValue: '',
   };
 
-  constructor(movie, comments, prevState) {
+  constructor(movie, comments, prevState, isCommentLoading) {
     super();
+    this.#isCommentLoading = isCommentLoading;
     this._state = PopupView.parsePopupToState(movie, comments, prevState);
 
     this.#setInnerHandlers();
@@ -217,6 +226,7 @@ export default class PopupView extends AbstractStatefulView {
       popup.comments,
       popup.selectedEmoji,
       popup.commentInputValue,
+      this.#isCommentLoading,
     );
   }
 
@@ -257,10 +267,12 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   setCommentDeleteHandler(callback) {
-    this._callback.commentDelete = callback;
-    this.element
-      .querySelector('.film-details__comments-list')
-      .addEventListener('click', this.#onCommentDelete.bind(this));
+    if (this._state.comments.length > 0) {
+      this._callback.commentDelete = callback;
+      this.element
+        .querySelector('.film-details__comments-list')
+        .addEventListener('click', this.#onCommentDelete.bind(this));
+    }
   }
 
   setCommentAddHandler(callback) {
@@ -351,10 +363,10 @@ export default class PopupView extends AbstractStatefulView {
 
   static parsePopupToState(movie, comments, prevState) {
     const state = {
-      movie: {...movie},
-      comments: [...comments],
       ...PopupView.defaultState,
       ...prevState,
+      movie: {...movie},
+      comments: [...comments],
     };
 
     return state;
