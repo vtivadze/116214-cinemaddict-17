@@ -65,12 +65,12 @@ const createCommentsTemplate = (comments) => (
 const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
 const createCommentLoadErrorTemplate = () => '<h3>Error while comments\' loading</h3>';
 
-const createCommentFormTemplate = (selectedEmoji, commentInputValue) => {
+const createCommentFormTemplate = (selectedEmoji, commentInputValue, isCommentLoading) => {
   const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
   const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
 
   return (
-    `<div class="film-details__new-comment">
+    `<div class="film-details__new-comment${isCommentLoading ? ' visually-hidden' : ''}">
       <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
 
       <label class="film-details__comment-label">
@@ -127,7 +127,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, 
   const commentLoadingTemplate = createCommentLoadingTemplate();
   const commentLoadErrorTemplate = createCommentLoadErrorTemplate();
 
-  const commentFormTemplate = createCommentFormTemplate(selectedEmoji, commentInputValue);
+  const commentFormTemplate = createCommentFormTemplate(selectedEmoji, commentInputValue, isCommentLoading);
 
   return (
     `<section class="film-details">
