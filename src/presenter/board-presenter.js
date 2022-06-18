@@ -13,6 +13,7 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MovieLoadingView from '../view/movie-loading-view.js';
+import MovieLoadingErrorView from '../view/movie-loading-error.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const MOST_COMMETNTED_COUNT = 2;
@@ -31,6 +32,7 @@ export default class BoardPresenter {
   #mostCommentedComponent = null;
   #loadMoreButtonComponent = new LoadMoreButtonView();
   #movieLoadingComponent = new MovieLoadingView();
+  #movieLoadingErrorComponent = new MovieLoadingErrorView();
 
   #popupPresenter = null;
   #filterPresenter = null;
@@ -39,6 +41,7 @@ export default class BoardPresenter {
 
   #isPreservedRenderedMovieCount = false;
   #isMovieLoading = true;
+  #isMovieLoadingError = false;
 
   #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
@@ -103,16 +106,25 @@ export default class BoardPresenter {
     render(this.#boardComponent, this.#siteMainElement);
 
     this.#renderMainContent();
-    this.#renderMostCommentedContent();
-    this.#renderTopRatedContent();
+
+    if (this.#isMovieLoadingError === false) {
+      this.#renderMostCommentedContent();
+      this.#renderTopRatedContent();
+    }
   }
 
   #renderMovieLoading() {
     render(this.#movieLoadingComponent, this.#siteMainElement);
   }
 
+  #renderMovieLoadingError() {
+    render(this.#movieLoadingErrorComponent, this.#boardComponent.element);
+  }
+
   #renderMainContent() {
-    if (this.movies.length === 0) {
+    if (this.#isMovieLoadingError) {
+      this.#renderMovieLoadingError();
+    } else if (this.movies.length === 0) {
       this.#renderNoMovie();
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
@@ -280,6 +292,12 @@ export default class BoardPresenter {
     switch(updateType) {
       case UpdateType.INIT:
         this.#isMovieLoading = false;
+        remove(this.#movieLoadingComponent);
+        this.#renderBoard();
+        break;
+      case UpdateType.MOVIE_LOAD_ERROR:
+        this.#isMovieLoading = false;
+        this.#isMovieLoadingError = true;
         remove(this.#movieLoadingComponent);
         this.#renderBoard();
         break;
