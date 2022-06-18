@@ -12,7 +12,7 @@ import MoviesListContainerView from '../view/movies-list-container-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import MostCommentedView from '../view/most-commented-view.js';
 import TopRatedView from '../view/top-rated-view.js';
-import LoadingView from '../view/loading-view.js';
+import MovieLoadingView from '../view/movie-loading-view.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const MOST_COMMETNTED_COUNT = 2;
@@ -30,7 +30,7 @@ export default class BoardPresenter {
   #topRatedComponent = new TopRatedView();
   #mostCommentedComponent = null;
   #loadMoreButtonComponent = new LoadMoreButtonView();
-  #loadingComponent = new LoadingView();
+  #movieLoadingComponent = new MovieLoadingView();
 
   #popupPresenter = null;
   #filterPresenter = null;
@@ -38,7 +38,7 @@ export default class BoardPresenter {
   #sortPresenter = null;
 
   #isPreservedRenderedMovieCount = false;
-  #isLoading = true;
+  #isMovieLoading = true;
 
   #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
@@ -95,8 +95,8 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if (this.#isLoading) {
-      this.#renderLoading();
+    if (this.#isMovieLoading) {
+      this.#renderMovieLoading();
       return;
     }
 
@@ -107,8 +107,8 @@ export default class BoardPresenter {
     this.#renderTopRatedContent();
   }
 
-  #renderLoading() {
-    render(this.#loadingComponent, this.#siteMainElement);
+  #renderMovieLoading() {
+    render(this.#movieLoadingComponent, this.#siteMainElement);
   }
 
   #renderMainContent() {
@@ -279,8 +279,8 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
     switch(updateType) {
       case UpdateType.INIT:
-        this.#isLoading = false;
-        remove(this.#loadingComponent);
+        this.#isMovieLoading = false;
+        remove(this.#movieLoadingComponent);
         this.#renderBoard();
         break;
       case UpdateType.LOAD_COMMENTS:
