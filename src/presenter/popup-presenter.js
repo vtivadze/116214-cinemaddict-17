@@ -1,11 +1,12 @@
 import { isEscape } from '../utils/util.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, FilterType } from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
 
 export default class PopupPresenter {
   #changeData = null;
   #commentsModel = null;
+  #filtersModel = null;
 
   #movie = null;
   #comments = [];
@@ -15,9 +16,10 @@ export default class PopupPresenter {
 
   popupMovieId = null;
 
-  constructor(commentsModel, changeData) {
+  constructor(commentsModel, changeData, filtersModel) {
     this.#commentsModel = commentsModel;
     this.#changeData = changeData;
+    this.#filtersModel = filtersModel;
   }
 
   init(movie) {
@@ -98,19 +100,22 @@ export default class PopupPresenter {
   #handleAddToWatchlistClick() {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
+    const updateType = this.#filtersModel.currentFilterType === FilterType.WATCHLIST ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   #handleAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
+    const updateType = this.#filtersModel.currentFilterType === FilterType.HISTORY ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   #handleFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
-    this.#changeData(UserAction.UPDATE_MOVIE, UpdateType.POPUP_MINOR, movie);
+    const updateType = this.#filtersModel.currentFilterType === FilterType.FAVORITES ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
   }
 
   #handleCommentDelete(commentId) {

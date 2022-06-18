@@ -89,7 +89,7 @@ export default class BoardPresenter {
     this.#sortPresenter = new SortPresenter(this.#siteMainElement, this.#sortModel);
     this.#sortPresenter.init();
 
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this));
+    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this), this.#filtersModel);
 
     this.#renderBoard();
   }
@@ -311,9 +311,15 @@ export default class BoardPresenter {
           this.#updatePopup(data);
         }
         break;
-      case UpdateType.POPUP_MINOR:
+      case UpdateType.POPUP_PATCH:
         this.#updateCards(data);
         this.#updatePopup(data);
+        break;
+      case UpdateType.POPUP_MINOR:
+        this.#isPreservedRenderedMovieCount = true;
+        this.#updateCards(data);
+        this.#updatePopup(data);
+        this.#updateBoard();
         break;
       case UpdateType.POPUP_MAJOR:
         this.#updateCards(data);
