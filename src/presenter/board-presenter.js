@@ -147,6 +147,7 @@ export default class BoardPresenter {
       this.#renderMovieLoadingError();
     } else if (this.movies.length === 0) {
       this.#renderNoMovie();
+      this.#sortPresenter.hideSort();
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
       render(
@@ -154,6 +155,13 @@ export default class BoardPresenter {
         this.#mainContentComponent.element
       );
       const mainContentMovies = this.#getMainContentMovies();
+
+      if (mainContentMovies.length === 0) {
+        this.#sortPresenter.hideSort();
+      } else {
+        this.#sortPresenter.displaySort();
+      }
+
       this.#renderMovies('Main', mainContentMovies);
 
       if (this.movies.length > this.#renderedMovieCount) {
@@ -373,7 +381,10 @@ export default class BoardPresenter {
         this.#updateBoard();
         break;
       case UpdateType.FILTER:
-        this.#sortPresenter.setToDefault();
+        if (this.#sortModel.currentSortType !== SortType.DEFAULT) {
+          this.#sortPresenter.reset();
+        }
+
         this.#updateBoard();
         break;
       case UpdateType.BOARD:

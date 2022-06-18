@@ -9,6 +9,8 @@ export default class SortPresenter {
 
   #sortComponent = null;
   #currentSortType = null;
+  #isSortHidden = false;
+  #isSortDisplayed = true;
 
   constructor(siteMainElement, sortModel, moviesModel) {
     this.#sortModel = sortModel;
@@ -20,10 +22,12 @@ export default class SortPresenter {
   }
 
   init(isMovieLoading) {
+    this.#isSortDisplayed = !this.#isSortHidden && !isMovieLoading;
+
     const previousSortcomponent = this.#sortComponent;
 
     this.#currentSortType = this.#sortModel.currentSortType;
-    this.#sortComponent = new SortView(this.#currentSortType, isMovieLoading);
+    this.#sortComponent = new SortView(this.#currentSortType, this.#isSortDisplayed);
     this.#sortComponent.setSortTypeChangeHandler(this.#onSortTypeChange.bind(this));
 
     if (previousSortcomponent === null) {
@@ -35,8 +39,22 @@ export default class SortPresenter {
     remove(previousSortcomponent);
   }
 
-  setToDefault() {
+  reset() {
     this.#sortModel.currentSortType = SortType.DEFAULT;
+    this.#refreshSort();
+  }
+
+  hideSort() {
+    this.#isSortHidden = true;
+    this.#refreshSort();
+  }
+
+  displaySort() {
+    this.#isSortHidden = false;
+    this.#refreshSort();
+  }
+
+  #refreshSort() {
     this.init(false);
   }
 
@@ -45,7 +63,7 @@ export default class SortPresenter {
   }
 
   #handleModelEvent = () => {
-    this.init();
+    this.#refreshSort();
   };
 
   #onSortTypeChange(sortType) {
