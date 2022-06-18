@@ -104,7 +104,8 @@ export default class BoardPresenter {
 
     this.#sortPresenter = new SortPresenter(
       this.#siteMainElement,
-      this.#sortModel
+      this.#sortModel,
+      this.#moviesModel
     );
     this.#sortPresenter.init(this.#isMovieLoading);
 

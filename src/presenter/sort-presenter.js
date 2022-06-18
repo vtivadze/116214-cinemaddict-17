@@ -5,15 +5,18 @@ import { UpdateType } from '../const';
 export default class SortPresenter {
   #sortModel = null;
   #siteMainElement = null;
+  #moviesModel = null;
 
   #sortComponent = null;
   #currentSortType = null;
 
-  constructor(siteMainElement, sortModel) {
+  constructor(siteMainElement, sortModel, moviesModel) {
     this.#sortModel = sortModel;
     this.#siteMainElement = siteMainElement;
+    this.#moviesModel = moviesModel;
 
     this.#sortModel.addObserver(this.#handleModelEvent);
+    this.#moviesModel.addObserver(this.#handleModelEvent);
   }
 
   init(isMovieLoading) {
