@@ -1,6 +1,6 @@
-import {render, remove, replace} from '../framework/render.js';
-import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
-import {sortMovieByDate, sortMovieByRating} from '../utils/util.js';
+import { render, remove, replace } from '../framework/render.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
+import { sortMovieByDate, sortMovieByRating } from '../utils/util.js';
 import FilterPresenter from './filter-presenter.js';
 import SortPresenter from './sort-presenter.js';
 import MoviePresenter from './movie-presenter.js';
@@ -46,18 +46,24 @@ export default class BoardPresenter {
   #movieListContainerComponent = {
     Main: new MoviesListContainerView(),
     MostCommented: new MoviesListContainerView(),
-    TopRated: new MoviesListContainerView()
+    TopRated: new MoviesListContainerView(),
   };
 
   #moviePresenters = {
     Main: new Map(),
     MostCommented: new Map(),
-    TopRated: new Map()
+    TopRated: new Map(),
   };
 
   #renderedMovieCount = MOVIE_COUNT_PER_STEP;
 
-  constructor(siteMainElement, moviesModel, commentsModel, filtersModel, sortModel) {
+  constructor(
+    siteMainElement,
+    moviesModel,
+    commentsModel,
+    filtersModel,
+    sortModel
+  ) {
     this.#siteMainElement = siteMainElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
@@ -71,11 +77,14 @@ export default class BoardPresenter {
   }
 
   get movies() {
-    const filteredMovies = this.#filtersModel.currentFilterType === FilterType.ALL
-      ? [...this.#moviesModel.movies]
-      : [...this.#moviesModel.movies].filter((movie) => movie.userDetails[this.#filtersModel.currentFilterType]);
+    const filteredMovies =
+      this.#filtersModel.currentFilterType === FilterType.ALL
+        ? [...this.#moviesModel.movies]
+        : [...this.#moviesModel.movies].filter(
+          (movie) => movie.userDetails[this.#filtersModel.currentFilterType]
+        );
 
-    switch(this.#sortModel.currentSortType) {
+    switch (this.#sortModel.currentSortType) {
       case SortType.DATE:
         return filteredMovies.sort(sortMovieByDate);
       case SortType.RATING:
@@ -86,13 +95,24 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#filterPresenter = new FilterPresenter(this.#siteMainElement, this.#filtersModel, this.#moviesModel);
+    this.#filterPresenter = new FilterPresenter(
+      this.#siteMainElement,
+      this.#filtersModel,
+      this.#moviesModel
+    );
     this.#filterPresenter.init();
 
-    this.#sortPresenter = new SortPresenter(this.#siteMainElement, this.#sortModel);
+    this.#sortPresenter = new SortPresenter(
+      this.#siteMainElement,
+      this.#sortModel
+    );
     this.#sortPresenter.init();
 
-    this.#popupPresenter = new PopupPresenter(this.#commentsModel, this.#handleViewAction.bind(this), this.#filtersModel);
+    this.#popupPresenter = new PopupPresenter(
+      this.#commentsModel,
+      this.#handleViewAction.bind(this),
+      this.#filtersModel
+    );
 
     this.#renderBoard();
   }
@@ -128,7 +148,10 @@ export default class BoardPresenter {
       this.#renderNoMovie();
     } else {
       render(this.#mainContentComponent, this.#boardComponent.element);
-      render(this.#movieListContainerComponent.Main, this.#mainContentComponent.element);
+      render(
+        this.#movieListContainerComponent.Main,
+        this.#mainContentComponent.element
+      );
       const mainContentMovies = this.#getMainContentMovies();
       this.#renderMovies('Main', mainContentMovies);
 
@@ -140,14 +163,22 @@ export default class BoardPresenter {
 
   #renderNoMovie() {
     const prevNoMovieComponent = this.#noMovieComponent;
-    this.#noMovieComponent = new NoMovieView(this.#filtersModel.currentFilterType);
+    this.#noMovieComponent = new NoMovieView(
+      this.#filtersModel.currentFilterType
+    );
 
-    if (prevNoMovieComponent && this.#boardComponent.element.contains(prevNoMovieComponent.element)) {
+    if (
+      prevNoMovieComponent &&
+      this.#boardComponent.element.contains(prevNoMovieComponent.element)
+    ) {
       replace(this.#noMovieComponent, prevNoMovieComponent);
       return;
     }
 
-    if (this.#mainContentComponent && this.#boardComponent.element.contains(this.#mainContentComponent.element)) {
+    if (
+      this.#mainContentComponent &&
+      this.#boardComponent.element.contains(this.#mainContentComponent.element)
+    ) {
       replace(this.#noMovieComponent, this.#mainContentComponent);
       return;
     }
@@ -168,13 +199,19 @@ export default class BoardPresenter {
     const prevMostCommentedComponent = this.#mostCommentedComponent;
     this.#mostCommentedComponent = new MostCommentedView();
 
-    if (prevMostCommentedComponent && this.#boardComponent.element.contains(prevMostCommentedComponent.element)) {
+    if (
+      prevMostCommentedComponent &&
+      this.#boardComponent.element.contains(prevMostCommentedComponent.element)
+    ) {
       replace(this.#mostCommentedComponent, prevMostCommentedComponent);
     } else {
       render(this.#mostCommentedComponent, this.#boardComponent.element);
     }
 
-    render(this.#movieListContainerComponent.MostCommented, this.#mostCommentedComponent.element);
+    render(
+      this.#movieListContainerComponent.MostCommented,
+      this.#mostCommentedComponent.element
+    );
   }
 
   #renderTopRatedContent() {
@@ -182,7 +219,10 @@ export default class BoardPresenter {
 
     if (topRatedMovies.length > 0) {
       render(this.#topRatedComponent, this.#boardComponent.element);
-      render(this.#movieListContainerComponent.TopRated, this.#topRatedComponent.element);
+      render(
+        this.#movieListContainerComponent.TopRated,
+        this.#topRatedComponent.element
+      );
 
       this.#renderMovies('TopRated', topRatedMovies);
     }
@@ -205,8 +245,14 @@ export default class BoardPresenter {
   }
 
   #renderLoadMoreButton() {
-    if (!this.#mainContentComponent.element.contains(this.#loadMoreButtonComponent.element)) {
-      this.#loadMoreButtonComponent.setClickHandler(this.#onLoadMoreButtonClick.bind(this));
+    if (
+      !this.#mainContentComponent.element.contains(
+        this.#loadMoreButtonComponent.element
+      )
+    ) {
+      this.#loadMoreButtonComponent.setClickHandler(
+        this.#onLoadMoreButtonClick.bind(this)
+      );
       render(this.#loadMoreButtonComponent, this.#mainContentComponent.element);
     }
   }
@@ -218,7 +264,9 @@ export default class BoardPresenter {
   }
 
   #clearMovieListContent(contentType) {
-    this.#moviePresenters[contentType].forEach((presenter) => presenter.destroy());
+    this.#moviePresenters[contentType].forEach((presenter) =>
+      presenter.destroy()
+    );
     this.#moviePresenters[contentType].clear();
 
     if (contentType === 'Main') {
@@ -237,7 +285,10 @@ export default class BoardPresenter {
   }
 
   #getMainContentMovies() {
-    return this.movies.slice(0, Math.min(this.movies.length, this.#renderedMovieCount));
+    return this.movies.slice(
+      0,
+      Math.min(this.movies.length, this.#renderedMovieCount)
+    );
   }
 
   #getMostCommentedMovies() {
@@ -274,7 +325,7 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    switch(actionType) {
+    switch (actionType) {
       case UserAction.UPDATE_MOVIE:
         this.#moviesModel.updateMovie(updateType, update);
         break;
@@ -289,7 +340,7 @@ export default class BoardPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    switch(updateType) {
+    switch (updateType) {
       case UpdateType.INIT:
         this.#isMovieLoading = false;
         remove(this.#movieLoadingComponent);
@@ -301,12 +352,15 @@ export default class BoardPresenter {
         remove(this.#movieLoadingComponent);
         this.#renderBoard();
         break;
-      case UpdateType.LOAD_COMMENTS:
+      case UpdateType.COMMENT_LOAD:
         this.#popupPresenter.refreshPopup();
         break;
       case UpdateType.PATCH:
         this.#updateCards(data);
-        if (this.#popupPresenter.popupMovieId && this.#popupPresenter.popupMovieId === data.id) {
+        if (
+          this.#popupPresenter.popupMovieId &&
+          this.#popupPresenter.popupMovieId === data.id
+        ) {
           this.#updatePopup(data);
         }
         break;
@@ -325,7 +379,10 @@ export default class BoardPresenter {
         this.#isPreservedRenderedMovieCount = true;
         this.#updateCards(data);
         this.#updateBoard();
-        if (this.#popupPresenter.popupMovieId && this.#popupPresenter.popupMovieId === data.id) {
+        if (
+          this.#popupPresenter.popupMovieId &&
+          this.#popupPresenter.popupMovieId === data.id
+        ) {
           this.#updatePopup(data);
         }
         break;
@@ -353,9 +410,15 @@ export default class BoardPresenter {
 
   #onLoadMoreButtonClick() {
     const movieCount = this.movies.length;
-    const newRenderedMovieCount = Math.min(movieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP);
+    const newRenderedMovieCount = Math.min(
+      movieCount,
+      this.#renderedMovieCount + MOVIE_COUNT_PER_STEP
+    );
 
-    const movies = this.#getMoviesToLoad(this.#renderedMovieCount, newRenderedMovieCount);
+    const movies = this.#getMoviesToLoad(
+      this.#renderedMovieCount,
+      newRenderedMovieCount
+    );
     this.#renderMovies('Main', movies);
 
     this.#renderedMovieCount = newRenderedMovieCount;

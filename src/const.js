@@ -42,12 +42,7 @@ const filters = [
   },
 ];
 
-const emojies = [
-  'smile',
-  'sleeping',
-  'puke',
-  'angry',
-];
+const emojies = ['smile', 'sleeping', 'puke', 'angry'];
 
 const UserAction = {
   UPDATE_MOVIE: 'UPDATE_MOVIE',
@@ -66,7 +61,7 @@ const UpdateType = {
   FILTER: 'FILTER',
   INIT: 'INIT',
   MOVIE_LOAD_ERROR: 'MOVIE_LOAD_ERROR',
-  LOAD_COMMENTS: 'LOAD_COMMENTS',
+  COMMENT_LOAD: 'COMMENT_LOAD',
 };
 
 const MOVIES_COUNT = 17;
@@ -82,5 +77,5 @@ export {
   UpdateType,
   MOVIES_COUNT,
   MAX_MOVIE_COMMENT_COUNT,
-  COMMENTS_ALL_COUNT
+  COMMENTS_ALL_COUNT,
 };

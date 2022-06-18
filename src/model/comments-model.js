@@ -11,23 +11,27 @@ export default class CommentsModel extends Observable {
     this.#commentsApiService = commentsApiService;
   }
 
-  get comments () {
+  get comments() {
     return this.#comments;
   }
 
   init = async (movie) => {
     try {
-      const comments = await this.#commentsApiService.getMovieComments(movie.id);
+      const comments = await this.#commentsApiService.getMovieComments(
+        movie.id
+      );
       this.#comments = comments.map(this.#adaptToClient);
-    } catch(err) {
+    } catch (err) {
       this.#comments = [];
     }
 
-    this._notify(UpdateType.LOAD_COMMENTS, movie);
+    this._notify(UpdateType.COMMENT_LOAD, movie);
   };
 
   deleteComment(commentId) {
-    const commentIndex = this.#comments.findIndex((comment) => comment.id === commentId);
+    const commentIndex = this.#comments.findIndex(
+      (comment) => comment.id === commentId
+    );
 
     if (commentIndex === -1) {
       throw new Error('Can\'t delete unexiting comment');
@@ -35,20 +39,18 @@ export default class CommentsModel extends Observable {
 
     this.#comments = [
       ...this.#comments.slice(0, commentIndex),
-      ...this.#comments.slice(commentIndex + 1)
+      ...this.#comments.slice(commentIndex + 1),
     ];
   }
 
   addComment(comment) {
-    this.#comments = [
-      ...this.#comments,
-      comment,
-    ];
+    this.#comments = [...this.#comments, comment];
   }
 
   #adaptToClient(comments) {
-    const adaptedComments = {...comments,
-      date: dayjs(comments.date).toDate()
+    const adaptedComments = {
+      ...comments,
+      date: dayjs(comments.date).toDate(),
     };
 
     return adaptedComments;
