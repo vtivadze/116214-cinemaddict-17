@@ -408,6 +408,10 @@ export default class BoardPresenter {
   };
 
   #onMovieClick = (movie) => {
+    if (this.#popupPresenter.popupMovieId === movie.id) {
+      return;
+    }
+
     this.#popupPresenter.init(movie);
   };
 
