@@ -142,19 +142,8 @@ export default class PopupPresenter {
     this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, {commentId, movie});
   }
 
-  #onCommentAdd(newComment) {
-    const comment = {
-      // ...generateComment(),
-      ...newComment,
-    };
-
-    const movie = {...this.#movie};
-    movie.comments = [
-      ...movie.comments,
-      comment.id,
-    ];
-
-    this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movie});
+  #onCommentAdd(comment) {
+    this.#changeData(UserAction.ADD_COMMENT, UpdateType.POPUP_MAJOR, {comment, movieId: this.#movie.id});
   }
 
   #onDocumentKeydown(evt) {

@@ -343,8 +343,8 @@ export default class BoardPresenter {
         this.#moviesModel.updateMovie(updateType, update.movie);
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.addComment(update.comment);
-        this.#moviesModel.updateMovie(updateType, update.movie);
+        this.#commentsModel.addComment(update);
+        // this.#moviesModel.updateMovie(updateType, update.movie);
     }
   };
 

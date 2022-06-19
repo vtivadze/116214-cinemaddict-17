@@ -362,14 +362,13 @@ export default class PopupView extends AbstractStatefulView {
       return;
     }
 
-    const commentBody = document.querySelector('.film-details__comment-input').value;
-    const emoji = document.querySelector('.film-details__emoji-list input[checked]')?.value;
+    const {selectedEmoji, commentInputValue} = this._state;
 
-    if (!commentBody || !emoji) {
+    if (!commentInputValue || !selectedEmoji) {
       return;
     }
 
-    const comment = {comment: commentBody, emotion: emoji};
+    const comment = {comment: commentInputValue, emotion: selectedEmoji};
 
     this._setState({
       selectedEmoji: '',

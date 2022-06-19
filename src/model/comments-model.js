@@ -47,9 +47,16 @@ export default class CommentsModel extends Observable {
     ];
   }
 
-  addComment(comment) {
-    this.#comments = [...this.#comments, comment];
-  }
+  addComment = async ({comment, movieId}) => {
+    try {
+      const response = await this.#commentsApiService.addComment(comment, movieId);
+      const {movie, comments} = response;
+      this.#comments = [...comments];
+      this._notify(UpdateType.POPUP_MAJOR, movie);
+    }catch(err) {
+      throw new Error('Can\'t add comment');
+    }
+  };
 
   #adaptToClient(comments) {
     const adaptedComments = {
