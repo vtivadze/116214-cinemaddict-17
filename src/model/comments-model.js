@@ -47,12 +47,13 @@ export default class CommentsModel extends Observable {
     ];
   }
 
-  addComment = async ({comment, movieId}) => {
+  addComment = async ({comment, movieId}, moviesModel) => {
     try {
       const response = await this.#commentsApiService.addComment(comment, movieId);
       const {movie, comments} = response;
       this.#comments = [...comments];
-      this._notify(UpdateType.POPUP_MAJOR, movie);
+      moviesModel.updateMoviesModel(movie);
+      this._notify(UpdateType.POPUP_MAJOR, moviesModel.getMovie(movieId));
     }catch(err) {
       throw new Error('Can\'t add comment');
     }

@@ -15,6 +15,10 @@ export default class MoviesModel extends Observable {
     return this.#movies;
   }
 
+  getMovie(movieId) {
+    return this.movies.find((movie) => movie.id === movieId);
+  }
+
   init = async () => {
     let updateType = null;
 
@@ -53,6 +57,22 @@ export default class MoviesModel extends Observable {
       // what to do
     }
   };
+
+  updateMoviesModel(update) {
+    const index = this.#movies.findIndex((movie) => movie.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Can\'t update unexiting movie');
+    }
+
+    const adaptedMovie = this.#adaptToClient(update);
+
+    this.#movies = [
+      ...this.#movies.slice(0, index),
+      adaptedMovie,
+      ...this.#movies.slice(index + 1)
+    ];
+  }
 
   #adaptToClient = (movie) => {
     const adaptedMovie = {...movie,

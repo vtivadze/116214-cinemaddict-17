@@ -2,7 +2,7 @@ import ApiService from '../framework/api-service.js';
 
 const Method = {
   GET: 'GET',
-  PUT: 'PUT',
+  POST: 'POST',
   DELETE: 'DELETE',
 };
 
@@ -15,7 +15,7 @@ export default class CommentsApiService extends ApiService {
   addComment = async (comment, movieId) => {
     const response = await this._load({
       url: `comments/${movieId}`,
-      method: Method.PUT,
+      method: Method.POST,
       body: JSON.stringify(comment),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
