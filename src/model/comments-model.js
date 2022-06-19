@@ -32,7 +32,7 @@ export default class CommentsModel extends Observable {
     this._notify(updateType, movie);
   };
 
-  deleteComment(commentId) {
+  deleteComment = async (updateType, {commentId, movie}, moviesModel) => {
     const commentIndex = this.#comments.findIndex(
       (comment) => comment.id === commentId
     );
@@ -41,19 +41,32 @@ export default class CommentsModel extends Observable {
       throw new Error('Can\'t delete unexiting comment');
     }
 
-    this.#comments = [
-      ...this.#comments.slice(0, commentIndex),
-      ...this.#comments.slice(commentIndex + 1),
-    ];
-  }
+    try {
+      await this.#commentsApiService.deleteComment(commentId);
 
-  addComment = async ({comment, movieId}, moviesModel) => {
+      this.#comments = [
+        ...this.#comments.slice(0, commentIndex),
+        ...this.#comments.slice(commentIndex + 1),
+      ];
+
+      movie.comments = this.#comments.map((comment) => comment.id);
+      moviesModel.updateMoviesModel(movie);
+
+      this._notify(updateType, movie);
+    } catch(err) {
+      throw new Error('Can\'t delete comment');
+    }
+  };
+
+  addComment = async ({comment, movieId}, updateType, moviesModel) => {
     try {
       const response = await this.#commentsApiService.addComment(comment, movieId);
       const {movie, comments} = response;
+
       this.#comments = [...comments];
       moviesModel.updateMoviesModel(movie);
-      this._notify(UpdateType.POPUP_MAJOR, moviesModel.getMovie(movieId));
+
+      this._notify(updateType, moviesModel.getMovie(movieId));
     }catch(err) {
       throw new Error('Can\'t add comment');
     }

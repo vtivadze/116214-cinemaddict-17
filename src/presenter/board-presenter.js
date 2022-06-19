@@ -339,11 +339,10 @@ export default class BoardPresenter {
         this.#moviesModel.updateMovie(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.deleteComment(update.commentId);
-        this.#moviesModel.updateMovie(updateType, update.movie);
+        this.#commentsModel.deleteComment(updateType, update, this.#moviesModel);
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.addComment(update, this.#moviesModel);
+        this.#commentsModel.addComment(update, updateType, this.#moviesModel);
     }
   };
 

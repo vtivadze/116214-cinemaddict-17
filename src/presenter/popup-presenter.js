@@ -28,9 +28,6 @@ export default class PopupPresenter {
     this.#movie = movie;
     this.popupMovieId = movie.id;
     this.#commentsModel.init(movie);
-    this.#comments = [];
-
-    this.#renderPopup();
   }
 
   refreshPopup(isCommentLoadError) {
@@ -133,11 +130,6 @@ export default class PopupPresenter {
     if (commentIndex === -1) {
       return;
     }
-
-    movie.comments = [
-      ...movie.comments.slice(0, commentIndex),
-      ...movie.comments.slice(commentIndex + 1),
-    ];
 
     this.#changeData(UserAction.DELETE_COMMENT, UpdateType.POPUP_MAJOR, {commentId, movie});
   }

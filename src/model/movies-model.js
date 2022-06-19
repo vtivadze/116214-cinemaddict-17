@@ -75,6 +75,10 @@ export default class MoviesModel extends Observable {
   }
 
   #adaptToClient = (movie) => {
+    if (movie.filmInfo) {
+      return movie;
+    }
+
     const adaptedMovie = {...movie,
       filmInfo: {...movie.film_info,
         ageRating: movie.film_info.age_rating,
