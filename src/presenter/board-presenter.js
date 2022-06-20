@@ -1,4 +1,5 @@
 import { render, remove, replace } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { sortMovieByDate, sortMovieByRating } from '../utils/util.js';
 import FilterPresenter from './filter-presenter.js';
@@ -19,6 +20,11 @@ const MOVIE_COUNT_PER_STEP = 5;
 const MOST_COMMETNTED_COUNT = 2;
 const TOP_RATED_COUNT = 2;
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 export default class BoardPresenter {
   #siteMainElement = null;
   #moviesModel = null;
@@ -33,6 +39,7 @@ export default class BoardPresenter {
   #loadMoreButtonComponent = new LoadMoreButtonView();
   #movieLoadingComponent = new MovieLoadingView();
   #movieLoadingErrorComponent = new MovieLoadingErrorView();
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   #popupPresenter = null;
   #filterPresenter = null;
@@ -334,6 +341,8 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_MOVIE:
         this.#moviesModel.updateMovie(updateType, update);
@@ -344,6 +353,8 @@ export default class BoardPresenter {
       case UserAction.ADD_COMMENT:
         this.#commentsModel.addComment(update, updateType, this.#moviesModel);
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
