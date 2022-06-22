@@ -1,25 +1,31 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, humanizeRuntime } from '../utils/util.js';
 
-const createWatchlistButtonTemplate = (watchlist) => (
+const createWatchlistButtonTemplate = (watchlist, isMovieUpdating) => (
   `<button
     class="${watchlist ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--add-to-watchlist"
-    type="button">Add to watchlist</button>`
+    type="button"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Add to watchlist</button>`
 );
 
-const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+const createAlreadyWatchedButtonTemplate = (alreadyWatched, isMovieUpdating) => (
   `<button
     class="${alreadyWatched ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--mark-as-watched"
-    type="button">Mark as watched</button>`
+    type="button"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Mark as watched</button>`
 );
 
-const createFavoriteButtonTemplate = (favorite) => (
+const createFavoriteButtonTemplate = (favorite, isMovieUpdating) => (
   `<button
     class="${favorite ? 'film-card__controls-item--active ' : ''}film-card__controls-item film-card__controls-item--favorite"
-    type="button">Mark as favorite</button>`
+    type="button"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Mark as favorite</button>`
 );
 
-const createMovieTemplate = (movie) => {
+const createMovieTemplate = (movie, isMovieUpdating) => {
   const {
     comments,
     filmInfo: {
@@ -45,9 +51,9 @@ const createMovieTemplate = (movie) => {
   const commentsCount = comments.length;
   const duration = humanizeRuntime(runtime);
 
-  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
-  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
-  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
+  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist, isMovieUpdating);
+  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched, isMovieUpdating);
+  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite, isMovieUpdating);
 
   return  (
     `<article class="film-card">
@@ -74,14 +80,16 @@ const createMovieTemplate = (movie) => {
 
 export default class CardView extends AbstractView {
   #movie = null;
+  #isMovieUpdating = false;
 
-  constructor(movie) {
+  constructor(movie, isMovieUpdating) {
     super();
     this.#movie = movie;
+    this.#isMovieUpdating = isMovieUpdating;
   }
 
   get template() {
-    return createMovieTemplate(this.#movie);
+    return createMovieTemplate(this.#movie, this.#isMovieUpdating);
   }
 
   setMovieClickHandler(callback) {

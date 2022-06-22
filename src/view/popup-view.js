@@ -252,14 +252,12 @@ const SHAKE_CLASS_NAME = 'shake';
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export default class PopupView extends AbstractStatefulView {
-  #isCommentLoading = true;
   #isCommentLoadError = false;
 
-  constructor(movie, comments, isCommentLoading, isCommentLoadError) {
+  constructor(movie, comments, isCommentLoadError) {
     super();
-    this.#isCommentLoading = isCommentLoading;
     this.#isCommentLoadError = isCommentLoadError;
-    this._state = PopupView.parsePopupToState(movie, comments, isCommentLoading);
+    this._state = PopupView.parsePopupToState(movie, comments);
 
     if (!this._state.isSaving) {
       this.#setInnerHandlers();

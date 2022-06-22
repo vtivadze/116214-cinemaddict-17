@@ -1,5 +1,5 @@
 import {render, replace, remove} from '../framework/render.js';
-import { UserAction, UpdateType, FilterType } from '../const.js';
+import { UserAction, UpdateType, FilterType, MovieUpdatingStatus } from '../const.js';
 import MovieView from '../view/movie-view.js';
 
 export default class MoviePresenter {
@@ -11,6 +11,8 @@ export default class MoviePresenter {
   #movie = null;
   #movieComponent = null;
 
+  #isMovieUpdating = false;
+
   constructor(movieContainer, changeData, handleMovieClick, filtersModel) {
     this.#movieContainer = movieContainer;
     this.#changeData = changeData;
@@ -18,15 +20,18 @@ export default class MoviePresenter {
     this.#filtersModel = filtersModel;
   }
 
-  init(movie) {
+  init(movie, isMovieUpdating) {
     this.#movie = movie;
+    this.#isMovieUpdating = isMovieUpdating;
 
     const prevMovieComponent = this.#movieComponent;
-    this.#movieComponent = new MovieView(movie);
+    this.#movieComponent = new MovieView(movie, this.#isMovieUpdating);
 
-    this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
-    this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
-    this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
+    if (!this.#isMovieUpdating) {
+      this.#movieComponent.setAddToWatchlistClickHandler(this.#onAddToWatchlistClick.bind(this));
+      this.#movieComponent.setAlreadyWatchedClickHandler(this.#onAlreadyWatchedClick.bind(this));
+      this.#movieComponent.setFavoriteClickHandler(this.#onFavoriteClick.bind(this));
+    }
     this.#movieComponent.setMovieClickHandler(this.#handleMovieClick);
 
     if (prevMovieComponent === null) {
@@ -45,6 +50,21 @@ export default class MoviePresenter {
     remove(this.#movieComponent);
   }
 
+  setMovieUpdating() {
+    this.#isMovieUpdating = MovieUpdatingStatus.TRUE;
+    this.init(this.#movie, this.#isMovieUpdating);
+  }
+
+  setMovieUpdateAborting(updatableField) {
+    const resetMovieUpdating = () => {
+      this.#isMovieUpdating = MovieUpdatingStatus.FALSE;
+      this.#movie.userDetails[updatableField] = !this.#movie.userDetails[updatableField];
+      this.init(this.#movie, this.#isMovieUpdating);
+    };
+
+    this.#movieComponent.shake(resetMovieUpdating);
+  }
+
   #renderMovie() {
     render(this.#movieComponent, this.#movieContainer);
   }
@@ -60,7 +80,7 @@ export default class MoviePresenter {
     const currentFilterType = this.#filtersModel.currentFilterType;
 
     const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, {movie, moviePresenter: this, updatableField: 'watchlist'});
   }
 
   #onAlreadyWatchedClick() {
@@ -70,7 +90,7 @@ export default class MoviePresenter {
     const currentFilterType = this.#filtersModel.currentFilterType;
 
     const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, {movie, moviePresenter: this, updatableField: 'alreadyWatched'});
   }
 
   #onFavoriteClick() {
@@ -80,6 +100,6 @@ export default class MoviePresenter {
     const currentFilterType = this.#filtersModel.currentFilterType;
 
     const updateType = currentFilterType === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_MOVIE, updateType, {movie, moviePresenter: this, updatableField: 'favorite'});
   }
 }

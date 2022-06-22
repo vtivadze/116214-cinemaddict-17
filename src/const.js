@@ -70,6 +70,11 @@ const MOVIES_COUNT = 17;
 const MAX_MOVIE_COMMENT_COUNT = 10;
 const COMMENTS_ALL_COUNT = MOVIES_COUNT * MAX_MOVIE_COMMENT_COUNT;
 
+const MovieUpdatingStatus = {
+  TRUE: true,
+  FALSE: false,
+};
+
 export {
   SortType,
   filters,
@@ -80,4 +85,5 @@ export {
   MOVIES_COUNT,
   MAX_MOVIE_COMMENT_COUNT,
   COMMENTS_ALL_COUNT,
+  MovieUpdatingStatus,
 };

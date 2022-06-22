@@ -345,10 +345,17 @@ export default class BoardPresenter {
 
     switch (actionType) {
       case UserAction.UPDATE_MOVIE:
-        this.#moviesModel.updateMovie(updateType, update);
+        update.moviePresenter.setMovieUpdating();
+
+        try {
+          await this.#moviesModel.updateMovie(updateType, update.movie);
+        } catch(err) {
+          update.moviePresenter.setMovieUpdateAborting(update.updatableField);
+        }
         break;
       case UserAction.UPDATE_POPUP_MOVIE:
         this.#popupPresenter.setMovieUpdating();
+
         try {
           await this.#moviesModel.updateMovie(updateType, update);
         } catch(err) {
@@ -357,6 +364,7 @@ export default class BoardPresenter {
         break;
       case UserAction.DELETE_COMMENT:
         this.#popupPresenter.setCommentDeleting(update.commentId);
+
         try {
           await this.#commentsModel.deleteComment(updateType, update, this.#moviesModel);
         } catch(err) {
@@ -365,6 +373,7 @@ export default class BoardPresenter {
         break;
       case UserAction.ADD_COMMENT:
         this.#popupPresenter.setCommentSaving();
+
         try {
           await this.#commentsModel.addComment(update, updateType, this.#moviesModel);
         } catch(err) {
