@@ -38,6 +38,7 @@ export default class CommentsModel extends Observable {
     );
 
     if (commentIndex === -1) {
+      this._notify(UpdateType.COMMENT_DELETE_ERROR, movie);
       throw new Error('Can\'t delete unexiting comment');
     }
 
@@ -51,11 +52,11 @@ export default class CommentsModel extends Observable {
 
       movie.comments = this.#comments.map((comment) => comment.id);
       moviesModel.updateMoviesModel(movie);
-
       this._notify(updateType, movie);
     } catch(err) {
       throw new Error('Can\'t delete comment');
     }
+
   };
 
   addComment = async ({comment, movieId}, updateType, moviesModel) => {
@@ -65,9 +66,8 @@ export default class CommentsModel extends Observable {
 
       this.#comments = [...comments];
       moviesModel.updateMoviesModel(movie);
-
       this._notify(updateType, moviesModel.getMovie(movieId));
-    }catch(err) {
+    } catch(err) {
       throw new Error('Can\'t add comment');
     }
   };

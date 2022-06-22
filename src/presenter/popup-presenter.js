@@ -37,10 +37,39 @@ export default class PopupPresenter {
     this.init(movie);
   }
 
-  setDeleting(deletingCommentId) {
+  setCommentDeleting(deletingCommentId) {
     this.#popupComponent.updateElement({
       deletingCommentId,
     });
+  }
+
+  setCommentSaving() {
+    this.#popupComponent.updateElement({
+      isSaving: true,
+    });
+  }
+
+  setCommentDeleteAborting() {
+    const resetCommentDelete = () => {
+      this.#popupComponent.updateElement({
+        deletingCommentId: null,
+        isDeletingError: true,
+      });
+    };
+
+    this.#popupComponent.shake('film-details__comments-list', resetCommentDelete);
+  }
+
+  setCommentSaveAborting() {
+    const resetCommentSave = () => {
+      this.#popupComponent.updateElement({
+        isSaving: false,
+        isSavingError: false,
+        isDisablingForm: false,
+      });
+    };
+
+    this.#popupComponent.shake('film-details__new-comment', resetCommentSave);
   }
 
   #renderPopup() {

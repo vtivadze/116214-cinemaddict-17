@@ -51,13 +51,21 @@ const createFavoriteButtonTemplate = (favorite) => (
     id="favorite" name="favorite">Add to favorites</button>`
 );
 
-const createSelectedEmojiTemplate = (selectedEmoji) => (
-  selectedEmoji ? `<img src="images/emoji/${selectedEmoji}.png" width="55" height="55" alt="emoji-smile">` : ''
+const createEmotionTemplate = (emotion) => (
+  emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : ''
 );
 
-const createEmojiListTemplate = (selectedEmoji) => (
+const createEmojiListTemplate = (emotion, isSaving) => (
   emojies.map((emoji) => (
-    `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${emoji === selectedEmoji && 'checked'}>
+    `<input
+      class="film-details__emoji-item visually-hidden"
+      name="comment-emoji"
+      type="radio"
+      id="emoji-${emoji}"
+      value="${emoji}"
+      ${emoji === emotion && 'checked'}
+      ${isSaving ? 'disabled' : ''}
+    >
     <label class="film-details__emoji-label" for="emoji-${emoji}">
       <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji" data-emoji-type="${emoji}">
     </label>`
@@ -71,16 +79,21 @@ const createCommentsTemplate = (comments, deletingCommentId) => (
 const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
 const createCommentLoadErrorTemplate = () => '<h3>Error while comments\' loading</h3>';
 
-const createCommentFormTemplate = (selectedEmoji, commentInputValue, isCommentLoading) => {
-  const selectedEmojiTemplate = createSelectedEmojiTemplate(selectedEmoji);
-  const emojiListeTemplate = createEmojiListTemplate(selectedEmoji);
+const createCommentFormTemplate = (emotion, comment, isCommentLoading, isSaving, isSavingError) => {
+  const emotionTemplate = createEmotionTemplate(emotion);
+  const emojiListeTemplate = createEmojiListTemplate(emotion, isSaving);
 
   return (
     `<div class="film-details__new-comment${isCommentLoading ? ' visually-hidden' : ''}">
-      <div class="film-details__add-emoji-label">${selectedEmojiTemplate}</div>
+      <div class="film-details__add-emoji-label">${emotionTemplate}</div>
 
       <label class="film-details__comment-label">
-        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentInputValue}</textarea>
+        <textarea
+          class="film-details__comment-input"
+          placeholder="Select reaction below and write comment here"
+          name="comment"
+          ${isSaving ? 'disabled' : ''}
+        >${comment}</textarea>
       </label>
 
       <div class="film-details__emoji-list">
@@ -93,9 +106,11 @@ const createCommentFormTemplate = (selectedEmoji, commentInputValue, isCommentLo
 const createPopupTemplate = ({
   movie,
   comments,
-  selectedEmoji,
-  commentInputValue,
+  emotion,
+  comment,
   deletingCommentId,
+  isSaving,
+  isSavingError,
   isCommentLoading,
   isCommentLoadError
 }) => {
@@ -141,7 +156,7 @@ const createPopupTemplate = ({
   const commentLoadingTemplate = createCommentLoadingTemplate();
   const commentLoadErrorTemplate = createCommentLoadErrorTemplate();
 
-  const commentFormTemplate = createCommentFormTemplate(selectedEmoji, commentInputValue, isCommentLoading);
+  const commentFormTemplate = createCommentFormTemplate(emotion, comment, isCommentLoading, isSaving, isSavingError);
 
   return (
     `<section class="film-details">
@@ -227,6 +242,9 @@ const createPopupTemplate = ({
   );
 };
 
+const SHAKE_CLASS_NAME = 'shake';
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export default class PopupView extends AbstractStatefulView {
   #isCommentLoading = true;
   #isCommentLoadError = false;
@@ -237,7 +255,9 @@ export default class PopupView extends AbstractStatefulView {
     this.#isCommentLoadError = isCommentLoadError;
     this._state = PopupView.parsePopupToState(movie, comments, isCommentLoading);
 
-    this.#setInnerHandlers();
+    if (!this._state.isSaving) {
+      this.#setInnerHandlers();
+    }
   }
 
   get template() {
@@ -245,13 +265,21 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   _restoreHandlers = () => {
-    this.#setInnerHandlers();
+    if (!this._state.isSaving) {
+      this.#setInnerHandlers();
+    }
     this.setCloseButtonClickHandler(this._callback.closeButtonClick);
     this.setAddToWatchlistClickHandler(this._callback.addToWatchlistClick);
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
-    this.setCommentDeleteHandler(this._callback.commentDelete);
-    this.setCommentAddHandler(this._callback.commentAdd);
+
+    if (!this._state.deletingCommentId) {
+      this.setCommentDeleteHandler(this._callback.commentDelete);
+    }
+
+    if (!this._state.isSaving) {
+      this.setCommentAddHandler(this._callback.commentAdd);
+    }
   };
 
   setCloseButtonClickHandler(callback) {
@@ -296,6 +324,14 @@ export default class PopupView extends AbstractStatefulView {
     }
   }
 
+  shake(className, callback) {
+    this.element.querySelector(`.${className}`).classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      this.element.querySelector(`.${className}`).classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   #setInnerHandlers() {
     if (this.#isCommentLoadError === false) {
       this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#onEmojiTypeChange.bind(this));
@@ -307,14 +343,14 @@ export default class PopupView extends AbstractStatefulView {
   #onCommentInput(evt) {
     evt.preventDefault();
     this._setState({
-      commentInputValue: evt.target.value,
+      comment: evt.target.value,
     });
   }
 
   #onEmojiTypeChange(evt) {
     evt.preventDefault();
     this.updateElement({
-      selectedEmoji: evt.target.dataset.emojiType,
+      emotion: evt.target.dataset.emojiType,
     });
     this.element.scrollTop = this._state.scrollTop;
   }
@@ -360,11 +396,11 @@ export default class PopupView extends AbstractStatefulView {
       return;
     }
 
-    if (!this._state.commentInputValue || !this._state.selectedEmoji) {
+    if (!this._state.comment || !this._state.emotion) {
       return;
     }
 
-    const comment = PopupView.parseStateToPopup();
+    const comment = PopupView.parseStateToPopup(this._state);
 
     evt.preventDefault();
     this._callback.commentAdd(comment);
@@ -372,12 +408,14 @@ export default class PopupView extends AbstractStatefulView {
 
   static parsePopupToState(movie, comments) {
     const state = {
+      emotion: '',
+      comment: '',
       movie: {...movie},
       comments: [...comments],
-      selectedEmoji: '',
-      commentInputValue: '',
       scrollTop: 0,
       deletingCommentId: null,
+      isSaving: false,
+      isSavingError: false,
     };
 
     return state;
@@ -386,8 +424,12 @@ export default class PopupView extends AbstractStatefulView {
   static parseStateToPopup(state) {
     const popup = {...state};
 
+    delete popup.movie;
+    delete popup.comments;
     delete popup.scrollTop;
     delete popup.deletingCommentId;
+    delete popup.isSaving;
+    delete popup.isSavingError;
 
     return popup;
   }
