@@ -30,25 +30,31 @@ const createCommentsListTemplate = (comments, deletingCommentId) => comments
       </li>`
   ), '');
 
-const createWatchlistButtonTemplate = (watchlist) => (
+const createWatchlistButtonTemplate = (watchlist, isMovieUpdating) => (
   `<button
     type="button"
     class="${watchlist ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watchlist"
-    id="watchlist" name="watchlist">Add to watchlist</button>`
+    id="watchlist" name="watchlist"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Add to watchlist</button>`
 );
 
-const createAlreadyWatchedButtonTemplate = (alreadyWatched) => (
+const createAlreadyWatchedButtonTemplate = (alreadyWatched, isMovieUpdating) => (
   `<button
     type="button"
     class="${alreadyWatched ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--watched"
-    id="watched" name="watched">Already watched</button>`
+    id="watched" name="watched"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Already watched</button>`
 );
 
-const createFavoriteButtonTemplate = (favorite) => (
+const createFavoriteButtonTemplate = (favorite, isMovieUpdating) => (
   `<button
     type="button"
     class="${favorite ? 'film-details__control-button--active ' : ''}film-details__control-button film-details__control-button--favorite"
-    id="favorite" name="favorite">Add to favorites</button>`
+    id="favorite" name="favorite"
+    ${isMovieUpdating ? 'disabled' : ''}
+  >Add to favorites</button>`
 );
 
 const createEmotionTemplate = (emotion) => (
@@ -111,7 +117,8 @@ const createPopupTemplate = ({
   deletingCommentId,
   isSaving,
   isCommentLoading,
-  isCommentLoadError
+  isCommentLoadError,
+  isMovieUpdating,
 }) => {
   const {
     filmInfo: {
@@ -148,9 +155,9 @@ const createPopupTemplate = ({
 
   const commentsTemplate = createCommentsTemplate(comments, deletingCommentId);
 
-  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
-  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
-  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite);
+  const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist, isMovieUpdating);
+  const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched, isMovieUpdating);
+  const favoriteButtonTemplate = createFavoriteButtonTemplate(favorite, isMovieUpdating);
 
   const commentLoadingTemplate = createCommentLoadingTemplate();
   const commentLoadErrorTemplate = createCommentLoadErrorTemplate();
@@ -414,6 +421,7 @@ export default class PopupView extends AbstractStatefulView {
       scrollTop: 0,
       deletingCommentId: null,
       isSaving: false,
+      isMovieUpdating: false,
     };
 
     return state;
@@ -427,6 +435,7 @@ export default class PopupView extends AbstractStatefulView {
     delete popup.scrollTop;
     delete popup.deletingCommentId;
     delete popup.isSaving;
+    delete popup.isMovieUpdating;
 
     return popup;
   }

@@ -341,11 +341,19 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = async (actionType, updateType, update) => {
-    // this.#uiBlocker.block();
+    this.#uiBlocker.block();
 
     switch (actionType) {
       case UserAction.UPDATE_MOVIE:
         this.#moviesModel.updateMovie(updateType, update);
+        break;
+      case UserAction.UPDATE_POPUP_MOVIE:
+        this.#popupPresenter.setMovieUpdating();
+        try {
+          await this.#moviesModel.updateMovie(updateType, update);
+        } catch(err) {
+          this.#popupPresenter.setMovieUpdateAborting();
+        }
         break;
       case UserAction.DELETE_COMMENT:
         this.#popupPresenter.setCommentDeleting(update.commentId);
@@ -365,7 +373,7 @@ export default class BoardPresenter {
         break;
     }
 
-    // this.#uiBlocker.unblock();
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {

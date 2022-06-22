@@ -46,6 +46,7 @@ const emojies = ['smile', 'sleeping', 'puke', 'angry'];
 
 const UserAction = {
   UPDATE_MOVIE: 'UPDATE_MOVIE',
+  UPDATE_POPUP_MOVIE: 'UPDATE_POPUP_MOVIE',
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
 };

@@ -49,6 +49,12 @@ export default class PopupPresenter {
     });
   }
 
+  setMovieUpdating() {
+    this.#popupComponent.updateElement({
+      isMovieUpdating: true,
+    });
+  }
+
   setCommentDeleteAborting() {
     const resetCommentDelete = () => {
       this.#popupComponent.updateElement({
@@ -70,6 +76,16 @@ export default class PopupPresenter {
     };
 
     this.#popupComponent.shake('film-details__new-comment', resetCommentSave);
+  }
+
+  setMovieUpdateAborting() {
+    const resetMovieUpdating = () => {
+      this.#popupComponent.updateElement({
+        isMovieUpdating: false,
+      });
+    };
+
+    this.#popupComponent.shake('film-details__controls', resetMovieUpdating);
   }
 
   #renderPopup() {
@@ -128,21 +144,21 @@ export default class PopupPresenter {
     const movie = {...this.#movie};
     movie.userDetails.watchlist = !movie.userDetails.watchlist;
     const updateType = this.#filtersModel.currentFilterType === FilterType.WATCHLIST ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_POPUP_MOVIE, updateType, movie);
   }
 
   #onAlreadyWatchedClick() {
     const movie = {...this.#movie};
     movie.userDetails.alreadyWatched = !movie.userDetails.alreadyWatched;
     const updateType = this.#filtersModel.currentFilterType === FilterType.HISTORY ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_POPUP_MOVIE, updateType, movie);
   }
 
   #onFavoriteClick() {
     const movie = {...this.#movie};
     movie.userDetails.favorite = !movie.userDetails.favorite;
     const updateType = this.#filtersModel.currentFilterType === FilterType.FAVORITES ? UpdateType.POPUP_MINOR : UpdateType.POPUP_PATCH;
-    this.#changeData(UserAction.UPDATE_MOVIE, updateType, movie);
+    this.#changeData(UserAction.UPDATE_POPUP_MOVIE, updateType, movie);
   }
 
   #onCommentDelete(commentId) {
