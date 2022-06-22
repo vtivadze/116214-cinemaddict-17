@@ -12,11 +12,8 @@ export default class PopupPresenter {
   #comments = [];
   #popupComponent = null;
   #keyDownHandler = null;
-  #prevState = {};
   #isCommentLoading = true;
   #isCommentLoadError = false;
-
-  popupMovieId = null;
 
   constructor(commentsModel, changeData, filtersModel) {
     this.#commentsModel = commentsModel;
@@ -26,7 +23,6 @@ export default class PopupPresenter {
 
   init(movie) {
     this.#movie = movie;
-    this.popupMovieId = movie.id;
     this.#commentsModel.init(movie);
   }
 
@@ -38,13 +34,18 @@ export default class PopupPresenter {
   }
 
   updatePopup(movie) {
-    this.#prevState = this.#getPrevState();
     this.init(movie);
+  }
+
+  setDeleting(deletingCommentId) {
+    this.#popupComponent.updateElement({
+      deletingCommentId,
+    });
   }
 
   #renderPopup() {
     const prevPopupComponent = this.#popupComponent;
-    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#prevState, this.#isCommentLoading, this.#isCommentLoadError);
+    this.#popupComponent = new PopupView(this.#movie, this.#comments, this.#isCommentLoading, this.#isCommentLoadError);
 
     this.#setHandlers();
 
@@ -61,11 +62,6 @@ export default class PopupPresenter {
     }
 
     remove(prevPopupComponent);
-  }
-
-  #getPrevState() {
-    const {selectedEmoji, commentInputValue, scrollTop} = this.#popupComponent._state;
-    return {selectedEmoji, commentInputValue, scrollTop};
   }
 
   #scrollTopPopup() {
@@ -95,10 +91,8 @@ export default class PopupPresenter {
     this.#popupComponent._setState({comments: []});
     remove(this.#popupComponent);
     this.#popupComponent = null;
-    this.#prevState = {};
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#keyDownHandler);
-    this.popupMovieId = null;
   }
 
   #onAddToWatchlistClick() {

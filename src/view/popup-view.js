@@ -6,7 +6,7 @@ import { emojies } from '../const.js';
 const createMovieGenresListTemplate = (genres) => genres
   .reduce((previousValue, currentValue) => `${previousValue}<span class="film-details__genre">${currentValue}</span>`, '');
 
-const createCommentsListTemplate = (comments) => comments
+const createCommentsListTemplate = (comments, deletingCommentId) => comments
   .reduce((previousValue, {id, emotion, comment, author, date}) => (
     `${previousValue}
     <li class="film-details__comment">
@@ -18,7 +18,13 @@ const createCommentsListTemplate = (comments) => comments
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
             <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
-            <button class="film-details__comment-delete" data-comment-id="${id}">Delete</button>
+            <button
+              class="film-details__comment-delete"
+              data-comment-id="${id}"
+              ${deletingCommentId === id ? 'disabled' : ''}
+            >
+              ${deletingCommentId === id ? 'Deleting...' : 'Delete'}
+            </button>
           </p>
         </div>
       </li>`
@@ -58,8 +64,8 @@ const createEmojiListTemplate = (selectedEmoji) => (
   )).join('')
 );
 
-const createCommentsTemplate = (comments) => (
-  `<ul class="film-details__comments-list">${createCommentsListTemplate(comments)}</ul>`
+const createCommentsTemplate = (comments, deletingCommentId) => (
+  `<ul class="film-details__comments-list">${createCommentsListTemplate(comments, deletingCommentId)}</ul>`
 );
 
 const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
@@ -84,7 +90,15 @@ const createCommentFormTemplate = (selectedEmoji, commentInputValue, isCommentLo
   );
 };
 
-const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, isCommentLoading, isCommentLoadError) => {
+const createPopupTemplate = ({
+  movie,
+  comments,
+  selectedEmoji,
+  commentInputValue,
+  deletingCommentId,
+  isCommentLoading,
+  isCommentLoadError
+}) => {
   const {
     filmInfo: {
       poster,
@@ -118,7 +132,7 @@ const createPopupTemplate = (movie, comments, selectedEmoji, commentInputValue, 
 
   const movieGenresListTemplate = createMovieGenresListTemplate(genre);
 
-  const commentsTemplate = createCommentsTemplate(comments);
+  const commentsTemplate = createCommentsTemplate(comments, deletingCommentId);
 
   const watchlistButtonTemplate = createWatchlistButtonTemplate(watchlist);
   const alreadyWatchedButtonTemplate = createAlreadyWatchedButtonTemplate(alreadyWatched);
@@ -217,32 +231,17 @@ export default class PopupView extends AbstractStatefulView {
   #isCommentLoading = true;
   #isCommentLoadError = false;
 
-  static defaultState = {
-    selectedEmoji: '',
-    scrollTop: 0,
-    commentInputValue: '',
-  };
-
-  constructor(movie, comments, prevState, isCommentLoading, isCommentLoadError) {
+  constructor(movie, comments, isCommentLoading, isCommentLoadError) {
     super();
     this.#isCommentLoading = isCommentLoading;
     this.#isCommentLoadError = isCommentLoadError;
-    this._state = PopupView.parsePopupToState(movie, comments, prevState);
+    this._state = PopupView.parsePopupToState(movie, comments, isCommentLoading);
 
     this.#setInnerHandlers();
   }
 
   get template() {
-    const popup = PopupView.parseStateToPopup(this._state);
-
-    return createPopupTemplate(
-      popup.movie,
-      popup.comments,
-      popup.selectedEmoji,
-      popup.commentInputValue,
-      this.#isCommentLoading,
-      this.#isCommentLoadError,
-    );
+    return createPopupTemplate(this._state);
   }
 
   _restoreHandlers = () => {
@@ -316,7 +315,6 @@ export default class PopupView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       selectedEmoji: evt.target.dataset.emojiType,
-      scrollTop: this.element.scrollTop,
     });
     this.element.scrollTop = this._state.scrollTop;
   }
@@ -362,29 +360,24 @@ export default class PopupView extends AbstractStatefulView {
       return;
     }
 
-    const {selectedEmoji, commentInputValue} = this._state;
-
-    if (!commentInputValue || !selectedEmoji) {
+    if (!this._state.commentInputValue || !this._state.selectedEmoji) {
       return;
     }
 
-    const comment = {comment: commentInputValue, emotion: selectedEmoji};
-
-    this._setState({
-      selectedEmoji: '',
-      commentInputValue: '',
-    });
+    const comment = PopupView.parseStateToPopup();
 
     evt.preventDefault();
     this._callback.commentAdd(comment);
   }
 
-  static parsePopupToState(movie, comments, prevState) {
+  static parsePopupToState(movie, comments) {
     const state = {
-      ...PopupView.defaultState,
-      ...prevState,
       movie: {...movie},
       comments: [...comments],
+      selectedEmoji: '',
+      commentInputValue: '',
+      scrollTop: 0,
+      deletingCommentId: null,
     };
 
     return state;
@@ -392,6 +385,9 @@ export default class PopupView extends AbstractStatefulView {
 
   static parseStateToPopup(state) {
     const popup = {...state};
+
+    delete popup.scrollTop;
+    delete popup.deletingCommentId;
 
     return popup;
   }
