@@ -79,7 +79,7 @@ const createCommentsTemplate = (comments, deletingCommentId) => (
 const createCommentLoadingTemplate = () => '<h3>Loading...</h3>';
 const createCommentLoadErrorTemplate = () => '<h3>Error while comments\' loading</h3>';
 
-const createCommentFormTemplate = (emotion, comment, isCommentLoading, isSaving, isSavingError) => {
+const createCommentFormTemplate = (emotion, comment, isCommentLoading, isSaving) => {
   const emotionTemplate = createEmotionTemplate(emotion);
   const emojiListeTemplate = createEmojiListTemplate(emotion, isSaving);
 
@@ -110,7 +110,6 @@ const createPopupTemplate = ({
   comment,
   deletingCommentId,
   isSaving,
-  isSavingError,
   isCommentLoading,
   isCommentLoadError
 }) => {
@@ -156,7 +155,7 @@ const createPopupTemplate = ({
   const commentLoadingTemplate = createCommentLoadingTemplate();
   const commentLoadErrorTemplate = createCommentLoadErrorTemplate();
 
-  const commentFormTemplate = createCommentFormTemplate(emotion, comment, isCommentLoading, isSaving, isSavingError);
+  const commentFormTemplate = createCommentFormTemplate(emotion, comment, isCommentLoading, isSaving);
 
   return (
     `<section class="film-details">
@@ -415,7 +414,6 @@ export default class PopupView extends AbstractStatefulView {
       scrollTop: 0,
       deletingCommentId: null,
       isSaving: false,
-      isSavingError: false,
     };
 
     return state;
@@ -429,7 +427,6 @@ export default class PopupView extends AbstractStatefulView {
     delete popup.scrollTop;
     delete popup.deletingCommentId;
     delete popup.isSaving;
-    delete popup.isSavingError;
 
     return popup;
   }
